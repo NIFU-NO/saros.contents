@@ -1,0 +1,32 @@
+---
+output: github_document
+editor_options: 
+  chunk_output_type: console
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# saros: Semi-Automatic Reporting of Ordinary Surveys
+
+<!-- badges: start -->
+
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![Codecov test coverage](https://codecov.io/gh/NIFU-NO/saros/branch/main/graph/badge.svg)](https://app.codecov.io/gh/NIFU-NO/saros?branch=main)
+[![CRAN status](https://www.r-pkg.org/badges/version/saros)](https://CRAN.R-project.org/package=saros)
+[![CRAN release](https://www.r-pkg.org/badges/version-ago/saros)](https://CRAN.R-project.org/package=saros)
+[![CRAN total downloads](https://cranlogs.r-pkg.org/badges/grand-total/saros)](https://CRAN.R-project.org/package=saros)
+[![R-CMD-check](https://github.com/NIFU-NO/saros/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/NIFU-NO/saros/actions/workflows/R-CMD-check.yaml)
+<!-- badges: end -->
+
+## Introduction
+
+
