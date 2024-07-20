@@ -27,7 +27,11 @@ validate_sarosmake_options <- function(params) {
 
       # Character vectors (not enums)
       type = list(fun = function(x) rlang::is_string(x)),
+
+      # For mesos, see also checks at the bottom of function
       mesos_var = list(fun = function(x) is.null(x) || rlang::is_string(x)),
+      mesos_group = list(fun = function(x) is.null(x) || rlang::is_string(x)),
+
       path = list(fun = function(x) is.null(x) || rlang::is_string(x)),
       label_separator = list(fun = function(x) is.null(x) || is.character(x)),
       variables_always_at_top = list(fun = function(x) is.null(x) || (is.character(x) && all(x %in% colnames(params$data)))),
@@ -87,6 +91,9 @@ validate_sarosmake_options <- function(params) {
     }
     if(all(is.na(params$data[[params$mesos_var]]))) {
       cli::cli_abort("{.arg mesos_var}: All mesos_var entries are NA.")
+    }
+    if(!rlang::is_string(params$mesos_group) || !params$mesos_group %in% as.character(unique(params$data[[params$mesos_var]]))) {
+      cli::cli_abort("{.arg mesos_group} ({.val {mesos_group}}) must be a value found in {params$mesos_var}.")
     }
   }
 
