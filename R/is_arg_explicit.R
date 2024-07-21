@@ -20,22 +20,3 @@ get_argument_value <- function(arg_name, call, defaults_env, formals_list) {
     return(formals_list[[arg_name]])
   }
 }
-
-compare_and_replace_args <- function(call,
-                                     defaults_env = .saros.env$sarosmake_defaults) {
-  default_values <- formals(sarosmake)
-  default_values <- default_values[!names(default_values) %in% .saros.env$ignore_args]
-  default_values <- lapply(default_values, eval)
-
-  # Loop over each argument in the function
-  arg_names <- names(default_values)
-  final_args <- list()
-
-  for (arg_name in arg_names) {
-    final_args[[arg_name]] <- get_argument_value(arg_name = arg_name,
-                                                 call = call,
-                                                 defaults_env = defaults_env,
-                                                 formals_list = default_values)
-  }
-  final_args
-}

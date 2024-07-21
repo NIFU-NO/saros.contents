@@ -15,12 +15,12 @@ sarosmake(
   ...,
   require_common_categories = TRUE,
   path = NULL,
+  show_for = c("all"),
   mesos_var = NULL,
   mesos_group = NULL,
   totals = FALSE,
   categories_treated_as_na = NULL,
   label_separator = " - ",
-  show_for = c("target", "others", "all"),
   showNA = c("ifany", "always", "never"),
   data_label = c("percentage_bare", "percentage", "proportion", "count"),
   html_interactive = TRUE,
@@ -97,6 +97,12 @@ Whether to check if all items share common categories.}
 
 Path to save docx-output.}
 
+\item{show_for}{\emph{Which groups to display results for}
+
+\verb{vector<character>} // \emph{default:} \code{c("target", "others", "all")} (\code{optional})
+
+Choose whether to produce results for target (mesos) group, others, or all combined.}
+
 \item{mesos_var}{\emph{Variable in \code{data} indicating groups to tailor reports for}
 
 \verb{scalar<character>} // \emph{default:} \code{NULL} (\code{optional})
@@ -124,12 +130,6 @@ Categories that should be treated as NA.}
 \verb{scalar<character>} // \emph{default:} \code{NULL} (\code{optional})
 
 Separator for main question from sub-question.}
-
-\item{show_for}{\emph{Which groups to display results for}
-
-\verb{vector<character>} // \emph{default:} \code{c("target", "others", "all")} (\code{optional})
-
-Choose whether to produce results for target (mesos) group, others, or all combined.}
 
 \item{showNA}{\emph{Show NA categories}
 

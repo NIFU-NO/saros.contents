@@ -279,13 +279,14 @@ sarosmake <-
            require_common_categories = TRUE,
            path = NULL,
 
+           # Multiple output, splits
+           show_for = c("all"), #"target", "others",
            mesos_var = NULL,
            mesos_group = NULL,
+
            totals = FALSE,
            categories_treated_as_na = NULL,
            label_separator = " - ",
-
-           show_for = c("target", "others", "all"),
            showNA = c("ifany", "always", "never"),
            data_label = c("percentage_bare", "percentage", "proportion", "count"),
            html_interactive = TRUE,
@@ -346,7 +347,10 @@ sarosmake <-
     indep_enq <- rlang::enquo(arg = indep)
     indep_pos <- tidyselect::eval_select(indep_enq, data = data)
 
-    args <- compare_and_replace_args(call = current_call)
+    args <- compare_and_replace_args(call = current_call,
+                                     ignore_args = .saros.env$ignore_args,
+                                     defaults_env = sarosmake_global_settings_get()
+                                     )
     args$data <- data # reinsert after compare_and_replace_args
     args$dep <- names(dep_pos)
     args$indep <- names(indep_pos)
@@ -366,15 +370,35 @@ sarosmake <-
     if(grepl(x=args$type, pattern = "freq")) args$data_label <- "count"
 
 
-    args$data_summary <- rlang::exec(summarize_data, !!!args)
+    args$show_for |>
+      rlang::set_names() |>
+    lapply(FUN = function(s) {
+      if(s == "target") {
+        if(!rlang::is_string(args$mesos_var) || !rlang::is_string(args$mesos_group)) {
+          cli::cli_abort("{.arg mesos_var} and {.arg mesos_group} must be specified (as strings) when {.arg show_for} is set as {.val {s}}.")
+        }
+        args$data <-
+          args$data |>
+          dplyr::filter(.data[[args$mesos_var]] == args$mesos_group)
+      } else if(s == "others") {
+        if(!rlang::is_string(args$mesos_var) || !rlang::is_string(args$mesos_group)) {
+          cli::cli_abort("{.arg mesos_var} and {.arg mesos_group} must be specified (as strings) when {.arg show_for} is set as {.val {s}}.")
+        }
 
+        args$data <-
+          args$data |>
+          dplyr::filter(.data[[args$mesos_var]] != args$mesos_group)
+      }
 
-    args$data_summary <-
-      post_process_sarosmake_data(data = args$data_summary,
-                                  indep = args$indep,
-                                  showNA = args$showNA,
-                                  colour_2nd_binary_cat = args$colour_2nd_binary_cat)
+      args$data_summary <-
+        rlang::exec(summarize_data, !!!args) |>
+        post_process_sarosmake_data(data = _,
+                                    indep = args$indep,
+                                    showNA = args$showNA,
+                                    colour_2nd_binary_cat = args$colour_2nd_binary_cat)
 
-    rlang::exec(makeme, type=args$type, !!!args[!names(args) %in% c("type")])
+      rlang::exec(makeme, type=args$type, !!!args[!names(args) %in% c("type")])
+
+    })
 
   }
