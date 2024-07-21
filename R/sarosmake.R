@@ -374,16 +374,10 @@ sarosmake <-
       rlang::set_names() |>
     lapply(FUN = function(s) {
       if(s == "target") {
-        if(!rlang::is_string(args$mesos_var) || !rlang::is_string(args$mesos_group)) {
-          cli::cli_abort("{.arg mesos_var} and {.arg mesos_group} must be specified (as strings) when {.arg show_for} is set as {.val {s}}.")
-        }
         args$data <-
           args$data |>
           dplyr::filter(.data[[args$mesos_var]] == args$mesos_group)
       } else if(s == "others") {
-        if(!rlang::is_string(args$mesos_var) || !rlang::is_string(args$mesos_group)) {
-          cli::cli_abort("{.arg mesos_var} and {.arg mesos_group} must be specified (as strings) when {.arg show_for} is set as {.val {s}}.")
-        }
 
         args$data <-
           args$data |>

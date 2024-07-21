@@ -85,6 +85,14 @@ validate_sarosmake_options <- function(params) {
   params$showNA <- params$showNA[1]
   params$data_label <- params$data_label[1]
 
+
+  if(any(c("target", "others") %in% params$show_for) &&
+     !(rlang::is_string(params$mesos_var) && rlang::is_string(params$mesos_group))) {
+
+      cli::cli_abort("{.arg mesos_var} and {.arg mesos_group} must be specified (as strings) when {.arg show_for} contains {.val 'target'} or {.val 'others'}.")
+
+  }
+
   if(rlang::is_string(params$mesos_var)) {
     if(!any(colnames(params$data) == params$mesos_var)) {
       cli::cli_abort("{.arg mesos_var}: {.arg {params$mesos_var}} not found in data.")
