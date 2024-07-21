@@ -49,6 +49,7 @@ sarosmake(
   font_family = "sans",
   docx_template = NULL,
   return_raw = FALSE,
+  simplify_output = TRUE,
   table_main_question_as_header = FALSE,
   translations = list(last_sep = " and ", by_breakdown = " by ", table_heading_N =
     "Total (N)", by_total = "Everyone", sigtest_prefix = "Significance testing of ",
@@ -282,9 +283,14 @@ Can be either a valid character path to a reference Word file, or an existing rd
 
 \item{return_raw}{\emph{NOT IN USE}
 
-\verb{scalar<integer>} // \emph{default:} \code{FALSE}
+\verb{scalar<logical>} // \emph{default:} \code{FALSE}
 
 Whether to return the raw static element.}
+
+\item{simplify_output}{\verb{scalar<logical>} // \emph{default:} \code{TRUE}
+
+If TRUE, a list output with a single output element will return the element
+itself, whereas list with multiple elements will return the list.}
 
 \item{table_main_question_as_header}{\emph{Table main question as header}
 

@@ -64,9 +64,16 @@
 #'
 #' @param return_raw *NOT IN USE*
 #'
-#'   `scalar<integer>` // *default:* `FALSE`
+#'   `scalar<logical>` // *default:* `FALSE`
 #'
 #'   Whether to return the raw static element.
+#'
+#' @param simplify_output
+#'
+#'   `scalar<logical>` // *default:* `TRUE`
+#'
+#'   If TRUE, a list output with a single output element will return the element
+#'   itself, whereas list with multiple elements will return the list.
 #'
 #' @param mesos_var *Variable in `data` indicating groups to tailor reports for*
 #'
@@ -321,6 +328,7 @@ sarosmake <-
 
            docx_template = NULL,
            return_raw = FALSE,
+           simplify_output = TRUE,
 
            table_main_question_as_header = FALSE,
 
@@ -369,30 +377,31 @@ sarosmake <-
 
     if(grepl(x=args$type, pattern = "freq")) args$data_label <- "count"
 
-
-    args$show_for |>
+    out <-
+      args$show_for |>
       rlang::set_names() |>
-    lapply(FUN = function(s) {
-      if(s == "target") {
-        args$data <-
-          args$data |>
-          dplyr::filter(.data[[args$mesos_var]] == args$mesos_group)
-      } else if(s == "others") {
+      lapply(FUN = function(s) {
+        if(s == "target") {
+          args$data <-
+            args$data |>
+            dplyr::filter(.data[[args$mesos_var]] == args$mesos_group)
+        } else if(s == "others") {
 
-        args$data <-
-          args$data |>
-          dplyr::filter(.data[[args$mesos_var]] != args$mesos_group)
-      }
+          args$data <-
+            args$data |>
+            dplyr::filter(.data[[args$mesos_var]] != args$mesos_group)
+        }
 
-      args$data_summary <-
-        rlang::exec(summarize_data, !!!args) |>
-        post_process_sarosmake_data(data = _,
-                                    indep = args$indep,
-                                    showNA = args$showNA,
-                                    colour_2nd_binary_cat = args$colour_2nd_binary_cat)
+        args$data_summary <-
+          rlang::exec(summarize_data, !!!args) |>
+          post_process_sarosmake_data(data = _,
+                                      indep = args$indep,
+                                      showNA = args$showNA,
+                                      colour_2nd_binary_cat = args$colour_2nd_binary_cat)
 
-      rlang::exec(makeme, type=args$type, !!!args[!names(args) %in% c("type")])
+        rlang::exec(makeme, type=args$type, !!!args[!names(args) %in% c("type")])
 
-    })
+      })
+    if(isTRUE(args$simplify_output) && length(out)==1) out[[1]] else out
 
   }
