@@ -29,10 +29,16 @@ if(!exists(".saros.env")) .saros.env <- NULL
   .saros.env$sarosmake_defaults$showNA <<- .saros.env$sarosmake_defaults$showNA[1]
   .saros.env$sarosmake_defaults$data_label <<- .saros.env$sarosmake_defaults$data_label[1]
 
+
+  .saros.env$n_rng_defaults <<-
+    lapply(formals(n_rng)[!names(formals(n_rng)) %in% c("data", "dep", "indep", "...")],
+           eval)
+
   # Initialize global options with the factory defaults if not already set
   .saros_options <- getOption("saros", list())
   if (is.null(.saros_options$sarosmake_defaults)) {
     .saros_options$sarosmake_defaults <- .saros.env$sarosmake_defaults
+    .saros_options$n_rng_defaults <- .saros.env$n_rng_defaults
     options(saros = .saros_options)
   }
 }

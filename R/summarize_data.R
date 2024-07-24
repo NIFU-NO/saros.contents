@@ -208,7 +208,7 @@ sort_data <- function(data_summary,
 #'
 #'   Both the absolute and relative folderpaths are required, as strings.
 #' @importFrom rlang !!!
-#' @export
+#' @keywords internal
 #' @return Dataset
 #'
 summarize_data <-

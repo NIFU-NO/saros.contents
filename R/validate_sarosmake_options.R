@@ -31,6 +31,7 @@ validate_sarosmake_options <- function(params) {
       # For mesos, see also checks at the bottom of function
       mesos_var = list(fun = function(x) is.null(x) || rlang::is_string(x)),
       mesos_group = list(fun = function(x) is.null(x) || rlang::is_string(x)),
+      hide_for_all_if_hidden_for_crowd = list(fun = function(x) is.null(x) || rlang::is_string(x)),
 
       path = list(fun = function(x) is.null(x) || rlang::is_string(x)),
       label_separator = list(fun = function(x) is.null(x) || is.character(x)),
@@ -42,13 +43,14 @@ validate_sarosmake_options <- function(params) {
       # Boolean
       require_common_categories = list(fun = is_bool),
       return_raw = list(fun = is_bool),
+      simplify_output = list(fun = is_bool),
       descend = list(fun = is_bool),
       vertical = list(fun = is_bool),
-      hide_chr_for_others = list(fun = is_bool),
-      hide_variable_if_all_na = list(fun = is_bool),
+      hide_for_crowd_if_all_na = list(fun = is_bool),
       hide_axis_text_if_single_variable = list(fun = is_bool),
       totals = list(fun = is_bool),
       table_main_question_as_header = list(fun = is_bool),
+      hide_for_crowd_if_all_na = list(fun = is_bool),
 
       # Numeric and integer
       hide_label_if_prop_below = list(fun = function(x) is_scalar_finite_doubleish(x) && x >= 0 && x <= 1),
@@ -59,8 +61,13 @@ validate_sarosmake_options <- function(params) {
       legend_font_size = list(fun = function(x) rlang::is_integerish(x, n = 1, finite = TRUE) && x >= 0 && x <= 72),
       strip_width = list(fun = function(x) rlang::is_integerish(x, n = 1, finite = TRUE) && x >= 0 && x <= 200),
       plot_height = list(fun = function(x) rlang::is_double(x, n = 1, finite = TRUE) && x >= 0 && x <= 200),
+      hide_for_crowd_if_valid_n_below = list(fun = function(x) rlang::is_integerish(x, n = 1)),
+      hide_for_crowd_if_category_k_below = list(fun = function(x) rlang::is_integerish(x, n = 1)),
+      hide_for_crowd_if_category_n_below = list(fun = function(x) rlang::is_integerish(x, n = 1)),
+      hide_for_crowd_if_cell_n_below = list(fun = function(x) rlang::is_integerish(x, n = 1)),
 
       # Enums
+      crowd = list(fun = function(x) is.character(x) && all(x %in% c("target", "others", "all"))),
       data_label = list(fun = function(x) is.character(x) && any(env$data_label == x[1])),
       showNA = list(fun = function(x) is.character(x) && any(env$showNA == x[1])),
       colour_palette_nominal = list(fun = function(x) (is.character(x) && all(is_colour(x))) || is.null(x) || is.function(x)),
@@ -84,6 +91,14 @@ validate_sarosmake_options <- function(params) {
   params$type <- params$type[1]
   params$showNA <- params$showNA[1]
   params$data_label <- params$data_label[1]
+
+
+  if(any(c("target", "others") %in% params$crowd) &&
+     !(rlang::is_string(params$mesos_var) && rlang::is_string(params$mesos_group))) {
+
+      cli::cli_abort("{.arg mesos_var} and {.arg mesos_group} must be specified (as strings) when {.arg crowd} contains {.val 'target'} or {.val 'others'}.")
+
+  }
 
   if(rlang::is_string(params$mesos_var)) {
     if(!any(colnames(params$data) == params$mesos_var)) {

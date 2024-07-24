@@ -15,9 +15,16 @@ sarosmake(
   ...,
   require_common_categories = TRUE,
   path = NULL,
-  show_for = c("all"),
+  crowd = c("all"),
   mesos_var = NULL,
   mesos_group = NULL,
+  simplify_output = TRUE,
+  hide_for_crowd_if_all_na = TRUE,
+  hide_for_crowd_if_valid_n_below = 0,
+  hide_for_crowd_if_category_k_below = 2,
+  hide_for_crowd_if_category_n_below = 0,
+  hide_for_crowd_if_cell_n_below = 0,
+  hide_for_all_crowds_if_hidden_for_crowd = NULL,
   totals = FALSE,
   categories_treated_as_na = NULL,
   label_separator = " - ",
@@ -26,8 +33,6 @@ sarosmake(
   html_interactive = TRUE,
   hide_axis_text_if_single_variable = TRUE,
   hide_label_if_prop_below = 0.01,
-  hide_chr_for_others = TRUE,
-  hide_variable_if_all_na = TRUE,
   inverse = FALSE,
   vertical = FALSE,
   digits = 0,
@@ -73,11 +78,7 @@ Columns in \code{data}. \code{dep} is compulsory.}
 
 \verb{scalar<character>} // \emph{default:} \code{"prop_plot"} (\code{optional})
 
-\describe{
-\item{"1"}{Choose one of various plot/table kinds. Suffix indicates "html" (interactive), "docx" (MS Chart/Word tables), "pdf" (static figures/tables)}
-\item{"2"}{Create your own makeme-method and register it. It will be served all the arguments as for }
-}
-For a list of registered types in your session, use \code{methods(makeme)}.}
+For a list of registered types in your session, use \code{get_sarosmake_types()}.}
 
 \item{...}{\emph{Dynamic dots}
 
@@ -97,11 +98,12 @@ Whether to check if all items share common categories.}
 
 Path to save docx-output.}
 
-\item{show_for}{\emph{Which groups to display results for}
+\item{crowd}{\emph{Which group(s) to display results for}
 
 \verb{vector<character>} // \emph{default:} \code{c("target", "others", "all")} (\code{optional})
 
-Choose whether to produce results for target (mesos) group, others, or all combined.}
+Choose whether to produce results for target (mesos) group, others, all, or
+combinations of these.}
 
 \item{mesos_var}{\emph{Variable in \code{data} indicating groups to tailor reports for}
 
@@ -112,6 +114,58 @@ Column name in data indicating the groups for which mesos reports will be produc
 \item{mesos_group}{\verb{scalar<character>} // \emph{default:} \code{NULL} (\code{optional})
 
 String, target group.}
+
+\item{simplify_output}{\verb{scalar<logical>} // \emph{default:} \code{TRUE}
+
+If TRUE, a list output with a single output element will return the element
+itself, whereas list with multiple elements will return the list.}
+
+\item{hide_for_crowd_if_all_na}{\emph{Hide variable from output if containing all NA}
+
+\verb{scalar<boolean>} // \emph{default:} \code{TRUE}
+
+Whether to remove all variables (in particular useful for mesos) if all values are NA}
+
+\item{hide_for_crowd_if_valid_n_below}{\emph{Hide variable if variable has < n observations}
+
+\verb{scalar<integer>} // \emph{default:} \code{0}
+
+Whether to hide a variable for a crowd if variable contains fewer than n observations (always ignoring NA).}
+
+\item{hide_for_crowd_if_category_k_below}{\emph{Hide variable if < k categories}
+
+\verb{scalar<integer>} // \emph{default:} \code{2}
+
+Whether to hide a variable for a crowd if variable contains fewer than k used categories (always ignoring NA).
+Defaults to \code{2} because a unitary plot/table is rarely informative.}
+
+\item{hide_for_crowd_if_category_n_below}{\emph{Hide variable if having a category with < n observations}
+
+\verb{scalar<integer>} // \emph{default:} \code{0}
+
+Whether to hide a variable for a crowd if variable contains a category with less than n observations (ignoring NA)
+Cells with a 0 count is not considered as these are usually not a problem for anonymity.}
+
+\item{hide_for_crowd_if_cell_n_below}{\emph{Hide variable if having a cell with < n}
+
+\verb{scalar<integer>} // \emph{default:} \code{0}
+
+Whether to hide a variable for a crowd if the combination of dep-indep results in a cell with less than n observations (ignoring NA).
+Cells with a 0 count is not considered as these are usually not a problem for anonymity.}
+
+\item{hide_for_all_crowds_if_hidden_for_crowd}{\emph{Conditional hiding}
+
+\verb{scalar<character>} // \emph{default:} \code{NULL} (\code{optional})
+
+Select one of the \code{crowd} output groups. If selected, will hide a variable across
+all \code{crowd}-outputs if it for some reason is not displayed for
+\code{hide_for_all_if_hidden_for_crowd}. For instance, say:
+
+\verb{crowd = c("target", "others"), hide_variable_if_all_na = TRUE,}
+\code{hide_for_all_if_hidden_for_crowd = "target"}
+
+will hide variables from both target and others-outputs if all are NA in
+the target-group.}
 
 \item{totals}{\emph{Include totals}
 
@@ -160,20 +214,6 @@ Whether to hide text on the y-axis label if just a single variable.}
 \verb{scalar<numeric>} // \emph{default:} \code{NULL} (\code{optional})
 
 Whether to hide label if below this value.}
-
-\item{hide_chr_for_others}{\emph{Hide open response displays for others}
-
-\verb{scalar<logical>} // \emph{default:} \code{TRUE} (\code{optional})
-
-For mesos reports using the element "chr_table", open responses are
-displayed for also the entire sample (\code{FALSE}) or only for the mesos
-group to ensure data privacy (\code{TRUE}).}
-
-\item{hide_variable_if_all_na}{\emph{Hide variable from outputs if containing all NA}
-
-\verb{scalar<boolean>} // \emph{default:} \code{TRUE} (\code{optional})
-
-Whether to remove all variables (in particular useful for mesos) if all values are NA}
 
 \item{inverse}{\emph{Flag to swap x-axis and faceting}
 
@@ -282,7 +322,7 @@ Can be either a valid character path to a reference Word file, or an existing rd
 
 \item{return_raw}{\emph{NOT IN USE}
 
-\verb{scalar<integer>} // \emph{default:} \code{FALSE}
+\verb{scalar<logical>} // \emph{default:} \code{FALSE}
 
 Whether to return the raw static element.}
 
