@@ -18,9 +18,20 @@ crosstable3.data.frame <-
     showNA <- rlang::arg_match(showNA, values = eval(formals(sarosmake)$showNA), error_call = call)
 
 
+    invalid_deps <- dep[!dep %in% colnames(data)]
+    if(length(invalid_deps)>0) {
+      cli::cli_abort("Column{?s} {.var {invalid_deps}} {?doesn't/don't} exist.")
+    }
+    invalid_indeps <- indep[!indep %in% colnames(data)]
+    if(length(invalid_indeps)>0) {
+      cli::cli_abort("Column{?s} {.var {invalid_indeps}} {?doesn't/don't} exist.")
+    }
+
     # indep_names <- colnames(data[, indep, drop = FALSE])
     indep_labels <- saros.base::get_raw_labels(data = data, col_pos = indep)
     col_names <- colnames(data[ , dep, drop=FALSE])[!(colnames(data[ , dep, drop=FALSE]) %in% indep)]
+
+
 
     if(length(col_names)==0) return()
 
@@ -116,8 +127,12 @@ crosstable3.data.frame <-
               })
 
             names(summary_prop)[ncol(summary_prop)] <- ".count"
+
+            grouped_count <- summary_prop[summary_prop$.category != "NA", ]
             grouped_count <- tryCatch(
-              stats::aggregate(x = summary_prop$.count, by = summary_prop[, indep, drop = FALSE], FUN = sum, na.rm=TRUE, simplify = TRUE),
+              stats::aggregate(x = grouped_count$.count,
+                               by = grouped_count[, indep, drop = FALSE],
+                               FUN = sum, na.rm=TRUE, simplify = TRUE),
               error = function(e) {
                 data.frame(matrix(NA, ncol = length(indep), dimnames = list(NULL, indep)))
               })
