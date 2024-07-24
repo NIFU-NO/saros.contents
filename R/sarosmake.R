@@ -18,11 +18,7 @@
 #'
 #'   `scalar<character>` // *default:* `"prop_plot"` (`optional`)
 #'
-#' \describe{
-#' \item{"1"}{Choose one of various plot/table kinds. Suffix indicates "html" (interactive), "docx" (MS Chart/Word tables), "pdf" (static figures/tables)}
-#' \item{"2"}{Create your own makeme-method and register it. It will be served all the arguments as for }
-#' }
-#' For a list of registered types in your session, use `methods(makeme)`.
+#' For a list of registered types in your session, use `get_sarosmake_types()`.
 #'
 #' @param categories_treated_as_na *NA categories*
 #'
@@ -87,11 +83,12 @@
 #'
 #'   String, target group.
 #'
-#' @param show_for *Which groups to display results for*
+#' @param crowd *Which group(s) to display results for*
 #'
 #'   `vector<character>` // *default:* `c("target", "others", "all")` (`optional`)
 #'
-#'   Choose whether to produce results for target (mesos) group, others, or all combined.
+#'   Choose whether to produce results for target (mesos) group, others, all, or
+#'   combinations of these.
 #'
 #' @param showNA *Show NA categories*
 #'
@@ -111,19 +108,52 @@
 #'
 #'   Whether to hide text on the y-axis label if just a single variable.
 #'
-#' @param hide_chr_for_others *Hide open response displays for others*
+#' @param hide_for_all_crowds_if_hidden_for_crowd *Conditional hiding*
 #'
-#'   `scalar<logical>` // *default:* `TRUE` (`optional`)
+#'   `scalar<character>` // *default:* `NULL` (`optional`)
 #'
-#'   For mesos reports using the element "chr_table", open responses are
-#'   displayed for also the entire sample (`FALSE`) or only for the mesos
-#'   group to ensure data privacy (`TRUE`).
+#'   Select one of the `crowd` output groups. If selected, will hide a variable across
+#'   all `crowd`-outputs if it for some reason is not displayed for
+#'   `hide_for_all_if_hidden_for_crowd`. For instance, say:
 #'
-#' @param hide_variable_if_all_na *Hide variable from outputs if containing all NA*
+#'   `crowd = c("target", "others"), hide_variable_if_all_na = TRUE,`
+#'   `hide_for_all_if_hidden_for_crowd = "target"`
 #'
-#'   `scalar<boolean>` // *default:* `TRUE` (`optional`)
+#'   will hide variables from both target and others-outputs if all are NA in
+#'   the target-group.
+#'
+#' @param hide_for_crowd_if_all_na *Hide variable from output if containing all NA*
+#'
+#'   `scalar<boolean>` // *default:* `TRUE`
 #'
 #'   Whether to remove all variables (in particular useful for mesos) if all values are NA
+#'
+#' @param hide_for_crowd_if_valid_n_below *Hide variable if variable has < n observations*
+#'
+#'   `scalar<integer>` // *default:* `0`
+#'
+#'   Whether to hide a variable for a crowd if variable contains fewer than n observations (always ignoring NA).
+#'
+#' @param hide_for_crowd_if_category_k_below *Hide variable if < k categories*
+#'
+#'   `scalar<integer>` // *default:* `2`
+#'
+#'   Whether to hide a variable for a crowd if variable contains fewer than k used categories (always ignoring NA).
+#'   Defaults to `2` because a unitary plot/table is rarely informative.
+#'
+#' @param hide_for_crowd_if_category_n_below *Hide variable if having a category with < n observations*
+#'
+#'   `scalar<integer>` // *default:* `0`
+#'
+#'   Whether to hide a variable for a crowd if variable contains a category with less than n observations (ignoring NA)
+#'   Cells with a 0 count is not considered as these are usually not a problem for anonymity.
+#'
+#' @param hide_for_crowd_if_cell_n_below *Hide variable if having a cell with < n*
+#'
+#'   `scalar<integer>` // *default:* `0`
+#'
+#'   Whether to hide a variable for a crowd if the combination of dep-indep results in a cell with less than n observations (ignoring NA).
+#'   Cells with a 0 count is not considered as these are usually not a problem for anonymity.
 #'
 #' @param label_separator *How to separate main question from sub-question*
 #'
@@ -286,10 +316,20 @@ sarosmake <-
            require_common_categories = TRUE,
            path = NULL,
 
-           # Multiple output, splits
-           show_for = c("all"), #"target", "others",
+           # Multiple output, splits and selective hiding of variables
+           crowd = c("all"), #"target", "others",
            mesos_var = NULL,
            mesos_group = NULL,
+           simplify_output = TRUE,
+
+           # Hide variable (combinations) for a crowd if...
+           hide_for_crowd_if_all_na = TRUE,
+           hide_for_crowd_if_valid_n_below = 0,
+           hide_for_crowd_if_category_k_below = 2,
+           hide_for_crowd_if_category_n_below = 0,
+           hide_for_crowd_if_cell_n_below = 0,
+           hide_for_all_crowds_if_hidden_for_crowd = NULL,
+
 
            totals = FALSE,
            categories_treated_as_na = NULL,
@@ -299,8 +339,6 @@ sarosmake <-
            html_interactive = TRUE,
            hide_axis_text_if_single_variable = TRUE,
            hide_label_if_prop_below = .01,
-           hide_chr_for_others = TRUE,
-           hide_variable_if_all_na = TRUE,
            inverse = FALSE,
            vertical = FALSE,
            digits = 0,
@@ -308,12 +346,14 @@ sarosmake <-
            x_axis_label_width = 25,
            strip_width = 25,
 
+           # Sorting
            sort_by = ".upper",
            descend = TRUE,
            variables_always_at_top = NULL,
            variables_always_at_bottom = NULL,
 
 
+           # Colours
            colour_palette = NULL,
            colour_2nd_binary_cat = "#ffffff",
            colour_na = "grey",
@@ -328,7 +368,6 @@ sarosmake <-
 
            docx_template = NULL,
            return_raw = FALSE,
-           simplify_output = TRUE,
 
            table_main_question_as_header = FALSE,
 
@@ -355,14 +394,14 @@ sarosmake <-
     indep_enq <- rlang::enquo(arg = indep)
     indep_pos <- tidyselect::eval_select(indep_enq, data = data)
 
-    args <- compare_and_replace_args(call = current_call,
-                                     ignore_args = .saros.env$ignore_args,
-                                     defaults_env = sarosmake_global_settings_get()
-                                     )
-    args$data <- data # reinsert after compare_and_replace_args
+    args <- check_options(call = current_call,
+                          ignore_args = .saros.env$ignore_args,
+                          defaults_env = sarosmake_global_settings_get()
+                          )
+    args$data <- data # reinsert after check_options
     args$dep <- names(dep_pos)
     args$indep <- names(indep_pos)
-    args$show_for <- args$show_for
+    args$crowd <- args$crowd
     args$showNA <- args$showNA[1]
     args$data_label <- args$data_label[1]
     args$type <- eval(args$type)[1]
@@ -377,31 +416,48 @@ sarosmake <-
 
     if(grepl(x=args$type, pattern = "freq")) args$data_label <- "count"
 
-    out <-
-      args$show_for |>
-      rlang::set_names() |>
-      lapply(FUN = function(s) {
-        if(s == "target") {
-          args$data <-
-            args$data |>
-            dplyr::filter(.data[[args$mesos_var]] == args$mesos_group)
-        } else if(s == "others") {
+    # Set hide_for_all_crowds_if_hidden_for_crowd first to get its excluded variables early
+    if(rlang::is_string(args$hide_for_all_crowds_if_hidden_for_crowd)) {
+      args$crowd <- c(args$hide_for_all_crowds_if_hidden_for_crowd,
+                      args$crowd[args$crowd != args$hide_for_all_crowds_if_hidden_for_crowd])
+    }
 
-          args$data <-
-            args$data |>
-            dplyr::filter(.data[[args$mesos_var]] != args$mesos_group)
-        }
 
-        args$data_summary <-
-          rlang::exec(summarize_data, !!!args) |>
-          post_process_sarosmake_data(data = _,
-                                      indep = args$indep,
-                                      showNA = args$showNA,
-                                      colour_2nd_binary_cat = args$colour_2nd_binary_cat)
+    omitted_vars <- c()
+    out <- list()
 
-        rlang::exec(makeme, type=args$type, !!!args[!names(args) %in% c("type")])
+    for(crwd in  rlang::set_names(args$crowd)) {
+      kept_cols_list <-
+        keep_cols(data = args$data,
+                  dep = args$dep, indep = args$indep,
+                  crowd = unname(crwd),
+                  mesos_var = args$mesos_var,
+                  mesos_group = args$mesos_group,
+                  hide_for_crowd_if_all_na = args$hide_for_crowd_if_all_na, # 1
+                  hide_for_crowd_if_valid_n_below = args$hide_for_crowd_if_valid_n_below, # 2
+                  hide_for_crowd_if_category_k_below = args$hide_for_crowd_if_category_k_below, # 3
+                  hide_for_crowd_if_category_n_below = args$hide_for_crowd_if_category_n_below, # 4
+                  hide_for_crowd_if_cell_n_below = args$hide_for_crowd_if_cell_n_below, # 5
+                  hide_for_all_crowds_if_hidden_for_crowd_vars = omitted_vars)
 
-      })
+      args$data <- kept_cols_list[["data"]]
+      if(crwd %in% args$hide_for_all_crowds_if_hidden_for_crowd) {
+        omitted_vars <- c(omitted_vars,  kept_cols_list[["omitted_vars"]])
+      }
+
+      if(!any(colnames(args$data) %in% args$dep)) next
+      # browser()
+      args$data_summary <-
+        rlang::exec(summarize_data, !!!args) |>
+        post_process_sarosmake_data(data = _,
+
+                                    indep = args$indep,
+                                    showNA = args$showNA,
+                                    colour_2nd_binary_cat = args$colour_2nd_binary_cat)
+      out[[crwd]] <- rlang::exec(makeme, type=args$type, !!!args[!names(args) %in% c("type")])
+
+    }
+
     if(isTRUE(args$simplify_output) && length(out)==1) out[[1]] else out
 
   }

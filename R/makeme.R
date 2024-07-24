@@ -23,6 +23,78 @@ makeme <- function(type, ...) {
 }
 
 
+
+#' Get all registered options for the type-argument in the `sarosmake`-function
+#'
+#'
+#' @description
+#' The [saros.contents::sarosmake()]-function take for the argument `type`
+#' one of several strings to indicate content type and output type.
+#' This function collects all registered alternatives. Extensions are possible,
+#' see further below.
+#'
+#'
+#' Built-in types:
+#'
+#' Whereas the names of the types can be arbitrary, a pattern is pursued in the
+#' built-in types.
+#' Prefix indicates what dependent data type it is intended for
+#' \describe{
+#' \item{"cat"}{Categorical (ordinal and nominal) data.}
+#' \item{"chr"}{Open ended responses and other character data.}
+#' \item{"int"}{Integer and numeric data.}
+#' }
+#'
+#' Suffix indicates output
+#' \describe{
+#' \item{"html"}{Interactive html, usually what you want for Quarto, as Quarto can usually convert to other formats when needed}
+#' \item{"docx"}{However, Quarto's and Pandoc's docx-support is currently still limited, for instance as vector graphics are converted to raster graphics for docx output. Hence, `saros.contents` offers some types that outputs into MS Chart vector graphics. Note that this is experimental and not actively developed.}
+#' \item{"pdf"}{This is basically just a shortcut for "html" with `interactive=FALSE`}
+#' }
+#'
+#' # Further details about some of the built-in types:
+#' \describe{
+#' \item{"cat_plot_"}{A Likert style plot for groups of categorical variables sharing the same categories.}
+#' \item{"cat_table_"}{A Likert style table.}
+#' \item{"chr_table_"}{A single-column table listing unique open ended responses.}
+#' \item{"sigtest_table_"}{See below}
+#' }
+#'
+#' sigtest_table_\*: Make Table with All Combinations of
+#' Univariate/Bivariate Significance Tests Based on Variable Types
+#'
+#'  Although there are hundreds of significance tests for associations between
+#'  two variables, depending upon the distributions, variables types and
+#'  assumptions, most fall into a smaller set of popular tests. This function
+#'  runs for all combinations of dependent and independent variables in data,
+#'  with a suitable test (but not the only possible) for the combination. Also
+#'  supports univariate tests, where the assumptions are that of a mean of zero
+#'  for continuous variables or all equal proportions for binary/categorical.
+#'
+#'  This function does not allow any adjustments - use the original underlying
+#'  functions for that (chisq.test, t.test, etc.)
+#'
+#' # Expanding with custom types
+#'
+#' [saros.contents::sarosmake()] calls the generic [saros.contents::makeme()],
+#' which uses the S3-method system to dispatch to the relevant method (i.e.,
+#' `paste0("makeme.", type)`). sarosmake forwards all its arguments to makeme,
+#' with the following exceptions:
+#'
+#'  1. dep and indep are converted from [dplyr::dplyr_tidy_select()]-syntax to simple character vectors, for simplifying building your own functions.
+#'  1. data_summary is attached, which contains many useful pieces of info for many (categorical) displays.
+#'
+#' @return Character vector
+#' @export
+#'
+#' @examples get_sarosmake_types()
+get_sarosmake_types <- function() {
+  out <- as.character(utils::methods("makeme"))
+  stringi::stri_replace_first_fixed(out[out != "makeme.default"],
+                                    pattern = "makeme.", replacement = "")
+}
+
+
 #' @export
 makeme.default <- function(type, ...) {
   dots <- rlang::list2(...)

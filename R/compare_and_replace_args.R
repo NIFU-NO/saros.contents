@@ -1,5 +1,5 @@
 
-compare_and_replace_args <- function(call,
+check_options <- function(call,
                                      defaults_env = sarosmake_global_settings_get(),
                                      default_values = formals(sarosmake),
                                      ignore_args = .saros.env$ignore_args) {
