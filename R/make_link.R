@@ -1,0 +1,73 @@
+#' Save data to a file and return a Markdown link
+#'
+#' The file is automatically named by a hash of the object, removing the need
+#' to come up with unique file names inside a Quarto report. This has the
+#' added benefit of reducing storage needs if the objects needing linking to
+#' are identical, and all are stored in the same folder. It also allows the user
+#' to download multiple files without worrying about accidentally overwriting them.
+#'
+#' @param data *Data or object*
+#'
+#'   `<data.frame|tbl|obj>`
+#'
+#'   Data frame if using a tabular data `save_fn`, or possibly any
+#'   R object, if a serializer `save_fn` is provided (e.g. saveRDS).
+#'
+#' @param folder *Where to store file*
+#'
+#'   `scalar<character>` // *default:* `"."` (`optional`)
+#'
+#'   Defaults to same folder.
+#'
+#' @param file_prefix,file_suffix *File pre-/suffix*
+#'
+#'   `scalar<character>` // *default:* `""` and `".csv"` (`optional`)
+#'
+#'   `file_suffix` should include the dot before the extension.
+#'
+#' @param save_fn *Saving function*
+#'
+#'   `function` // *default:* `utils::write.csv`
+#'
+#'   Can be any saving/writing function. However, first argument must be
+#'   the object to be saved, and the second must be the path. Hence,
+#'   [ggplot2::ggsave()] must be wrapped in another function with `filename` and
+#'   `object` swapped.
+#'
+#' @param link_prefix,link_suffix *Pre/suffix for the link*
+#'
+#'   `scalar<character>` // *default:* `"[download data]("` and `")"`
+#'
+#'   The stuff that is returned.
+#'
+#' @return String.
+#' @export
+#'
+#' @examples
+#' tmpdir <- tempdir()
+#' make_link(mtcars)
+make_link <- function(data,
+                      folder = NULL,
+                      file_prefix = NULL,
+                      file_suffix = ".csv",
+                      save_fn = utils::write.csv,
+                      link_prefix = "[download figure data](",
+                      link_suffix = ")") {
+
+
+  current_call <- match.call()
+  current_call <- current_call[!names(current_call) %in% .saros.env$ignore_args]
+
+  args <- check_options(call = current_call,
+                        ignore_args = .saros.env$ignore_args,
+                        default_values = formals(make_link),
+                        defaults_env = make_link_global_settings_get()
+  )
+  if(!rlang::is_string(args$folder)) args$folder <- "."
+
+  path <- fs::path(args$folder,
+                   paste0(args$file_prefix, rlang::hash(data), args$file_suffix))
+
+  save_fn(data, path)
+  I(paste0(args$link_prefix, path, args$link_suffix))
+}

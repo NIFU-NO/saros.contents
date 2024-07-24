@@ -29,6 +29,9 @@ if(!exists(".saros.env")) .saros.env <- NULL
   .saros.env$sarosmake_defaults$type <<- .saros.env$sarosmake_defaults$type[1]
   .saros.env$sarosmake_defaults$showNA <<- .saros.env$sarosmake_defaults$showNA[1]
   .saros.env$sarosmake_defaults$data_label <<- .saros.env$sarosmake_defaults$data_label[1]
+  .saros.env$make_link_defaults <<-
+    lapply(formals(make_link)[!names(formals(make_link)) %in% c("data")],
+           eval)
 
 
   .saros.env$n_rng_defaults <<-
