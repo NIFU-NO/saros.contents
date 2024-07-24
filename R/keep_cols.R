@@ -32,7 +32,7 @@ keep_cols <- function(data,
   }
 
   kept_vars <- c()
-  # browser()
+
 
   for(d in dep) {
     keep_1 <-

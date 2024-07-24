@@ -54,10 +54,12 @@ sarosmake(
   font_family = "sans",
   docx_template = NULL,
   return_raw = FALSE,
+  table_wide = TRUE,
   table_main_question_as_header = FALSE,
   translations = list(last_sep = " and ", by_breakdown = " by ", table_heading_N =
     "Total (N)", by_total = "Everyone", sigtest_prefix = "Significance testing of ",
-    sigtest_suffix = "", mesos_group_prefix = " Group: ", mesos_group_suffix = "",
+    sigtest_suffix = "", sigtest_variable_header_1 = "Var 1", sigtest_variable_header_2 =
+    "Var 2", mesos_group_prefix = " Group: ", mesos_group_suffix = "",
     mesos_label_all_others = "Others")
 )
 }
@@ -326,6 +328,12 @@ Can be either a valid character path to a reference Word file, or an existing rd
 
 Whether to return the raw static element.}
 
+\item{table_wide}{\emph{Pivot table wider}
+
+\verb{scalar<logical>} // \emph{default:} \code{FALSE} (\code{optional})
+
+Whether to pivot table wider.}
+
 \item{table_main_question_as_header}{\emph{Table main question as header}
 
 \verb{scalar<logical>} // \emph{default:} \code{FALSE} (\code{optional})
@@ -347,5 +355,9 @@ This function allows embedding of interactive or static plots based on various t
 \examples{
 sarosmake(data = saros.base::ex_survey, dep = b_1:b_3)
 sarosmake(data = saros.base::ex_survey, dep = b_1, indep = x1_sex)
-sarosmake(data = saros.base::ex_survey, dep = b_1, indep = x1_sex, type = "cat_prop_plot_docx")
+sarosmake(data = saros.base::ex_survey, dep = b_1:b_3,
+                                        indep = c(x1_sex, x2_human),
+                                        type = "sigtest_table_html")
+sarosmake(data = saros.base::ex_survey, dep = b_1, indep = x1_sex,
+                                        type = "cat_prop_plot_docx")
 }

@@ -253,7 +253,10 @@ summarize_data <-
       add_collapsed_categories(sort_by = dots$sort_by,
                                categories_treated_as_na = dots$categories_treated_as_na,
                                data_label = dots$data_label) |>
-      dplyr::mutate(.variable_label = keep_subitem(fct = .data$.variable_label,
+      dplyr::mutate(.variable_label_prefix = get_main_question(.data$.variable_label,
+                                                   label_separator = dots$label_separator,
+                                                   warn_multiple = FALSE),
+                    .variable_label = keep_subitem(fct = .data$.variable_label,
                                                    label_separator = dots$label_separator)) |>
       # add_n_to_bygroups(add_n_to_bygroup = add_n_to_bygroup, indep_names = indep) |>
       flip_exception_categories(categories_treated_as_na = dots$categories_treated_as_na,

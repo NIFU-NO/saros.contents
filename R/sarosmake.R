@@ -33,31 +33,6 @@
 #'
 #'   One of "proportion", "percentage", "percentage_bare", "count", "mean", or "median".
 #'
-#' @param plot_height *DOCX-setting*
-#'
-#'   `scalar<numeric>` // *default:* `12` (`optional`)
-#'
-#'   DOCX plots need a height, which currently cannot be set easily with a Quarto chunk option.
-#'
-#' @param main_font_size,label_font_size,strip_font_size,legend_font_size *Font sizes*
-#'
-#'   `scalar<integer>` // *default:* `6` (`optional`)
-#'
-#'   ONLY FOR DOCX-OUTPUT. Other output is adjusted using e.g. ggplot2::theme() or set with a global theme (ggplot2::theme_set()).
-#'   Font sizes for general text (6), data label text (3), strip text (6) and legend text (6).
-#'
-#' @param font_family *Font family*
-#'
-#'   `scalar<character>` // *default:* `"sans"` (`optional`)
-#'
-#'   Word font family. See officer::fp_text.
-#'
-#' @param docx_template *Filename or rdocx object*
-#'
-#'   `scalar<character>|<rdocx>-object` // *default:* `NULL` (`optional`)
-#'
-#'   Can be either a valid character path to a reference Word file, or an existing rdocx-object in memory.
-#'
 #' @param return_raw *NOT IN USE*
 #'
 #'   `scalar<logical>` // *default:* `FALSE`
@@ -276,6 +251,40 @@
 #'   `scalar<logical>` // *default:* `FALSE` (`optional`)
 #'
 #'   Whether to include the main question as a header in the table.
+#'
+#' @param table_wide *Pivot table wider*
+#'
+#'   `scalar<logical>` // *default:* `FALSE` (`optional`)
+#'
+#'   Whether to pivot table wider.
+#'
+#'
+#' @param plot_height *DOCX-setting*
+#'
+#'   `scalar<numeric>` // *default:* `12` (`optional`)
+#'
+#'   DOCX plots need a height, which currently cannot be set easily with a Quarto chunk option.
+#'
+#' @param main_font_size,label_font_size,strip_font_size,legend_font_size *Font sizes*
+#'
+#'   `scalar<integer>` // *default:* `6` (`optional`)
+#'
+#'   ONLY FOR DOCX-OUTPUT. Other output is adjusted using e.g. ggplot2::theme() or set with a global theme (ggplot2::theme_set()).
+#'   Font sizes for general text (6), data label text (3), strip text (6) and legend text (6).
+#'
+#' @param font_family *Font family*
+#'
+#'   `scalar<character>` // *default:* `"sans"` (`optional`)
+#'
+#'   Word font family. See officer::fp_text.
+#'
+#' @param docx_template *Filename or rdocx object*
+#'
+#'   `scalar<character>|<rdocx>-object` // *default:* `NULL` (`optional`)
+#'
+#'   Can be either a valid character path to a reference Word file, or an existing rdocx-object in memory.
+#'
+#'
 #' @param ... *Dynamic dots*
 #'
 #'   <[`dynamic-dots`](https://rlang.r-lib.org/reference/dyn-dots.html)>
@@ -291,7 +300,11 @@
 #' @examples
 #' sarosmake(data = saros.base::ex_survey, dep = b_1:b_3)
 #' sarosmake(data = saros.base::ex_survey, dep = b_1, indep = x1_sex)
-#' sarosmake(data = saros.base::ex_survey, dep = b_1, indep = x1_sex, type = "cat_prop_plot_docx")
+#' sarosmake(data = saros.base::ex_survey, dep = b_1:b_3,
+#'                                         indep = c(x1_sex, x2_human),
+#'                                         type = "sigtest_table_html")
+#' sarosmake(data = saros.base::ex_survey, dep = b_1, indep = x1_sex,
+#'                                         type = "cat_prop_plot_docx")
 sarosmake <-
   function(data,
            dep = tidyselect::everything(),
@@ -369,6 +382,7 @@ sarosmake <-
            docx_template = NULL,
            return_raw = FALSE,
 
+           table_wide = TRUE,
            table_main_question_as_header = FALSE,
 
            translations =
@@ -378,6 +392,8 @@ sarosmake <-
                   by_total = "Everyone",
                   sigtest_prefix = "Significance testing of ",
                   sigtest_suffix = "",
+                  sigtest_variable_header_1 = "Var 1",
+                  sigtest_variable_header_2 = "Var 2",
                   mesos_group_prefix = " Group: ",
                   mesos_group_suffix = "",
                   mesos_label_all_others = "Others"
@@ -409,10 +425,14 @@ sarosmake <-
     validate_sarosmake_options(params = args)
 
 
-    check_multiple_indep(data, indep = {{ indep }})
+    if(!args$type %in% c("sigtest_table_html")) {
+      check_multiple_indep(data, indep = {{ indep }})
+      check_category_pairs(data = data, cols_pos = c(dep_pos))
+
+    }
 
 
-    check_category_pairs(data = data, cols_pos = c(dep_pos))
+
 
     if(grepl(x=args$type, pattern = "freq")) args$data_label <- "count"
 
@@ -429,7 +449,8 @@ sarosmake <-
     for(crwd in  rlang::set_names(args$crowd)) {
       kept_cols_list <-
         keep_cols(data = args$data,
-                  dep = args$dep, indep = args$indep,
+                  dep = args$dep,
+                  indep = args$indep,
                   crowd = unname(crwd),
                   mesos_var = args$mesos_var,
                   mesos_group = args$mesos_group,
@@ -446,15 +467,37 @@ sarosmake <-
       }
 
       if(!any(colnames(args$data) %in% args$dep)) next
-      # browser()
-      args$data_summary <-
-        rlang::exec(summarize_data, !!!args) |>
-        post_process_sarosmake_data(data = _,
 
+      variable_type_dep <-
+        lapply(args$dep, function(v) class(args$data[[v]])) |>
+        unlist()
+
+      # Future: switch or S3
+      if(all(variable_type_dep %in% c("integer", "numeric"))) {
+
+        args$data_summary <-
+          rlang::exec(summarize_int_cat_data, !!!args)
+
+      } else if(all(variable_type_dep %in% c("factor", "ordered"))) {
+
+        args$data_summary <-
+          rlang::exec(summarize_data, !!!args)
+      }
+
+      args$main_question <-
+        get_main_question(args$data_summary$.variable_label,
+                          label_separator = args$label_separator,
+                          warn_multiple = TRUE)
+
+      if(!args$type %in% c("sigtest_table_html")) {
+        args$data_summary <-
+          args$data_summary |>
+          post_process_sarosmake_data(data = _,
                                     indep = args$indep,
                                     showNA = args$showNA,
                                     colour_2nd_binary_cat = args$colour_2nd_binary_cat)
-      # browser()
+      }
+
       out[[crwd]] <- rlang::exec(makeme, type=args$type, !!!args[!names(args) %in% c("type")])
     }
 
