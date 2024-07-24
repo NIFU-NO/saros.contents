@@ -9,6 +9,7 @@ if(!exists(".saros.env")) .saros.env <- NULL
   .saros.env$summary_data_sort2 <<-
     c(".variable_name", ".category",
       ".count", ".count_se",
+      ".count_total",
       ".proportion", ".proportion_se",
       ".mean", ".mean_se", #".mean_base",
       ".variable_label",  ".data_label", ".comb_categories",

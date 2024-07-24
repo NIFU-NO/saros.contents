@@ -454,8 +454,8 @@ sarosmake <-
                                     indep = args$indep,
                                     showNA = args$showNA,
                                     colour_2nd_binary_cat = args$colour_2nd_binary_cat)
+      # browser()
       out[[crwd]] <- rlang::exec(makeme, type=args$type, !!!args[!names(args) %in% c("type")])
-
     }
 
     if(isTRUE(args$simplify_output) && length(out)==1) out[[1]] else out

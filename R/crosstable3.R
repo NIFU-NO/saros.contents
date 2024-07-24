@@ -18,9 +18,20 @@ crosstable3.data.frame <-
     showNA <- rlang::arg_match(showNA, values = eval(formals(sarosmake)$showNA), error_call = call)
 
 
+    invalid_deps <- dep[!dep %in% colnames(data)]
+    if(length(invalid_deps)>0) {
+      cli::cli_abort("Column{?s} {.var {invalid_deps}} {?doesn't/don't} exist.")
+    }
+    invalid_indeps <- indep[!indep %in% colnames(data)]
+    if(length(invalid_indeps)>0) {
+      cli::cli_abort("Column{?s} {.var {invalid_indeps}} {?doesn't/don't} exist.")
+    }
+
     # indep_names <- colnames(data[, indep, drop = FALSE])
     indep_labels <- saros.base::get_raw_labels(data = data, col_pos = indep)
     col_names <- colnames(data[ , dep, drop=FALSE])[!(colnames(data[ , dep, drop=FALSE]) %in% indep)]
+
+
 
     if(length(col_names)==0) return()
 
@@ -46,7 +57,7 @@ crosstable3.data.frame <-
       }
     }
 
-    output <-
+    output <- # For each dependent variable...
       lapply(stats::setNames(col_names, col_names), function(.x) {
         if(!any(indep == .x)) {
 
@@ -107,6 +118,7 @@ crosstable3.data.frame <-
 
             summary_prop <- out
             summary_prop$.count <- 1L
+
             summary_prop <- tryCatch(
               stats::aggregate(x = summary_prop$.count, by = summary_prop[, c(indep, ".category"), drop = FALSE], FUN = length, simplify = TRUE),
               error = function(e) {
@@ -114,14 +126,19 @@ crosstable3.data.frame <-
                 data.frame(matrix(NA, ncol = length(cols), dimnames = list(NULL, cols)))
               })
 
-            names(summary_prop)[names(summary_prop) == "x"] <- ".count" ## FAKE SOLUTION, A VARIABLE CALLED x will break it all
+            names(summary_prop)[ncol(summary_prop)] <- ".count"
+
+            grouped_count <- summary_prop[summary_prop$.category != "NA", ]
             grouped_count <- tryCatch(
-              stats::aggregate(x = summary_prop$.count, by = summary_prop[, indep, drop = FALSE], FUN = sum, na.rm=TRUE, simplify = TRUE),
+              stats::aggregate(x = grouped_count$.count,
+                               by = grouped_count[, indep, drop = FALSE],
+                               FUN = sum, na.rm=TRUE, simplify = TRUE),
               error = function(e) {
                 data.frame(matrix(NA, ncol = length(indep), dimnames = list(NULL, indep)))
               })
+            names(grouped_count)[ncol(grouped_count)] <- ".count_total"
             summary_prop <- merge(summary_prop, grouped_count, by = indep)
-            summary_prop$.proportion <- summary_prop$.count / summary_prop$x
+            summary_prop$.proportion <- summary_prop$.count / summary_prop[[".count_total"]]
             summary_prop$.category <- factor(x = summary_prop$.category,
                                              levels = fct_lvls,
                                              labels = fct_lvls)
@@ -149,8 +166,9 @@ crosstable3.data.frame <-
                               .variable_label = unname(saros.base::get_raw_labels(data = data, col_pos = .x)),
                               .category = factor(NA),
                               .count = NA_integer_,
-                              .proportion = NA_real_,
                               .count_se = NA_real_,
+                              .count_all = NA_integer_,
+                              .proportion = NA_real_,
                               .proportion_se = NA_real_,
                               .mean = NA_real_,
                               .mean_se = NA_real_)
@@ -166,6 +184,7 @@ crosstable3.data.frame <-
         c(".variable_name", ".variable_label",
           ".category",
           ".count", ".count_se",
+          ".count_total",
           ".proportion", ".proportion_se",
           ".mean", ".mean_se",
           # ".mean_base",
@@ -250,12 +269,15 @@ crosstable3.tbl_svy <-
         }
 
         summary_mean <- srvyr::group_by(out, srvyr::across(tidyselect::all_of(indep)))
-        summary_mean <- srvyr::summarize(summary_mean, .mean = srvyr::survey_mean(as.numeric(.data$.category)))
+        summary_mean <- srvyr::summarize(summary_mean,
+                                         .mean = srvyr::survey_mean(as.numeric(.data$.category)),
+                                         .count_total = srvyr::survey_total(na.rm = TRUE))
         summary_mean <- srvyr::ungroup(summary_mean)
         summary_mean <- srvyr::as_tibble(summary_mean)
 
         summary_prop <- srvyr::group_by(out, srvyr::across(tidyselect::all_of(c(indep, ".category"))))
-        summary_prop <- srvyr::summarize(summary_prop, .count = srvyr::survey_total(na.rm = TRUE),
+        summary_prop <- srvyr::summarize(summary_prop,
+                                         .count = srvyr::survey_total(na.rm = TRUE),
                                          .proportion = srvyr::survey_prop(proportion = TRUE))
         summary_prop <- srvyr::ungroup(summary_prop)
         summary_prop <- srvyr::as_tibble(summary_prop)
@@ -276,14 +298,15 @@ crosstable3.tbl_svy <-
       } else {
         out <- data.frame(.variable_name = .x,
                           .variable_label = unname(saros.base::get_raw_labels(data = data, col_pos = .x)),
-                          .category = factor(),
-                          .count = integer(),
-                          .proportion = numeric(),
-                          .count_se = numeric(),
-                          .proportion_se = numeric(),
-                          .mean = numeric(),
-                          .mean_se = numeric())
-        out[, indep] <- character()
+                          .category = factor(NA),
+                          .count = NA_integer_,
+                          .count_total = NA_integer_,
+                          .proportion = NA_real_,
+                          .count_se = NA_real_,
+                          .proportion_se = NA_real_,
+                          .mean = NA_real_,
+                          .mean_se = NA_real_)
+        out[, indep] <- NA_character_
       }
       as.data.frame(out)
 
@@ -295,6 +318,7 @@ crosstable3.tbl_svy <-
         c(".variable_name", ".variable_label",
           ".category",
           ".count", ".count_se",
+          ".count_total",
           ".proportion", ".proportion_se",
           ".mean", ".mean_se",
           # ".mean_base",
