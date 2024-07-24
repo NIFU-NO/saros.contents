@@ -39,7 +39,8 @@ find_test2 <- function(y, x=NULL) {
   x_type <- class(x)[1]
 
   # Initialize dataframe to store test results
-  result <- data.frame(.bi_test = NA_character_, .p_value = NA_real_)
+  result <- data.frame(.bi_test = NA_character_, .p_value = NA_real_,
+                       y_type = NA_character_, x_type = NA_character_)
 
   if(is.null(x)) {
     if(y_type == "numeric") {
@@ -90,7 +91,7 @@ find_test2 <- function(y, x=NULL) {
         tryCatch(expr = {
           suppressWarnings(stats::chisq.test(table(y, x, useNA="no")))$p.value
         }, error = function(e) NA_real_)
-      result$.bi_test <- "Chi-sq"
+      result$.bi_test <- "Chi-squared Goodness-of-Fit Test"
 
     } else if(y_type == "numeric" && x_type == "numeric") {
 
@@ -100,7 +101,7 @@ find_test2 <- function(y, x=NULL) {
         tryCatch(expr = {
           stats::cor.test(y, x, use="complete.obs")$p.value
         }, error = function(e) NA_real_)
-      result$.bi_test <- "Pearson Cor"
+      result$.bi_test <- "Pearson Correlation"
 
     } else if((y_type == "ordered" && x_type == "factor") ||
               (y_type == "factor" && x_type == "ordered")) {
@@ -121,7 +122,7 @@ find_test2 <- function(y, x=NULL) {
         tryCatch(expr = {
           stats::cor.test(y, x, method = "spearman", use="complete.obs")$p.value
         }, error = function(e) NA_real_)
-      result$.bi_test <- "Spearman Rank Cor"
+      result$.bi_test <- "Spearman Rank Correlation"
 
     } else if(y_type == "numeric" && x_type == "ordered") {
 
@@ -131,7 +132,7 @@ find_test2 <- function(y, x=NULL) {
         tryCatch(expr = {
           stats::cor.test(x, y, method = "spearman", use="complete.obs")$p.value
         }, error = function(e) NA_real_)
-      result$.bi_test <- "Spearman Rank Cor"
+      result$.bi_test <- "Spearman Rank Correlation"
 
     } else if(y_type == "ordered" && x_type == "ordered") {
 
@@ -141,7 +142,7 @@ find_test2 <- function(y, x=NULL) {
         tryCatch(expr = {
           stats::cor.test(x, y, method = "spearman", use="complete.obs")$p.value
         }, error = function(e) NA_real_)
-      result$.bi_test <- "Spearman Rank Cor"
+      result$.bi_test <- "Spearman Rank Correlation"
 
     } else {
 
@@ -150,7 +151,7 @@ find_test2 <- function(y, x=NULL) {
   }
 
   # Return the name of the test and the p-value
-  result
+  cbind(result, y_type = y_type, x_type = x_type)
 }
 
 

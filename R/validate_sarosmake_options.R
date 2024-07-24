@@ -51,6 +51,7 @@ validate_sarosmake_options <- function(params) {
       totals = list(fun = is_bool),
       table_main_question_as_header = list(fun = is_bool),
       hide_for_crowd_if_all_na = list(fun = is_bool),
+      table_wide = list(fun = is_bool),
 
       # Numeric and integer
       hide_label_if_prop_below = list(fun = function(x) is_scalar_finite_doubleish(x) && x >= 0 && x <= 1),
