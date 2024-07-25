@@ -211,14 +211,31 @@ sort_data <- function(data_summary,
 #' @keywords internal
 #' @return Dataset
 #'
-summarize_data <-
+summarize_cat_cat_data <-
   function(data,
-           ...,
            dep = colnames(data),
            indep = NULL,
-           call = rlang::caller_env()) {
+           ...,
+           showNA = c("ifany", "always", "never"),
+           totals = FALSE,
+           sort_by = ".upper",
+           data_label = c("percentage_bare", "percentage", "proportion", "count"),
+           digits = 0,
+           hide_label_if_prop_below = .01,
+           data_label_decimal_symbol = ".",
+           categories_treated_as_na = NULL,
+           label_separator = NULL,
+           descend = FALSE,
+           variables_always_at_bottom = NULL,
+           variables_always_at_top = NULL,
+           translations = list(),
+           call = rlang::caller_env()
+           ) {
 
-    dots <- rlang::list2(...)
+
+    showNA <- rlang::arg_match(showNA)
+    data_label <- rlang::arg_match(data_label)
+
 
     if(!(inherits(data, what = "data.frame") || !inherits(data, what = "survey"))) {
       cli::cli_abort("{.arg data} should be a data.frame/tibble or survey object, not {.obj_type_friendly {data}}.")
@@ -226,46 +243,48 @@ summarize_data <-
 
     if(any(dep %in% indep)) return()
 
-    fct_unions <- get_common_levels(data=data, col_pos=match(dep, colnames(data)))
 
     cross_table_output <-
       crosstable3(data,
                   dep = dep,
                   indep = indep,
-                  showNA = dots$showNA,
-                  totals = dots$totals,
-                  translations = dots$translations)
+                  showNA = showNA,
+                  totals = totals,
+                  translations = translations)
+
+    # fct_unions <- get_common_levels(data=data, col_pos=match(dep, colnames(data)))
+    fct_unions <- levels(cross_table_output[[".category"]])
 
     valid_values <- c(.saros.env$summary_data_sort1,
                       .saros.env$summary_data_sort2,
                       unique(as.character(cross_table_output$.category)))
-    if(!all(dots$sort_by %in% valid_values)) {
-      cli::cli_abort(c(x="Not all {.arg sort_by} are valid: {dots$sort_by}.",
+    if(!all(sort_by %in% valid_values)) {
+      cli::cli_abort(c(x="Not all {.arg sort_by} are valid: {sort_by}.",
                        i="Valid values are {valid_values}"))
     }
 
     cross_table_output |>
-      mutate_data_label(data_label = dots$data_label,
-                        digits = dots$digits,
-                        hide_label_if_prop_below = dots$hide_label_if_prop_below,
-                        decimal_symbol = dots$data_label_decimal_symbol) |>
+      mutate_data_label(data_label = data_label,
+                        digits = digits,
+                        hide_label_if_prop_below = hide_label_if_prop_below,
+                        decimal_symbol = data_label_decimal_symbol) |>
       category_var_as_fct(fct_unions = fct_unions) |>
-      add_collapsed_categories(sort_by = dots$sort_by,
-                               categories_treated_as_na = dots$categories_treated_as_na,
-                               data_label = dots$data_label) |>
+      add_collapsed_categories(sort_by = sort_by,
+                               categories_treated_as_na = categories_treated_as_na,
+                               data_label = data_label) |>
       dplyr::mutate(.variable_label_prefix = get_main_question(.data$.variable_label,
-                                                   label_separator = dots$label_separator,
+                                                   label_separator = label_separator,
                                                    warn_multiple = FALSE),
                     .variable_label = keep_subitem(fct = .data$.variable_label,
-                                                   label_separator = dots$label_separator)) |>
+                                                   label_separator = label_separator)) |>
       # add_n_to_bygroups(add_n_to_bygroup = add_n_to_bygroup, indep_names = indep) |>
-      flip_exception_categories(categories_treated_as_na = dots$categories_treated_as_na,
-                                sort_by = dots$sort_by) |>
+      flip_exception_categories(categories_treated_as_na = categories_treated_as_na,
+                                sort_by = sort_by) |>
       sort_data(indep_names = indep,
-                sort_by = dots$sort_by,
-                descend = dots$descend,
-                variables_always_at_bottom = dots$variables_always_at_bottom,
-                variables_always_at_top = dots$variables_always_at_top,
-                translations = dots$translations)
+                sort_by = sort_by,
+                descend = descend,
+                variables_always_at_bottom = variables_always_at_bottom,
+                variables_always_at_top = variables_always_at_top,
+                translations = translations)
   }
 

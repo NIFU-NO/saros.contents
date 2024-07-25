@@ -1,8 +1,8 @@
-testthat::test_that("summarize_data", {
+testthat::test_that("summarize_cat_cat_data", {
   #Takes on average 5 sec to run all.
 
   testthat::expect_equal(
-    saros.contents:::summarize_data(
+    saros.contents:::summarize_cat_cat_data(
       data = saros.base::ex_survey,
       dep = paste0("a_", 1:9),
 
@@ -19,7 +19,7 @@ testthat::test_that("summarize_data", {
     expected = "60")
 
   testthat::expect_equal(
-    saros.contents:::summarize_data(
+    saros.contents:::summarize_cat_cat_data(
       data = saros.base::ex_survey,
       dep = paste0("a_", 1:9),
 
@@ -34,7 +34,7 @@ testthat::test_that("summarize_data", {
     expected = 166)
 
   testthat::expect_equal(
-    saros.contents:::summarize_data(
+    saros.contents:::summarize_cat_cat_data(
       data = saros.base::ex_survey,
       dep = paste0("b_", 1:3),
 
@@ -48,7 +48,7 @@ testthat::test_that("summarize_data", {
     expected = 126)
 
   testthat::expect_equal(
-    saros.contents:::summarize_data(
+    saros.contents:::summarize_cat_cat_data(
       data = saros.base::ex_survey,
       dep = paste0("b_", 1:3),
 
@@ -65,7 +65,7 @@ testthat::test_that("summarize_data", {
     expected = .53666667)
 
   testthat::expect_equal(
-    saros.contents:::summarize_data(
+    saros.contents:::summarize_cat_cat_data(
       data = saros.base::ex_survey,
       dep = paste0("b_", 1:3),
 
@@ -80,7 +80,7 @@ testthat::test_that("summarize_data", {
     expected = "9.3%")
 
   testthat::expect_equal(
-    saros.contents:::summarize_data(
+    saros.contents:::summarize_cat_cat_data(
       data = saros.base::ex_survey,
       dep = paste0("a_", 1:9),
 
@@ -95,7 +95,7 @@ testthat::test_that("summarize_data", {
     "51.9%")
 
   testthat::expect_equal(
-    saros.contents:::summarize_data(
+    saros.contents:::summarize_cat_cat_data(
       data = saros.base::ex_survey,
       dep = paste0("a_", 1:9),
 
@@ -113,7 +113,7 @@ testthat::test_that("summarize_data", {
 
 
   testthat::expect_equal(
-    saros.contents:::summarize_data(
+    saros.contents:::summarize_cat_cat_data(
       data = saros.base::ex_survey,
       dep = paste0("a_", 1:9),
       indep = "x1_sex",
@@ -130,7 +130,7 @@ testthat::test_that("summarize_data", {
     expected = 64)
 
   testthat::expect_equal(
-    saros.contents:::summarize_data(
+    saros.contents:::summarize_cat_cat_data(
       data = saros.base::ex_survey,
       dep = paste0("a_", 1:9),
       indep = c("x1_sex", "x2_human", "f_uni"),
@@ -158,7 +158,7 @@ testthat::test_that("crosstable3 srvyr gives same output as regular tbl with 0 i
   suppressMessages(library(srvyr))
   x <-
     saros.base::ex_survey |>
-    saros.contents:::summarize_data(dep = paste0("b_", 1:3),
+    saros.contents:::summarize_cat_cat_data(dep = paste0("b_", 1:3),
 
                            sort_by = c("A lot", "A bit"),
                            digits = 2,
@@ -174,7 +174,7 @@ testthat::test_that("crosstable3 srvyr gives same output as regular tbl with 0 i
   x_srv <-
     saros.base::ex_survey |>
     srvyr::as_survey(strata = f_uni) |>
-    saros.contents:::summarize_data(dep = paste0("b_", 1:3),
+    saros.contents:::summarize_cat_cat_data(dep = paste0("b_", 1:3),
 
                            sort_by = c("A lot", "A bit"),
                            digits = 2,
@@ -235,7 +235,7 @@ testthat::test_that("crosstable3 srvyr gives same output as regular tbl with 1 i
   suppressMessages(library(srvyr))
   x <-
     saros.base::ex_survey |>
-    saros.contents:::summarize_data(dep = paste0("b_", 1:3),
+    saros.contents:::summarize_cat_cat_data(dep = paste0("b_", 1:3),
                            indep = "x1_sex",
 
                            sort_by = c("A lot", "A bit"),
@@ -251,7 +251,7 @@ testthat::test_that("crosstable3 srvyr gives same output as regular tbl with 1 i
   x_srv <-
     saros.base::ex_survey |>
     srvyr::as_survey(strata = f_uni) |>
-    saros.contents:::summarize_data(dep = paste0("b_", 1:3),
+    saros.contents:::summarize_cat_cat_data(dep = paste0("b_", 1:3),
                            indep = "x1_sex",
 
                            sort_by = c("A lot", "A bit"),
@@ -310,7 +310,7 @@ testthat::test_that("crosstable3 srvyr gives same output as regular tbl with 2 i
   suppressMessages(library(srvyr))
   x <-
     saros.base::ex_survey |>
-    saros.contents:::summarize_data(dep = paste0("b_", 1:3),
+    saros.contents:::summarize_cat_cat_data(dep = paste0("b_", 1:3),
                            indep = c("x1_sex", "x2_human"),
 
                            sort_by = c("A lot", "A bit"),
@@ -326,7 +326,7 @@ testthat::test_that("crosstable3 srvyr gives same output as regular tbl with 2 i
   x_srv <-
     saros.base::ex_survey |>
     srvyr::as_survey(strata = f_uni) |>
-    saros.contents:::summarize_data(dep = paste0("b_", 1:3),
+    saros.contents:::summarize_cat_cat_data(dep = paste0("b_", 1:3),
                            indep = c("x1_sex", "x2_human"),
 
                            sort_by = c("A lot", "A bit"),
