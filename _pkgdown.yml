@@ -7,14 +7,14 @@ reference:
 - title: "The main function you will use"
   desc: "You use this function with the `type`-argument to create most things you'll need."
   contents:
-  - sarosmake
+  - makeme
 - title: "Get, set and reset global options"
-  desc: "Global options allow you to easily set defaults for all your sarosmake function calls, so you basically do not need to specify the same arguments throughout. data, dep and indep will still need to be specified."
+  desc: "Global options allow you to easily set defaults for all your makeme function calls, so you basically do not need to specify the same arguments throughout. data, dep and indep will still need to be specified."
   contents:
-  - sarosmake_global_settings_get
-  - sarosmake_global_settings_set
-  - sarosmake_global_settings_reset
+  - makeme_global_settings_get
+  - makeme_global_settings_set
+  - makeme_global_settings_reset
 - title: "Gets the possible data_label argument options"
-  desc: "Retrieves all the options you can set for data_label in sarosmake()"
+  desc: "Retrieves all the options you can set for data_label in makeme()"
   contents:
   - get_data_label_opts

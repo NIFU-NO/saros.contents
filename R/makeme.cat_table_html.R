@@ -1,5 +1,5 @@
 #' @export
-makeme.cat_table_html <-
+make_content.cat_table_html <-
   function(...) {
 
     dots <- rlang::list2(...)

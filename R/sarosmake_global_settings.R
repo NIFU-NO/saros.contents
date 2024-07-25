@@ -1,47 +1,47 @@
 
-#' Get Global Options for `sarosmake()`
+#' Get Global Options for `makeme()`
 #'
 #' @return List with options in R
 #' @export
 #'
-#' @examples sarosmake_global_settings_get()
-sarosmake_global_settings_get <- function() {
-  getOption("saros")$sarosmake_defaults
+#' @examples makeme_global_settings_get()
+makeme_global_settings_get <- function() {
+  getOption("saros")$makeme_defaults
 }
 
-#' Set Global Options for `sarosmake()`
+#' Set Global Options for `makeme()`
 #'
-#' @param new List of arguments (see `sarosmake()`)
+#' @param new List of arguments (see `makeme()`)
 #'
 #' @return Invisible returned list of old and new values.
 #' @export
 #'
-#' @examples sarosmake_global_settings_set(new=list(digits=2))
-sarosmake_global_settings_set <- function(new) {
-  suppressWarnings(validate_sarosmake_options(params = new))
+#' @examples makeme_global_settings_set(new=list(digits=2))
+makeme_global_settings_set <- function(new) {
+  suppressWarnings(validate_makeme_options(params = new))
   saros_options <- getOption("saros", list())
-  current_options <- saros_options$sarosmake_defaults
+  current_options <- saros_options$makeme_defaults
   updated_options <- utils::modifyList(current_options, new)
-  saros_options$sarosmake_defaults <- updated_options
+  saros_options$makeme_defaults <- updated_options
   options(saros = saros_options)
-  cli::cli_inform("{.val options('saros')$sarosmake_defaults} has now been set.")
+  cli::cli_inform("{.val options('saros')$makeme_defaults} has now been set.")
   invisible(list(old = current_options,
                  new = updated_options))
 }
 
-#' Reset Global Options for `sarosmake()`
+#' Reset Global Options for `makeme()`
 #'
 #' @return Invisible returned list of old and new values.
 #' @export
 #'
-#' @examples sarosmake_global_settings_reset()
-sarosmake_global_settings_reset <- function() {
+#' @examples makeme_global_settings_reset()
+makeme_global_settings_reset <- function() {
   saros_options <- getOption("saros", list())
-  old <- saros_options$sarosmake_defaults
-  saros_options$sarosmake_defaults <- .saros.env$sarosmake_defaults
+  old <- saros_options$makeme_defaults
+  saros_options$makeme_defaults <- .saros.env$makeme_defaults
   options(saros = saros_options)
-  cli::cli_inform("{.val options('saros')$sarosmake_defaults} has now been reset to factory defaults.")
+  cli::cli_inform("{.val options('saros')$makeme_defaults} has now been reset to factory defaults.")
   invisible(list(old = old,
-                 new = saros_options$sarosmake_defaults))
+                 new = saros_options$makeme_defaults))
 }
 

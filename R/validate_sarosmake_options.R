@@ -1,9 +1,9 @@
-validate_sarosmake_options <- function(params) {
+validate_makeme_options <- function(params) {
 
-  unwanted_args <- names(params)[!names(params) %in% c(names(formals(sarosmake)))]
+  unwanted_args <- names(params)[!names(params) %in% c(names(formals(makeme)))]
   if(length(unwanted_args) > 0) cli::cli_abort("{.arg {unwanted_args}} are not recognized valid arguments.")
 
-  env <- lapply(formals(sarosmake)[!names(formals(sarosmake)) %in% .saros.env$ignore_args], eval)
+  env <- lapply(formals(makeme)[!names(formals(makeme)) %in% .saros.env$ignore_args], eval)
   check_and_set_default <- function(target,
                                     param_name,
                                     validation_fun) {

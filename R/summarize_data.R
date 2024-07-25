@@ -132,7 +132,7 @@ sort_data <- function(data_summary,
                       descend = FALSE,
                       variables_always_at_bottom = NULL,
                       variables_always_at_top = NULL,
-                      translations = eval(formals(sarosmake)$translations),
+                      translations = eval(formals(makeme)$translations),
                       indep_names = character(0),
                       call = rlang::caller_env()) {
 
@@ -201,7 +201,7 @@ sort_data <- function(data_summary,
 
 #' Summarize a survey dataset for use in tables and graphs
 #'
-#' @inheritParams sarosmake
+#' @inheritParams makeme
 #' @param call *Internal call*
 #'
 #'   `obj:<call>` // *Default:* `rlang::caller_env()` (`optional`)

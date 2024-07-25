@@ -9,13 +9,13 @@ crosstable3.data.frame <-
   function(data,
            dep = colnames(data),
            indep = NULL,
-           showNA = eval(formals(sarosmake)$showNA),
-           totals = eval(formals(sarosmake)$totals),
-           translations = eval(formals(sarosmake)$translations),
+           showNA = eval(formals(makeme)$showNA),
+           totals = eval(formals(makeme)$totals),
+           translations = eval(formals(makeme)$translations),
            ...,
            call = rlang::caller_env()) {
 
-    showNA <- rlang::arg_match(showNA, values = eval(formals(sarosmake)$showNA), error_call = call)
+    showNA <- rlang::arg_match(showNA, values = eval(formals(makeme)$showNA), error_call = call)
 
 
     invalid_deps <- dep[!dep %in% colnames(data)]
@@ -215,9 +215,9 @@ crosstable3.tbl_svy <-
   function(data,
            dep = colnames(data),
            indep = NULL,
-           showNA = eval(formals(sarosmake)$showNA),
-           totals = eval(formals(sarosmake)$totals),
-           translations = eval(formals(sarosmake)$translations),
+           showNA = eval(formals(makeme)$showNA),
+           totals = eval(formals(makeme)$totals),
+           translations = eval(formals(makeme)$translations),
            ...,
            call = rlang::caller_env()) {
 
@@ -226,7 +226,7 @@ crosstable3.tbl_svy <-
       cli::cli_abort("Needs {.pkg srvyr} to use tbl_svy objects: {.run install.packages('srvyr')}.")
     }
 
-    showNA <- rlang::arg_match(showNA, values = eval(formals(sarosmake)$showNA), error_call = call)
+    showNA <- rlang::arg_match(showNA, values = eval(formals(makeme)$showNA), error_call = call)
 
     # indep_names <- colnames(data[, indep, drop = FALSE])
     indep_labels <- saros.base::get_raw_labels(data = data$variables, col_pos = indep)

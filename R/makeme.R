@@ -1,7 +1,7 @@
 #' Method for Creating Saros Contents
 #'
-#' Takes the same arguments as `sarosmake`, except
-#' that dep and indep in makeme are character vectors,
+#' Takes the same arguments as `makeme`, except
+#' that dep and indep in make_content are character vectors,
 #' for ease of user-customized function programming.
 #'
 #' @param type *Method name*
@@ -13,22 +13,22 @@
 #'
 #' @param ... *Dots*
 #'
-#'   Arguments provided by `sarosmake`
+#'   Arguments provided by `makeme`
 #'
 #'
 #' @export
-makeme <- function(type, ...) {
+make_content <- function(type, ...) {
   class(type) <- type
-  UseMethod("makeme", type)
+  UseMethod("make_content", type)
 }
 
 
 
-#' Get all registered options for the type-argument in the `sarosmake`-function
+#' Get all registered options for the type-argument in the `makeme`-function
 #'
 #'
 #' @description
-#' The [saros.contents::sarosmake()]-function take for the argument `type`
+#' The [saros.contents::makeme()]-function take for the argument `type`
 #' one of several strings to indicate content type and output type.
 #' This function collects all registered alternatives. Extensions are possible,
 #' see further below.
@@ -76,9 +76,9 @@ makeme <- function(type, ...) {
 #'
 #' # Expanding with custom types
 #'
-#' [saros.contents::sarosmake()] calls the generic [saros.contents::makeme()],
+#' [saros.contents::makeme()] calls the generic [saros.contents::make_content()],
 #' which uses the S3-method system to dispatch to the relevant method (i.e.,
-#' `paste0("makeme.", type)`). sarosmake forwards all its arguments to makeme,
+#' `paste0("make_content.", type)`). makeme forwards all its arguments to make_content,
 #' with the following exceptions:
 #'
 #'  1. dep and indep are converted from [dplyr::dplyr_tidy_select()]-syntax to simple character vectors, for simplifying building your own functions.
@@ -87,16 +87,16 @@ makeme <- function(type, ...) {
 #' @return Character vector
 #' @export
 #'
-#' @examples get_sarosmake_types()
-get_sarosmake_types <- function() {
-  out <- as.character(utils::methods("makeme"))
-  stringi::stri_replace_first_fixed(out[out != "makeme.default"],
-                                    pattern = "makeme.", replacement = "")
+#' @examples get_makeme_types()
+get_makeme_types <- function() {
+  out <- as.character(utils::methods("make_content"))
+  stringi::stri_replace_first_fixed(out[out != "make_content.default"],
+                                    pattern = "make_content.", replacement = "")
 }
 
 
 #' @export
-makeme.default <- function(type, ...) {
+make_content.default <- function(type, ...) {
   dots <- rlang::list2(...)
-  cli::cli_abort("Invalid makeme-type: {type}. Check that you have loaded the required packages/methods and registererd your custom method.")
+  cli::cli_abort("Invalid make_content-type: {type}. Check that you have loaded the required packages/methods and registererd your custom method.")
 }

@@ -1,5 +1,5 @@
 #' @export
-# makeme.uni_int_plot <-
+# make_content.uni_int_plot <-
 #   function(...) {
 #
 #
