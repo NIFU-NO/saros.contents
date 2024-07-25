@@ -15,6 +15,7 @@ summarize_cat_cat_data(
   data_label = c("percentage_bare", "percentage", "proportion", "count"),
   digits = 0,
   add_n_to_label = FALSE,
+  add_n_to_category = FALSE,
   hide_label_if_prop_below = 0.01,
   data_label_decimal_symbol = ".",
   categories_treated_as_na = NULL,
@@ -87,6 +88,27 @@ One of "proportion", "percentage", "percentage_bare", "count", "mean", or "media
 \verb{scalar<integer>} // \emph{default:} \code{0L} (\code{optional})
 
 Number of decimal places.}
+
+\item{add_n_to_label}{\emph{Add N= to the variable label}
+
+\verb{scalar<logical>} // \emph{default:} \code{FALSE} (\code{optional})
+
+For some plots and tables it is useful to attach the \code{"N="} to the end of the label.
+Whether it is \code{N} or \code{N_valid} depends on your \code{showNA}-setting. See also
+\code{translations$add_n_to_label_prefix} and
+\code{translations$add_n_to_label_suffix}.}
+
+\item{add_n_to_category}{\emph{Add N= to the category}
+
+\verb{scalar<logical>} // \emph{default:} \code{FALSE} (\code{optional})
+
+For some plots and tables it is useful to attach the \code{"N="} to the end of the category.
+This will likely produce a range across the variables, hence an infix (comma)
+between the minimum and maximum can be specified.
+Whether it is \code{N} or \code{N_valid} depends on your \code{showNA}-setting. See also
+\code{translations$add_n_to_category_prefix},
+\code{translations$add_n_to_category_infix}, and
+\code{translations$add_n_to_category_suffix}.}
 
 \item{hide_label_if_prop_below}{\emph{Hide label threshold}
 
