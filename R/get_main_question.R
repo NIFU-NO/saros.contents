@@ -14,13 +14,13 @@ get_main_question <-
                             regex = stringi::stri_c(ignore_null=TRUE, "(^.*)", label_separator, "(.*$)"),
                             replacement = "$1") |>
       unique()
-    x <- if(length(x)>0) stringi::stri_c(ignore_null=TRUE, x, collapse="\n")
-    if(length(x) > 1L && warn_multiple) {
+    if(length(x) > 1L && isTRUE(warn_multiple)) {
       cli::cli_warn(c(x="There are multiple main questions for these variables.",
                       i="Check your data."), call = call)
-    } else if(length(x) == 0L) {
+    } else if(length(x)==1 && nchar(x) == 0L) {
       cli::cli_warn(c(x="No main question found.",
                       i="Check your {.arg label_separator}."), call = call)
     }
+    x <- if(length(x)>0) stringi::stri_c(ignore_null=TRUE, x, collapse="\n")
     x
   }
