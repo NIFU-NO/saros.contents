@@ -5,8 +5,6 @@ make_content.cat_table_html <-
     dots <- rlang::list2(...)
     data_summary <- dots$data_summary
 
-    # check_summary_data_cols(data, call = call)
-
     if(dots$data_label %in% c("percentage", "percentage_bare", "proportion")) {
       data_label2 <- "count"
     } else {
@@ -30,11 +28,8 @@ make_content.cat_table_html <-
 
     # indep_label <- unname(saros.base::get_raw_labels(data = dots$data, col_pos = dots$indep))
 
-    # browser()
-
 
     cat_lvls <- levels(data_summary[[".category"]])
-    # cat_lvls <- cat_lvls[cat_lvls %in% as.character(unique(data_summary[[".category"]]))]
     if(length(indep_label)==1 && length(dots$indep)==0) {
       cli::cli_abort("Something wrong in function.")
     }
