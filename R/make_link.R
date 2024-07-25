@@ -6,6 +6,8 @@
 #' are identical, and all are stored in the same folder. It also allows the user
 #' to download multiple files without worrying about accidentally overwriting them.
 #'
+#'
+#' @inheritParams makeme
 #' @param data *Data or object*
 #'
 #'   `<data.frame|tbl|obj>`
@@ -32,7 +34,7 @@
 #'   Can be any saving/writing function. However, first argument must be
 #'   the object to be saved, and the second must be the path. Hence,
 #'   [ggplot2::ggsave()] must be wrapped in another function with `filename` and
-#'   `object` swapped.
+#'   `object` swapped. See [ggsaver()] for an example of such a wrapper function.
 #'
 #' @param link_prefix,link_suffix *Link prefix/suffix*
 #'
@@ -51,12 +53,13 @@ make_link <- function(data,
                       file_suffix = ".csv",
                       save_fn = utils::write.csv,
                       link_prefix = "[download figure data](",
-                      link_suffix = ")") {
+                      link_suffix = ")",
+                      ...) {
 
+  # dots <- rlang::list2(...)
 
   current_call <- match.call()
   current_call <- current_call[!names(current_call) %in% c(.saros.env$ignore_args)]
-
 
   args <-
     check_options(call = current_call,
@@ -70,6 +73,6 @@ make_link <- function(data,
   path <- fs::path(args$folder,
                    paste0(args$file_prefix, rlang::hash(data), args$file_suffix))
 
-  save_fn(data, path)
+  save_fn(data, path, ...)
   I(paste0(args$link_prefix, path, args$link_suffix))
 }
