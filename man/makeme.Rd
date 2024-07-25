@@ -25,6 +25,7 @@ makeme(
   hide_for_crowd_if_category_n_below = 0,
   hide_for_crowd_if_cell_n_below = 0,
   hide_for_all_crowds_if_hidden_for_crowd = NULL,
+  add_n_to_label = FALSE,
   totals = FALSE,
   categories_treated_as_na = NULL,
   label_separator = " - ",
@@ -49,10 +50,11 @@ makeme(
   table_wide = TRUE,
   table_main_question_as_header = FALSE,
   translations = list(last_sep = " and ", by_breakdown = " by ", table_heading_N =
-    "Total (N)", by_total = "Everyone", sigtest_prefix = "Significance testing of ",
-    sigtest_suffix = "", sigtest_variable_header_1 = "Var 1", sigtest_variable_header_2 =
-    "Var 2", mesos_group_prefix = " Group: ", mesos_group_suffix = "",
-    mesos_label_all_others = "Others"),
+    "Total (N)", add_n_to_label_prefix = " (N = ", add_n_to_label_suffix = ")", by_total
+    = "Everyone", sigtest_prefix = "Significance testing of ", sigtest_suffix = "",
+    sigtest_variable_header_1 = "Var 1", sigtest_variable_header_2 = "Var 2",
+    mesos_group_prefix = " Group: ", mesos_group_suffix = "", mesos_label_all_others =
+    "Others"),
   plot_height = 15,
   label_font_size = 6,
   main_font_size = 6,

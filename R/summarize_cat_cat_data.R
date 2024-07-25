@@ -80,23 +80,22 @@ add_collapsed_categories <-
 
 
 
-add_n_to_bygroups <- function(data_summary,
-                              add_n_to_bygroup = FALSE,
-                              by_names = NULL) {
+add_n_to_label <- function(data_summary,
+                           add_n_to_label = FALSE,
+                           add_n_to_label_prefix = " (N = ",
+                           add_n_to_label_suffix = ")") {
 
-  # if(!(add_n_to_bygroup && length(by_names) > 0)) {
-  return(data_summary)
-  # } else {
-  # n_per_group <-
-  #   data_summary |>
-  #   dplyr::arrange(as.integer(.data$.category)) |>
-  #   dplyr::group_by(dplyr::pick(tidyselect::all_of(c(".variable_label", by_names)))) |>
-  #   dplyr::summarize(n_per_category = sum(.data$.count, na.rm = TRUE)) |>
-  #   dplyr::pull(.data$n_per_category)
-  # data_summary$.category <- factor(data_summary$.category,
-  #                                  labels = stringi::stri_c(ignore_null=TRUE, levels(data_summary$.category),
-  #                                                          " (N=", n_per_category, ")"))
-  # }
+  if(isFALSE(add_n_to_label)) return(data_summary)
+
+  if(is.null(add_n_to_label_prefix) || is.na(add_n_to_label_prefix)) {
+    add_n_to_label_prefix <- ""
+  }
+
+  data_summary |>
+    tidyr::unite(col = ".variable_label",
+                 tidyselect::all_of(c(".variable_label", ".count_total")),
+                 sep = add_n_to_label_prefix, remove = FALSE, na.rm = TRUE) |>
+    dplyr::mutate(.variable_label = paste0(.data[[".variable_label"]], add_n_to_label_suffix))
 }
 
 
@@ -221,6 +220,7 @@ summarize_cat_cat_data <-
            sort_by = ".upper",
            data_label = c("percentage_bare", "percentage", "proportion", "count"),
            digits = 0,
+           add_n_to_label = FALSE,
            hide_label_if_prop_below = .01,
            data_label_decimal_symbol = ".",
            categories_treated_as_na = NULL,
@@ -277,7 +277,9 @@ summarize_cat_cat_data <-
                                                    warn_multiple = FALSE),
                     .variable_label = keep_subitem(fct = .data$.variable_label,
                                                    label_separator = label_separator)) |>
-      # add_n_to_bygroups(add_n_to_bygroup = add_n_to_bygroup, indep_names = indep) |>
+      add_n_to_label(add_n_to_label = add_n_to_label,
+                     add_n_to_label_prefix = translations$add_n_to_label_prefix,
+                     add_n_to_label_suffix = translations$add_n_to_label_suffix) |>
       flip_exception_categories(categories_treated_as_na = categories_treated_as_na,
                                 sort_by = sort_by) |>
       sort_data(indep_names = indep,
