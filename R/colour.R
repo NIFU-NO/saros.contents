@@ -95,7 +95,7 @@ get_remaining_colours <- function(user_colour_set,
 #'     palette from RColorBrewer.
 #'
 #' @inheritParams sarosmake
-#' @inheritParams summarize_data
+#' @inheritParams summarize_cat_cat_data
 #' @param x Vector for which colours will be found.
 #' @param colour_palette_nominal,colour_palette_ordinal *User specified colour set*
 #'
@@ -178,7 +178,7 @@ get_colour_set <-
 #'     palette from RColorBrewer.
 #'
 #' @inheritParams sarosmake
-#' @inheritParams summarize_data
+#' @inheritParams summarize_cat_cat_data
 #' @param col_pos Character vector of column names for which colours will be found.
 #' @param colour_palette_nominal,colour_palette_ordinal *User specified colour set*
 #'

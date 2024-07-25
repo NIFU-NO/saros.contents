@@ -42,6 +42,7 @@ if(!exists(".saros.env")) .saros.env <- NULL
   .saros_options <- getOption("saros", list())
   if (is.null(.saros_options$sarosmake_defaults)) {
     .saros_options$sarosmake_defaults <- .saros.env$sarosmake_defaults
+    .saros_options$make_link_defaults <- .saros.env$make_link_defaults
     .saros_options$n_rng_defaults <- .saros.env$n_rng_defaults
     options(saros = .saros_options)
   }

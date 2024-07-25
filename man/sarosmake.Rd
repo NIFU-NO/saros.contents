@@ -360,4 +360,6 @@ sarosmake(data = saros.base::ex_survey, dep = b_1:b_3,
                                         type = "sigtest_table_html")
 sarosmake(data = saros.base::ex_survey, dep = b_1, indep = x1_sex,
                                         type = "cat_prop_plot_docx")
+sarosmake(data = saros.base::ex_survey, dep = p_1:p_4, indep = x2_human,
+                                        type = "cat_table_html")
 }

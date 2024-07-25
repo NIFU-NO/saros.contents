@@ -305,6 +305,8 @@
 #'                                         type = "sigtest_table_html")
 #' sarosmake(data = saros.base::ex_survey, dep = b_1, indep = x1_sex,
 #'                                         type = "cat_prop_plot_docx")
+#' sarosmake(data = saros.base::ex_survey, dep = p_1:p_4, indep = x2_human,
+#'                                         type = "cat_table_html")
 sarosmake <-
   function(data,
            dep = tidyselect::everything(),
@@ -481,13 +483,27 @@ sarosmake <-
       } else if(all(variable_type_dep %in% c("factor", "ordered"))) {
 
         args$data_summary <-
-          rlang::exec(summarize_data, !!!args)
+          summarize_cat_cat_data(data = args$data,
+                         dep = args$dep,
+                         indep = args$indep,
+                         ...,
+                         showNA = args$showNA,
+                         totals = args$totals,
+                         sort_by = args$sort_by,
+                         data_label = args$data_label,
+                         digits = args$digits,
+                         hide_label_if_prop_below = args$hide_label_if_prop_below,
+                         data_label_decimal_symbol = args$data_label_decimal_symbol,
+                         categories_treated_as_na = args$categories_treated_as_na,
+                         label_separator = args$label_separator,
+                         descend = args$descend,
+                         variables_always_at_bottom = args$variables_always_at_bottom,
+                         variables_always_at_top = args$variables_always_at_top,
+                         translations = args$translations)
       }
 
       args$main_question <-
-        get_main_question(args$data_summary$.variable_label,
-                          label_separator = args$label_separator,
-                          warn_multiple = TRUE)
+        as.character(unique(args$data_summary[[".variable_label_prefix"]]))
 
       if(!args$type %in% c("sigtest_table_html")) {
         args$data_summary <-

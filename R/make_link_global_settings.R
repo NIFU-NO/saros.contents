@@ -18,7 +18,6 @@ make_link_global_settings_get <- function() {
 #'
 #' @examples make_link_global_settings_set(new=list(digits=2))
 make_link_global_settings_set <- function(new) {
-  suppressWarnings(validate_make_link_options(params = new))
   saros_options <- getOption("saros", list())
   current_options <- saros_options$make_link_defaults
   updated_options <- utils::modifyList(current_options, new)

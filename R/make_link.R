@@ -11,7 +11,7 @@
 #'   `<data.frame|tbl|obj>`
 #'
 #'   Data frame if using a tabular data `save_fn`, or possibly any
-#'   R object, if a serializer `save_fn` is provided (e.g. saveRDS).
+#'   R object, if a serializing `save_fn` is provided (e.g. [saveRDS()]).
 #'
 #' @param folder *Where to store file*
 #'
@@ -19,7 +19,7 @@
 #'
 #'   Defaults to same folder.
 #'
-#' @param file_prefix,file_suffix *File pre-/suffix*
+#' @param file_prefix,file_suffix *File prefix/suffix*
 #'
 #'   `scalar<character>` // *default:* `""` and `".csv"` (`optional`)
 #'
@@ -34,7 +34,7 @@
 #'   [ggplot2::ggsave()] must be wrapped in another function with `filename` and
 #'   `object` swapped.
 #'
-#' @param link_prefix,link_suffix *Pre/suffix for the link*
+#' @param link_prefix,link_suffix *Link prefix/suffix*
 #'
 #'   `scalar<character>` // *default:* `"[download data]("` and `")"`
 #'
@@ -44,8 +44,7 @@
 #' @export
 #'
 #' @examples
-#' tmpdir <- tempdir()
-#' make_link(mtcars)
+#' make_link(mtcars, folder=tempdir())
 make_link <- function(data,
                       folder = NULL,
                       file_prefix = NULL,
@@ -56,13 +55,16 @@ make_link <- function(data,
 
 
   current_call <- match.call()
-  current_call <- current_call[!names(current_call) %in% .saros.env$ignore_args]
+  current_call <- current_call[!names(current_call) %in% c(.saros.env$ignore_args)]
 
-  args <- check_options(call = current_call,
+
+  args <-
+    check_options(call = current_call,
                         ignore_args = .saros.env$ignore_args,
-                        default_values = formals(make_link),
-                        defaults_env = make_link_global_settings_get()
+                        defaults_env = make_link_global_settings_get(),
+                        default_values = formals(make_link)
   )
+
   if(!rlang::is_string(args$folder)) args$folder <- "."
 
   path <- fs::path(args$folder,
