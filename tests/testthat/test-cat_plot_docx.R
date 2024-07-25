@@ -35,13 +35,11 @@ testthat::test_that("chart cat_docx", {
 
   testthat::expect_error(object = makeme(data=mtcars,
                                          type="cat_prop_plot_docx",
-                                         dep = c(cyl, vs, gear, carb),
-                                         return_raw = FALSE),
+                                         dep = c(cyl, vs, gear, carb)),
                          regexp = "Column `cyl` and column `vs` lack common categories")
   testthat::expect_error(object = makeme(data=saros.base::ex_survey,
                                          type="cat_prop_plot_docx",
-                                         dep = tidyselect::matches("^[ab]"),
-                                         return_raw = FALSE),
+                                         dep = tidyselect::matches("^[ab]")),
                          regexp = "Column `a_1` and column `b_1` lack common categories")
 
   testthat::expect_s3_class(object = {
@@ -60,8 +58,7 @@ testthat::test_that("chart cat_docx", {
              hide_label_if_prop_below = 0,
              descend = TRUE,
              height_per_col = .3,
-             height_fixed = 1,
-             return_raw = FALSE)
+             height_fixed = 1)
   }, class = "rdocx", exact = TRUE)
   invisible(capture.output(
     x <- withr::with_tempfile(new = "test", code = {
@@ -86,8 +83,7 @@ testthat::test_that("chart cat_docx", {
              hide_label_if_prop_below = 0,
              descend = TRUE,
              height_per_col = .3,
-             height_fixed = 1,
-             return_raw = FALSE)
+             height_fixed = 1)
   }, class = "rdocx", exact = TRUE)
   invisible(capture.output(
     x <- withr::with_tempfile(new = "test", code = {
@@ -117,8 +113,7 @@ testthat::test_that("chart cat_docx", {
              hide_label_if_prop_below = 0,
              descend = TRUE,
              height_per_col = .3,
-             height_fixed = 1,
-             return_raw = FALSE)
+             height_fixed = 1)
   }, class = "rdocx", exact = TRUE)
   invisible(capture.output(
     x <- withr::with_tempfile(new = "test", code = {
@@ -149,8 +144,7 @@ testthat::test_that("chart cat_docx", {
              vertical = FALSE,
              digits = 0,
              hide_label_if_prop_below = 0,
-             descend = TRUE,
-             return_raw = FALSE)
+             descend = TRUE)
   }, class = "rdocx", exact = TRUE)
   invisible(capture.output(
     x <- withr::with_tempfile(new = "test", code = {
@@ -181,8 +175,7 @@ testthat::test_that("chart cat_docx", {
              hide_label_if_prop_below = 0,
              descend = TRUE,
              height_per_col = .3,
-             height_fixed = 1,
-             return_raw = FALSE)
+             height_fixed = 1)
   }, class = "rdocx", exact = TRUE)
   invisible(capture.output(
     x <- withr::with_tempfile(new = "test", code = {
@@ -213,8 +206,7 @@ testthat::test_that("chart cat_docx", {
              hide_label_if_prop_below = 0,
              descend = TRUE,
              height_per_col = .3,
-             height_fixed = 1,
-             return_raw = FALSE)
+             height_fixed = 1)
   }, class = "rdocx", exact = TRUE)
   invisible(capture.output(
     x <- withr::with_tempfile(new = "test", code = {
@@ -243,8 +235,7 @@ testthat::test_that("chart cat_docx", {
              hide_label_if_prop_below = 0,
              descend = TRUE,
              height_per_col = .3,
-             height_fixed = 1,
-             return_raw = FALSE)
+             height_fixed = 1)
   }, class = "rdocx", exact = TRUE)
   invisible(capture.output(
     x <- withr::with_tempfile(new = "test", code = {
@@ -274,8 +265,7 @@ testthat::test_that("chart cat_docx", {
              digits = 0,
              hide_label_if_prop_below = 0,
              height_per_col = .3,
-             height_fixed = 1,
-             return_raw = FALSE)
+             height_fixed = 1)
   }, class = "rdocx", exact = TRUE)
   invisible(capture.output(
     x <- withr::with_tempfile(new = "test", code = {
@@ -307,8 +297,7 @@ testthat::test_that("chart cat_docx", {
              digits = 0,
              hide_label_if_prop_below = 0,
              height_per_col = .3,
-             height_fixed = 1,
-             return_raw = FALSE)
+             height_fixed = 1)
   }, class = "rdocx", exact = TRUE)
   invisible(capture.output(
     x <- withr::with_tempfile(new = "test", code = {
@@ -339,8 +328,7 @@ testthat::test_that("chart cat_docx", {
              hide_label_if_prop_below = 0,
              descend = TRUE,
              height_per_col = .3,
-             height_fixed = 1,
-             return_raw = FALSE)
+             height_fixed = 1)
   }, class = "rdocx", exact = TRUE)
   invisible(capture.output(
     x <- withr::with_tempfile(new = "test", code = {
@@ -360,8 +348,7 @@ testthat::test_that("chart cat_docx", {
       makeme(data=_,
              dep = paste0("b_", 1),
              indep = c("x1_sex","x2_human"),
-             type="cat_prop_plot_docx",
-             return_raw = FALSE)
+             type="cat_prop_plot_docx")
   }, regexp = "Too many columns provided for `indep`")
 
 
