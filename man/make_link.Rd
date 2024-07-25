@@ -20,7 +20,7 @@ make_link(
 \verb{<data.frame|tbl|obj>}
 
 Data frame if using a tabular data \code{save_fn}, or possibly any
-R object, if a serializer \code{save_fn} is provided (e.g. saveRDS).}
+R object, if a serializing \code{save_fn} is provided (e.g. \code{\link[=saveRDS]{saveRDS()}}).}
 
 \item{folder}{\emph{Where to store file}
 
@@ -28,7 +28,7 @@ R object, if a serializer \code{save_fn} is provided (e.g. saveRDS).}
 
 Defaults to same folder.}
 
-\item{file_prefix, file_suffix}{\emph{File pre-/suffix}
+\item{file_prefix, file_suffix}{\emph{File prefix/suffix}
 
 \verb{scalar<character>} // \emph{default:} \code{""} and \code{".csv"} (\code{optional})
 
@@ -43,7 +43,7 @@ the object to be saved, and the second must be the path. Hence,
 \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}} must be wrapped in another function with \code{filename} and
 \code{object} swapped.}
 
-\item{link_prefix, link_suffix}{\emph{Pre/suffix for the link}
+\item{link_prefix, link_suffix}{\emph{Link prefix/suffix}
 
 \verb{scalar<character>} // \emph{default:} \code{"[download data]("} and \code{")"}
 
@@ -56,9 +56,9 @@ String.
 The file is automatically named by a hash of the object, removing the need
 to come up with unique file names inside a Quarto report. This has the
 added benefit of reducing storage needs if the objects needing linking to
-are identical, and all are stored in the same folder.
+are identical, and all are stored in the same folder. It also allows the user
+to download multiple files without worrying about accidentally overwriting them.
 }
 \examples{
-tmpdir <- tempdir()
-make_link(mtcars)
+make_link(mtcars, folder=tempdir())
 }

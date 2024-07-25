@@ -1,44 +1,40 @@
 testthat::test_that("make_link generates correct link for default settings", {
-  tmpdir <- tempdir()
-  result <- saros.contents::make_link(mtcars, folder = tmpdir)
+  result <- saros.contents::make_link(mtcars, folder = tempdir())
   testthat::expect_true(grepl(x = as.character(result), "\\[download figure data\\]\\(.+/d0487363db4e6cc64fdb740cb6617fc0\\.csv\\)$"))
 })
 
 testthat::test_that("make_link generates correct link with custom prefix and suffix", {
-  tmpdir <- tempdir()
-  result <- saros.contents::make_link(mtcars, folder = tmpdir, file_prefix = "data_", file_suffix = ".txt",
+  result <- saros.contents::make_link(mtcars, folder = tempdir(), file_prefix = "data_", file_suffix = ".txt",
                                       link_prefix = "[clicking me](", link_suffix = ") is the way to go")
   testthat::expect_true(grepl(x = as.character(result), "\\[clicking me\\]\\(.+/data_d0487363db4e6cc64fdb740cb6617fc0\\.txt\\) is the way to go"))
 })
 
 testthat::test_that("make_link uses custom save function", {
-  tmpdir <- tempdir()
-  result <- saros.contents::make_link(mtcars, folder = tmpdir, save_fn = saveRDS, file_suffix=".rds")
+  result <- saros.contents::make_link(mtcars, folder = tempdir(), save_fn = saveRDS, file_suffix=".rds")
   testthat::expect_true(grepl(x = as.character(result), "\\[download figure data\\]\\(.+/d0487363db4e6cc64fdb740cb6617fc0\\.rds\\)$"))
 })
 
 
 testthat::test_that("make_link generates unique filename based on object hash", {
-  tmpdir <- tempdir()
   hash1 <- rlang::hash(mtcars)
   hash2 <- rlang::hash(iris)
-  result1 <- saros.contents::make_link(mtcars, folder = tmpdir)
-  result2 <- saros.contents::make_link(iris, folder = tmpdir)
+  result1 <- saros.contents::make_link(mtcars, folder = tempdir())
+  result2 <- saros.contents::make_link(iris, folder = tempdir())
   testthat::expect_true(grepl(paste0(hash1, "\\.csv"), result1))
   testthat::expect_true(grepl(paste0(hash2, "\\.csv"), result2))
 })
 
 testthat::test_that("make_link creates file in specified folder", {
-  tmpdir <- tempdir()
-  path <- fs::path(tmpdir, paste0(rlang::hash(mtcars), ".csv"))
+  path <- fs::path(tempdir(), paste0(rlang::hash(mtcars), ".csv"))
   if (fs::file_exists(path)) fs::file_delete(path)
-  saros.contents::make_link(mtcars, folder = tmpdir)
+  saros.contents::make_link(mtcars, folder = tempdir())
   testthat::expect_true(fs::file_exists(path))
 })
 
 
 testthat::test_that("make_link throws error if save function fails", {
   save_fn <- function(data, path) stop("Intentional error")
-  tmpdir <- tempdir()
-  testthat::expect_error(saros.contents::make_link(mtcars, folder = tmpdir, save_fn = save_fn))
+  testthat::expect_error(saros.contents::make_link(mtcars,
+                                                   folder = tempdir(),
+                                                   save_fn = save_fn))
 })
