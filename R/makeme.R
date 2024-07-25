@@ -190,6 +190,28 @@
 #'
 #'   A list of translations where the name is the code and the value is the translation. See the examples.
 #'
+#' @param add_n_to_label *Add N= to the variable label*
+#'
+#'   `scalar<logical>` // *default:* `FALSE` (`optional`)
+#'
+#'   For some plots and tables it is useful to attach the `"N="` to the end of the label.
+#'   Whether it is `N` or `N_valid` depends on your `showNA`-setting. See also
+#'   `translations$add_n_to_label_prefix` and
+#'   `translations$add_n_to_label_suffix`.
+#'
+#' @param add_n_to_category *Add N= to the category*
+#'
+#'   `scalar<logical>` // *default:* `FALSE` (`optional`)
+#'
+#'   For some plots and tables it is useful to attach the `"N="` to the end of the category.
+#'   This will likely produce a range across the variables, hence an infix (comma)
+#'   between the minimum and maximum can be specified.
+#'   Whether it is `N` or `N_valid` depends on your `showNA`-setting. See also
+#'   `translations$add_n_to_category_prefix`,
+#'   `translations$add_n_to_category_infix`, and
+#'   `translations$add_n_to_category_suffix`.
+#'
+#'
 #' @param totals *Include totals*
 #'
 #'   `scalar<logical>` // *default:* `FALSE` (`optional`)
@@ -346,6 +368,7 @@ makeme <-
 
 
            add_n_to_label = FALSE,
+           add_n_to_category = FALSE,
            totals = FALSE,
            categories_treated_as_na = NULL,
            label_separator = " - ",
@@ -383,6 +406,9 @@ makeme <-
                   table_heading_N = "Total (N)",
                   add_n_to_label_prefix = " (N = ",
                   add_n_to_label_suffix = ")",
+                  add_n_to_category_prefix = " (N = [",
+                  add_n_to_category_infix = ",",
+                  add_n_to_category_suffix = "])",
                   by_total = "Everyone",
                   sigtest_prefix = "Significance testing of ",
                   sigtest_suffix = "",
@@ -498,6 +524,7 @@ makeme <-
                          data_label = args$data_label,
                          digits = args$digits,
                          add_n_to_label = args$add_n_to_label,
+                         add_n_to_category = args$add_n_to_category,
                          hide_label_if_prop_below = args$hide_label_if_prop_below,
                          data_label_decimal_symbol = args$data_label_decimal_symbol,
                          categories_treated_as_na = args$categories_treated_as_na,

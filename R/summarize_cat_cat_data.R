@@ -99,6 +99,39 @@ add_n_to_label <- function(data_summary,
 }
 
 
+
+add_n_to_category <- function(data_summary,
+                           add_n_to_category = FALSE,
+                           add_n_to_category_prefix = " (N = ",
+                           add_n_to_category_infix = ",",
+                           add_n_to_category_suffix = ")") {
+
+  if(isFALSE(add_n_to_category)) return(data_summary)
+
+  if(is.null(add_n_to_category_prefix) || is.na(add_n_to_category_prefix)) {
+    add_n_to_category_prefix <- ""
+  }
+  if(is.null(add_n_to_category_infix) || is.na(add_n_to_category_infix)) {
+    add_n_to_category_infix <- ","
+  }
+
+  out <-
+    data_summary |>
+    dplyr::mutate(.category_n_rng = paste0(range(.data[[".count"]], na.rm = TRUE),
+                                           collapse = add_n_to_category_infix),
+                  .by = tidyselect::all_of(".category")) |>
+    tidyr::unite(col = ".category_new",
+                 tidyselect::all_of(c(".category", ".category_n_rng")),
+                 sep = add_n_to_category_prefix, remove = FALSE, na.rm = TRUE) |>
+    dplyr::mutate(.category_new = paste0(.data[[".category_new"]], add_n_to_category_suffix))
+  new_labels <- unique(out$.category_new)
+  names(new_labels) <- levels(out$.category)
+  levels(out$.category) <- new_labels
+  out
+}
+
+
+
 flip_exception_categories <- function(data_summary,
                                       sort_by = NULL,
                                       categories_treated_as_na = c(),
@@ -221,6 +254,7 @@ summarize_cat_cat_data <-
            data_label = c("percentage_bare", "percentage", "proportion", "count"),
            digits = 0,
            add_n_to_label = FALSE,
+           add_n_to_category = FALSE,
            hide_label_if_prop_below = .01,
            data_label_decimal_symbol = ".",
            categories_treated_as_na = NULL,
@@ -280,6 +314,10 @@ summarize_cat_cat_data <-
       add_n_to_label(add_n_to_label = add_n_to_label,
                      add_n_to_label_prefix = translations$add_n_to_label_prefix,
                      add_n_to_label_suffix = translations$add_n_to_label_suffix) |>
+      add_n_to_category(add_n_to_category = add_n_to_category,
+                     add_n_to_category_prefix = translations$add_n_to_category_prefix,
+                     add_n_to_category_infix = translations$add_n_to_category_infix,
+                     add_n_to_category_suffix = translations$add_n_to_category_suffix) |>
       flip_exception_categories(categories_treated_as_na = categories_treated_as_na,
                                 sort_by = sort_by) |>
       sort_data(indep_names = indep,
