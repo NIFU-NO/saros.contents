@@ -128,13 +128,17 @@ crosstable3.data.frame <-
 
             names(summary_prop)[ncol(summary_prop)] <- ".count"
 
-            grouped_count <- summary_prop[summary_prop$.category != "NA", ]
+            if(showNA %in% c("never")) {
+              grouped_count <- summary_prop[summary_prop$.category != "NA", , drop=FALSE]
+            } else {
+              grouped_count <- summary_prop
+            }
             grouped_count <- tryCatch(
               stats::aggregate(x = grouped_count$.count,
                                by = grouped_count[, indep, drop = FALSE],
                                FUN = sum, na.rm=TRUE, simplify = TRUE),
               error = function(e) {
-                data.frame(matrix(NA, ncol = length(indep), dimnames = list(NULL, indep)))
+                data.frame(matrix(NA, ncol = max(c(1, length(indep))), dimnames = list(NULL, indep)))
               })
             names(grouped_count)[ncol(grouped_count)] <- ".count_total"
             summary_prop <- merge(summary_prop, grouped_count, by = indep)
