@@ -18,7 +18,7 @@
 #'
 #'   `scalar<character>` // *default:* `"prop_plot"` (`optional`)
 #'
-#' For a list of registered types in your session, use `get_sarosmake_types()`.
+#' For a list of registered types in your session, use `get_makeme_types()`.
 #'
 #' @param categories_treated_as_na *NA categories*
 #'
@@ -298,16 +298,21 @@
 #' @export
 #'
 #' @examples
-#' sarosmake(data = saros.base::ex_survey, dep = b_1:b_3)
-#' sarosmake(data = saros.base::ex_survey, dep = b_1, indep = x1_sex)
-#' sarosmake(data = saros.base::ex_survey, dep = b_1:b_3,
-#'                                         indep = c(x1_sex, x2_human),
-#'                                         type = "sigtest_table_html")
-#' sarosmake(data = saros.base::ex_survey, dep = b_1, indep = x1_sex,
-#'                                         type = "cat_prop_plot_docx")
-#' sarosmake(data = saros.base::ex_survey, dep = p_1:p_4, indep = x2_human,
-#'                                         type = "cat_table_html")
-sarosmake <-
+#' library(saros.base)
+#' makeme(data = ex_survey,
+#'        dep = b_1:b_3)
+#' makeme(data = ex_survey,
+#'        dep = b_1, indep = x1_sex)
+#' makeme(data = ex_survey,
+#'        dep = b_1:b_3, indep = c(x1_sex, x2_human),
+#'        type = "sigtest_table_html")
+#' makeme(data = ex_survey,
+#'        dep = b_1, indep = x1_sex,
+#'        type = "cat_prop_plot_docx")
+#' makeme(data = ex_survey,
+#'        dep = p_1:p_4, indep = x2_human,
+#'        type = "cat_table_html")
+makeme <-
   function(data,
            dep = tidyselect::everything(),
            indep = NULL,
@@ -414,7 +419,7 @@ sarosmake <-
 
     args <- check_options(call = current_call,
                           ignore_args = .saros.env$ignore_args,
-                          defaults_env = sarosmake_global_settings_get()
+                          defaults_env = makeme_global_settings_get()
                           )
     args$data <- data # reinsert after check_options
     args$dep <- names(dep_pos)
@@ -424,7 +429,7 @@ sarosmake <-
     args$data_label <- args$data_label[1]
     args$type <- eval(args$type)[1]
 
-    validate_sarosmake_options(params = args)
+    validate_makeme_options(params = args)
 
 
     if(!args$type %in% c("sigtest_table_html")) {
@@ -508,13 +513,13 @@ sarosmake <-
       if(!args$type %in% c("sigtest_table_html")) {
         args$data_summary <-
           args$data_summary |>
-          post_process_sarosmake_data(data = _,
+          post_process_makeme_data(data = _,
                                     indep = args$indep,
                                     showNA = args$showNA,
                                     colour_2nd_binary_cat = args$colour_2nd_binary_cat)
       }
 
-      out[[crwd]] <- rlang::exec(makeme, type=args$type, !!!args[!names(args) %in% c("type")])
+      out[[crwd]] <- rlang::exec(make_content, type=args$type, !!!args[!names(args) %in% c("type")])
     }
 
     if(isTRUE(args$simplify_output) && length(out)==1) out[[1]] else out

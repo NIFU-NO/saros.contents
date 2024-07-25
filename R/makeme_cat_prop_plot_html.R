@@ -1,5 +1,5 @@
 #' @export
-makeme.cat_prop_plot_html <-
+make_content.cat_prop_plot_html <-
   function(type,
            ...) {
 

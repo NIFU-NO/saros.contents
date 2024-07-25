@@ -1,4 +1,4 @@
-post_process_sarosmake_data <- function(data,
+post_process_makeme_data <- function(data,
                                         indep = NULL,
                                         showNA = "never",
                                         colour_2nd_binary_cat = NULL) {

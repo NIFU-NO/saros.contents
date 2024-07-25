@@ -1,5 +1,5 @@
 #' @export
-makeme.cat_prop_plot_docx <-
+make_content.cat_prop_plot_docx <-
   function(...) {
 
     dots <- rlang::list2(...)

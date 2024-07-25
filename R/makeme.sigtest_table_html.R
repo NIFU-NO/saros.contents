@@ -1,5 +1,5 @@
 #' @export
-makeme.sigtest_table_html <-
+make_content.sigtest_table_html <-
   function(...) {
 
     dots <- rlang::list2(...)

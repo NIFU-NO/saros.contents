@@ -23,12 +23,12 @@ if(!exists(".saros.env")) .saros.env <- NULL
                                #"type",
                                "chapter_overview", "path", "...")
 
-  .saros.env$sarosmake_defaults <<-
-    lapply(formals(sarosmake)[!names(formals(sarosmake)) %in% c("data", "dep", "indep", "...")],
+  .saros.env$makeme_defaults <<-
+    lapply(formals(makeme)[!names(formals(makeme)) %in% c("data", "dep", "indep", "...")],
            eval)
-  .saros.env$sarosmake_defaults$type <<- .saros.env$sarosmake_defaults$type[1]
-  .saros.env$sarosmake_defaults$showNA <<- .saros.env$sarosmake_defaults$showNA[1]
-  .saros.env$sarosmake_defaults$data_label <<- .saros.env$sarosmake_defaults$data_label[1]
+  .saros.env$makeme_defaults$type <<- .saros.env$makeme_defaults$type[1]
+  .saros.env$makeme_defaults$showNA <<- .saros.env$makeme_defaults$showNA[1]
+  .saros.env$makeme_defaults$data_label <<- .saros.env$makeme_defaults$data_label[1]
   .saros.env$make_link_defaults <<-
     lapply(formals(make_link)[!names(formals(make_link)) %in% c("data")],
            eval)
@@ -40,8 +40,8 @@ if(!exists(".saros.env")) .saros.env <- NULL
 
   # Initialize global options with the factory defaults if not already set
   .saros_options <- getOption("saros", list())
-  if (is.null(.saros_options$sarosmake_defaults)) {
-    .saros_options$sarosmake_defaults <- .saros.env$sarosmake_defaults
+  if (is.null(.saros_options$makeme_defaults)) {
+    .saros_options$makeme_defaults <- .saros.env$makeme_defaults
     .saros_options$make_link_defaults <- .saros.env$make_link_defaults
     .saros_options$n_rng_defaults <- .saros.env$n_rng_defaults
     options(saros = .saros_options)

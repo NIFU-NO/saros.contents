@@ -1,5 +1,5 @@
 #' @export
-makeme.cat_freq_plot_html <-
+make_content.cat_freq_plot_html <-
   function(...) {
 
     dots <- rlang::list2(...)

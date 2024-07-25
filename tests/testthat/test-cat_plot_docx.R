@@ -7,7 +7,7 @@ testthat::test_that("chart cat_docx", {
   testthat::expect_s3_class(object = {
     test <-
       saros.base::ex_survey |>
-      sarosmake(data=_,
+      makeme(data=_,
              type="cat_prop_plot_docx",
              dep = paste0("b_", 1:3),
              font_family = "Calibri",
@@ -33,12 +33,12 @@ testthat::test_that("chart cat_docx", {
 
 
 
-  testthat::expect_error(object = sarosmake(data=mtcars,
+  testthat::expect_error(object = makeme(data=mtcars,
                                          type="cat_prop_plot_docx",
                                          dep = c(cyl, vs, gear, carb),
                                          return_raw = FALSE),
                          regexp = "Column `cyl` and column `vs` lack common categories")
-  testthat::expect_error(object = sarosmake(data=saros.base::ex_survey,
+  testthat::expect_error(object = makeme(data=saros.base::ex_survey,
                                          type="cat_prop_plot_docx",
                                          dep = tidyselect::matches("^[ab]"),
                                          return_raw = FALSE),
@@ -46,7 +46,7 @@ testthat::test_that("chart cat_docx", {
 
   testthat::expect_s3_class(object = {
     test <-
-      sarosmake(data=saros.base::ex_survey,
+      makeme(data=saros.base::ex_survey,
              dep = paste0("a_", 1:9),
              type="cat_prop_plot_docx",
              font_family = "Calibri",
@@ -72,7 +72,7 @@ testthat::test_that("chart cat_docx", {
 
   testthat::expect_s3_class(object = {
     test <-
-      sarosmake(data = saros.base::ex_survey,
+      makeme(data = saros.base::ex_survey,
              dep = paste0("a_", 1:9),
              type = "cat_prop_plot_docx",
              showNA = "never",
@@ -103,7 +103,7 @@ testthat::test_that("chart cat_docx", {
       saros.base::ex_survey |>
       dplyr::mutate(across(p_4, ~forcats::fct_recode(.x, NULL = "Strongly disagree"))) |>
       labelled::copy_labels_from(from = saros.base::ex_survey) |>
-      sarosmake(data=_,
+      makeme(data=_,
              dep = paste0("p_", 1:4),
              type = "cat_prop_plot_docx",
              showNA = "never",
@@ -135,7 +135,7 @@ testthat::test_that("chart cat_docx", {
       saros.base::ex_survey |>
       dplyr::mutate(across(p_1, ~forcats::fct_recode(.x, NULL = "Somewhat disagree"))) |>
       labelled::copy_labels_from(from = saros.base::ex_survey) |>
-      sarosmake(data=_,
+      makeme(data=_,
              dep = paste0("p_", 1:4),
              type="cat_prop_plot_docx",
              height_per_col = .3,
@@ -167,7 +167,7 @@ testthat::test_that("chart cat_docx", {
       saros.base::ex_survey |>
       dplyr::mutate(across(p_4, ~forcats::fct_recode(.x, NULL = "Strongly agree"))) |>
       labelled::copy_labels_from(from = saros.base::ex_survey) |>
-      sarosmake(data=_,
+      makeme(data=_,
              dep = paste0("p_", 1:4),
              type="cat_prop_plot_docx",
              showNA = "never",
@@ -199,7 +199,7 @@ testthat::test_that("chart cat_docx", {
       saros.base::ex_survey |>
       dplyr::mutate(dplyr::across(p_1, ~forcats::fct_recode(.x, NULL = "Strongly agree"))) |>
       labelled::copy_labels_from(from = saros.base::ex_survey) |>
-      sarosmake(data=_,
+      makeme(data=_,
              dep = paste0("p_", 1:4),
              type="cat_prop_plot_docx",
              showNA = "never",
@@ -229,7 +229,7 @@ testthat::test_that("chart cat_docx", {
   testthat::expect_s3_class(object = {
     test <-
       saros.base::ex_survey |>
-      sarosmake(data=_,
+      makeme(data=_,
              dep = paste0("a_", 1:9),
              type="cat_prop_plot_docx",
              data_label = "percentage_bare",
@@ -259,7 +259,7 @@ testthat::test_that("chart cat_docx", {
   testthat::expect_s3_class(object = {
     test <-
       saros.base::ex_survey |>
-      sarosmake(data=_,
+      makeme(data=_,
              dep = paste0("a_", 1:9),
              type="cat_prop_plot_docx",
              sort_by = ".count",
@@ -291,7 +291,7 @@ testthat::test_that("chart cat_docx", {
   testthat::expect_s3_class(object = {
     test <-
       saros.base::ex_survey |>
-      sarosmake(data=_,
+      makeme(data=_,
              dep = paste0("a_", 1:9),
              type="cat_prop_plot_docx",
              sort_by = ".count",
@@ -323,7 +323,7 @@ testthat::test_that("chart cat_docx", {
   testthat::expect_s3_class(object = {
     test <-
       saros.base::ex_survey |>
-      sarosmake(data=_,
+      makeme(data=_,
              dep = paste0("b_", 1:3),
              type = "cat_prop_plot_docx",
              sort_by = ".count",
@@ -357,7 +357,7 @@ testthat::test_that("chart cat_docx", {
   testthat::expect_error(object = {
     test <-
       saros.base::ex_survey |>
-      sarosmake(data=_,
+      makeme(data=_,
              dep = paste0("b_", 1),
              indep = c("x1_sex","x2_human"),
              type="cat_prop_plot_docx",

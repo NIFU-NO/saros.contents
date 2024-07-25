@@ -18,7 +18,7 @@ n_rng <- function(data, dep, indep = NULL,
   current_call <- current_call[!names(current_call) %in% .saros.env$ignore_args]
   args <- check_options(call = current_call,
                         ignore_args = .saros.env$ignore_args,
-                        defaults_env = sarosmake_global_settings_get())
+                        defaults_env = makeme_global_settings_get())
 
   deps <- as.character(unique(dep))
   deps <- deps[!is.na(deps)]
@@ -91,7 +91,7 @@ n_range <- function(data, dep, indep=NULL,
 
   args <- check_options(call = current_call,
                         ignore_args = .saros.env$ignore_args,
-                        defaults_env = sarosmake_global_settings_get()
+                        defaults_env = makeme_global_settings_get()
   )
   args$data <- data # reinsert after check_options
   args$dep <- names(dep_pos)
