@@ -33,12 +33,6 @@
 #'
 #'   One of "proportion", "percentage", "percentage_bare", "count", "mean", or "median".
 #'
-#' @param return_raw *NOT IN USE*
-#'
-#'   `scalar<logical>` // *default:* `FALSE`
-#'
-#'   Whether to return the raw static element.
-#'
 #' @param simplify_output
 #'
 #'   `scalar<logical>` // *default:* `TRUE`
@@ -378,17 +372,7 @@ makeme <-
            colour_2nd_binary_cat = "#ffffff",
            colour_na = "grey",
 
-           # Only for docx, for ggplot2 it is set globally
-           plot_height = 15,
-           label_font_size = 6,
-           main_font_size = 6,
-           strip_font_size = 6,
-           legend_font_size = 6,
-           font_family = "sans",
-
-           docx_template = NULL,
-           return_raw = FALSE,
-
+           # For tables
            table_wide = TRUE,
            table_main_question_as_header = FALSE,
 
@@ -404,7 +388,18 @@ makeme <-
                   mesos_group_prefix = " Group: ",
                   mesos_group_suffix = "",
                   mesos_label_all_others = "Others"
-             )
+             ),
+
+           # Only for docx, for ggplot2 it is set globally
+           plot_height = 15,
+           label_font_size = 6,
+           main_font_size = 6,
+           strip_font_size = 6,
+           legend_font_size = 6,
+           font_family = "sans",
+           docx_template = NULL
+
+
            ) {
 
 

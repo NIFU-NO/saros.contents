@@ -42,7 +42,6 @@ validate_makeme_options <- function(params) {
 
       # Boolean
       require_common_categories = list(fun = is_bool),
-      return_raw = list(fun = is_bool),
       simplify_output = list(fun = is_bool),
       descend = list(fun = is_bool),
       vertical = list(fun = is_bool),

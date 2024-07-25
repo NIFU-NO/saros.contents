@@ -46,21 +46,20 @@ makeme(
   colour_palette = NULL,
   colour_2nd_binary_cat = "#ffffff",
   colour_na = "grey",
-  plot_height = 15,
-  label_font_size = 6,
-  main_font_size = 6,
-  strip_font_size = 6,
-  legend_font_size = 6,
-  font_family = "sans",
-  docx_template = NULL,
-  return_raw = FALSE,
   table_wide = TRUE,
   table_main_question_as_header = FALSE,
   translations = list(last_sep = " and ", by_breakdown = " by ", table_heading_N =
     "Total (N)", by_total = "Everyone", sigtest_prefix = "Significance testing of ",
     sigtest_suffix = "", sigtest_variable_header_1 = "Var 1", sigtest_variable_header_2 =
     "Var 2", mesos_group_prefix = " Group: ", mesos_group_suffix = "",
-    mesos_label_all_others = "Others")
+    mesos_label_all_others = "Others"),
+  plot_height = 15,
+  label_font_size = 6,
+  main_font_size = 6,
+  strip_font_size = 6,
+  legend_font_size = 6,
+  font_family = "sans",
+  docx_template = NULL
 )
 }
 \arguments{
@@ -297,6 +296,24 @@ Colour for the second category in binary variables. Often useful to hide this.}
 
 Colour as a single string for NA values, if showNA is "ifany" or "always".}
 
+\item{table_wide}{\emph{Pivot table wider}
+
+\verb{scalar<logical>} // \emph{default:} \code{FALSE} (\code{optional})
+
+Whether to pivot table wider.}
+
+\item{table_main_question_as_header}{\emph{Table main question as header}
+
+\verb{scalar<logical>} // \emph{default:} \code{FALSE} (\code{optional})
+
+Whether to include the main question as a header in the table.}
+
+\item{translations}{\emph{Localize your output}
+
+\verb{list<character>}
+
+A list of translations where the name is the code and the value is the translation. See the examples.}
+
 \item{plot_height}{\emph{DOCX-setting}
 
 \verb{scalar<numeric>} // \emph{default:} \code{12} (\code{optional})
@@ -321,30 +338,6 @@ Word font family. See officer::fp_text.}
 \verb{scalar<character>|<rdocx>-object} // \emph{default:} \code{NULL} (\code{optional})
 
 Can be either a valid character path to a reference Word file, or an existing rdocx-object in memory.}
-
-\item{return_raw}{\emph{NOT IN USE}
-
-\verb{scalar<logical>} // \emph{default:} \code{FALSE}
-
-Whether to return the raw static element.}
-
-\item{table_wide}{\emph{Pivot table wider}
-
-\verb{scalar<logical>} // \emph{default:} \code{FALSE} (\code{optional})
-
-Whether to pivot table wider.}
-
-\item{table_main_question_as_header}{\emph{Table main question as header}
-
-\verb{scalar<logical>} // \emph{default:} \code{FALSE} (\code{optional})
-
-Whether to include the main question as a header in the table.}
-
-\item{translations}{\emph{Localize your output}
-
-\verb{list<character>}
-
-A list of translations where the name is the code and the value is the translation. See the examples.}
 }
 \value{
 ggplot
