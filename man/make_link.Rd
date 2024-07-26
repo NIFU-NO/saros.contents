@@ -11,7 +11,8 @@ make_link(
   file_suffix = ".csv",
   save_fn = utils::write.csv,
   link_prefix = "[download figure data](",
-  link_suffix = ")"
+  link_suffix = ")",
+  ...
 )
 }
 \arguments{
@@ -41,13 +42,19 @@ Defaults to same folder.}
 Can be any saving/writing function. However, first argument must be
 the object to be saved, and the second must be the path. Hence,
 \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}} must be wrapped in another function with \code{filename} and
-\code{object} swapped.}
+\code{object} swapped. See \code{\link[=ggsaver]{ggsaver()}} for an example of such a wrapper function.}
 
 \item{link_prefix, link_suffix}{\emph{Link prefix/suffix}
 
 \verb{scalar<character>} // \emph{default:} \code{"[download data]("} and \code{")"}
 
 The stuff that is returned.}
+
+\item{...}{\emph{Dynamic dots}
+
+<\href{https://rlang.r-lib.org/reference/dyn-dots.html}{\code{dynamic-dots}}>
+
+Arguments forwarded to the corresponding functions that create the elements.}
 }
 \value{
 String.
