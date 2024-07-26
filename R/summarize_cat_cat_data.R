@@ -173,15 +173,19 @@ sort_data <- function(data_summary,
 
     return(dplyr::arrange(data_summary, as.integer(.data$.variable_label), as.integer(.data$.category)))
 
-  } else if(all(sort_by %in% names(data_summary))) { # E.g. .variabel_name, .variable_label, x1_sex
+  }
+
+  if(all(sort_by %in% names(data_summary))) { # E.g. .variabel_name, .variable_label, x1_sex
 
     sort_col <- sort_by
 
   } else if((length(sort_by) == 1 &&
-             sort_by %in% .saros.env$summary_data_sort1) ||
-            all(sort_by %in% unique(data_summary$.category))) { # E.g. .top, .upper, .mid_upper, c("A bit", "A lot")
+             sort_by %in% .saros.env$summary_data_sort1) ||  # E.g. .top, .upper, .mid_upper, c("A bit", "A lot")
+            all(sort_by %in% unique(data_summary$.category))) {
 
-    sort_col <- c(".sum_value", indep_names, ".category")
+    sort_col <- c(".sum_value",
+                  indep_names[lapply(indep_names, function(indep_name) is.ordered(data_summary[[indep_name]])) |> unlist()],
+                  ".category")
 
   }
   #### descend IS CURRENTLY GLOBAL ACROSS ALL VARIABLES:

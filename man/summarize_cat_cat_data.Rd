@@ -62,7 +62,10 @@ Whether to include totals in the output.}
 
 \verb{vector<character>} // \emph{default:} \code{NULL} (\code{optional})
 
-Sort output (and collapse if requested).
+Sort output (and collapse if requested). When using \code{indep}-argument,
+sorting differs between ordered factors and unordered factors: Ordering
+of ordered factors is always respected in output. Unordered factors will be
+reordered by \code{sort_by}. Currently, this works best for a single \code{dep}.
 
 \describe{
 \item{".top"}{The proportion for the highest category available in the variable.}

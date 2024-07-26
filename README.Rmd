@@ -31,3 +31,6 @@ knitr::opts_chunk$set(
 ## Introduction
 
 
+## Acknowledgements
+The code for reordering unordered factors in cat_prop_plots has been copied (without permission) from Julia Silge's and David Robinson's excellent [{tidytext}](https://juliasilge.github.io/tidytext/)-package.
+

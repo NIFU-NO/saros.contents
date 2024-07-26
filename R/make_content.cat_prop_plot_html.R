@@ -43,6 +43,12 @@ make_content.cat_prop_plot_html <-
     percentage <- dots$data_label %in% c("percentage", "percentage_bare")
     prop_family <- dots$data_label %in% c("percentage", "percentage_bare", "proportion")
     x <- if(length(indep_vars) == 1 && isFALSE(dots$inverse)) indep_vars else ".variable_label"
+    if(!is.ordered(data[[x]])) {
+      data[[x]] <- reorder_within(x = data[[x]],
+                                  by = ifelse(is.na(data[[".sum_value"]]), 0, data[[".sum_value"]]),
+                                  within = data[, c(".variable_label")],
+                                  fun = mean, na.rm=TRUE)
+    }
     p <-
       dplyr::mutate(data,
                     .id = seq_len(nrow(data)),
@@ -112,7 +118,7 @@ make_content.cat_prop_plot_html <-
       ggiraph::scale_colour_discrete_interactive(
         guide = FALSE, #values = c("black", "white"),
         drop = FALSE) +
-      ggplot2::scale_x_discrete(limits = rev, labels = function(x) string_wrap(x, width = dots$x_axis_label_width)) +
+      scale_x_reordered(limits = rev) +
       ggplot2::guides(
         alpha = "none",
         fill = if (hide_legend) "none" else ggiraph::guide_legend_interactive(data_id = "fill.guide",
@@ -168,7 +174,7 @@ make_content.cat_prop_plot_html <-
               )
             ),
             interactive_on = "text",
-            switch = "y", scales = "free_y", space = "free_y"
+            switch = "y", scales = "free", space = "free_y"
           )
       } else {
         p <- p +
