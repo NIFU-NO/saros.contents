@@ -10,6 +10,8 @@ ggsaver(plot, filename, ...)
 \item{plot}{Plot}
 
 \item{filename}{Note}
+
+\item{...}{Arguments forwarded to \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}}}
 }
 \description{
 This only exists to make it easy to use it in \code{\link[=make_link]{make_link()}}
@@ -17,5 +19,6 @@ This only exists to make it easy to use it in \code{\link[=make_link]{make_link(
 \examples{
 library(ggplot2)
 my_plot <- ggplot(data=mtcars, aes(x=hp, y=mpg)) + geom_point()
-make_link(my_plot, folder=tempdir(), file_suffix = ".png", save_fn = ggsaver)
+make_link(my_plot, folder=tempdir(), file_suffix = ".png",
+          save_fn = ggsaver, width = 16, height = 16, units = "cm")
 }

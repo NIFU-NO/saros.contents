@@ -4,6 +4,7 @@
 #'
 #' @param plot Plot
 #' @param filename Note
+#' @param ... Arguments forwarded to [ggplot2::ggsave()]
 #'
 #' @export
 #'
