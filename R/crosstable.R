@@ -1,11 +1,11 @@
-crosstable3 <- function(data,
+crosstable <- function(data,
                         ...) {
-  UseMethod("crosstable3")
+  UseMethod("crosstable")
 }
 
 
 #' @export
-crosstable3.data.frame <-
+crosstable.data.frame <-
   function(data,
            dep = colnames(data),
            indep = NULL,
@@ -208,10 +208,10 @@ crosstable3.data.frame <-
   }
 
 #' @export
-crosstable3.tbl_df <- crosstable3.data.frame
+crosstable.tbl_df <- crosstable.data.frame
 
 #' @export
-crosstable3.tbl_svy <-
+crosstable.tbl_svy <-
   function(data,
            dep = colnames(data),
            indep = NULL,

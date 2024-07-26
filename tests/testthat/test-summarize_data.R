@@ -153,7 +153,7 @@ testthat::test_that("summarize_cat_cat_data", {
 })
 
 
-testthat::test_that("crosstable3 srvyr gives same output as regular tbl with 0 indep-col", {
+testthat::test_that("crosstable srvyr gives same output as regular tbl with 0 indep-col", {
   suppressMessages(library(dplyr))
   suppressMessages(library(srvyr))
   x <-
@@ -230,7 +230,7 @@ testthat::test_that("crosstable3 srvyr gives same output as regular tbl with 0 i
                          expected = dplyr::pull(x, .data[[".sum_value"]]))
 })
 
-testthat::test_that("crosstable3 srvyr gives same output as regular tbl with 1 indep-col", {
+testthat::test_that("crosstable srvyr gives same output as regular tbl with 1 indep-col", {
   suppressMessages(library(dplyr))
   suppressMessages(library(srvyr))
   x <-
@@ -305,7 +305,7 @@ testthat::test_that("crosstable3 srvyr gives same output as regular tbl with 1 i
 })
 
 
-testthat::test_that("crosstable3 srvyr gives same output as regular tbl with 2 indep-col", {
+testthat::test_that("crosstable srvyr gives same output as regular tbl with 2 indep-col", {
   suppressMessages(library(dplyr))
   suppressMessages(library(srvyr))
   x <-

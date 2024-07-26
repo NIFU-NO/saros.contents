@@ -279,7 +279,7 @@ summarize_cat_cat_data <-
 
 
     cross_table_output <-
-      crosstable3(data,
+      crosstable(data,
                   dep = dep,
                   indep = indep,
                   showNA = showNA,

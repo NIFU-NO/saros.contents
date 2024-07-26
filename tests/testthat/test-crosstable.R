@@ -1,9 +1,9 @@
-testthat::test_that("crosstable3", {
+testthat::test_that("crosstable", {
 
   testthat::expect_no_error(object = {
     x <-
       saros.base::ex_survey |>
-      saros.contents:::crosstable3.data.frame(
+      saros.contents:::crosstable.data.frame(
         dep = paste0("b_", 1:3),
         indep = NULL, showNA = "ifany")
   })
@@ -18,7 +18,7 @@ testthat::test_that("crosstable3", {
   testthat::expect_no_error(object = {
     x <-
       saros.base::ex_survey |>
-      saros.contents:::crosstable3.data.frame(
+      saros.contents:::crosstable.data.frame(
         dep = paste0("b_", 1:3),
         indep = "x1_sex",
         showNA = "ifany")
