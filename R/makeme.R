@@ -240,7 +240,10 @@
 #'
 #'   `vector<character>` // *default:* `NULL` (`optional`)
 #'
-#'   Sort output (and collapse if requested).
+#'   Sort output (and collapse if requested). When using `indep`-argument,
+#'   sorting differs between ordered factors and unordered factors: Ordering
+#'   of ordered factors is always respected in output. Unordered factors will be
+#'   reordered by `sort_by`. Currently, this works best for a single `dep`.
 #'
 #' \describe{
 #' \item{".top"}{The proportion for the highest category available in the variable.}
