@@ -8,6 +8,7 @@ make_content.sigtest_table_html <-
     data_summary <- dots$data_summary
 
 
+    out <-
     tidyr::expand_grid(y = dots$dep, x = dots$indep) |>
       dplyr::rowwise() |>
       dplyr::group_map(
@@ -48,4 +49,12 @@ make_content.sigtest_table_html <-
 
         }) |>
       dplyr::bind_rows()
+    if(rlang::is_string(dots$translations$sigtest_variable_header_1)) {
+      names(out)[names(out) == "y"] <- dots$translations$sigtest_variable_header_1
+    } else cli::cli_abort("{.arg translations$sigtest_variable_header_1} must be a string, not {.obj_type_friendly {dots$translations$sigtest_variable_header_1}}.")
+    if(rlang::is_string(dots$translations$sigtest_variable_header_2)) {
+      names(out)[names(out) == "x"] <- dots$translations$sigtest_variable_header_2
+    } else cli::cli_abort("{.arg translations$sigtest_variable_header_2} must be a string, not {.obj_type_friendly {dots$translations$sigtest_variable_header_2}}.")
+
+    out
   }
