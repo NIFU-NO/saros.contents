@@ -413,8 +413,6 @@ makeme <-
                   by_total = "Everyone",
                   sigtest_variable_header_1 = "Var 1",
                   sigtest_variable_header_2 = "Var 2",
-                  mesos_group_prefix = " Group: ",
-                  mesos_group_suffix = "",
                   mesos_label_all_others = "Others"
              ),
 

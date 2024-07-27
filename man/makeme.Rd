@@ -53,8 +53,7 @@ makeme(
     add_n_to_label_prefix = " (N = ", add_n_to_label_suffix = ")",
     add_n_to_category_prefix = " (N = [", add_n_to_category_infix = ",",
     add_n_to_category_suffix = "])", by_total = "Everyone", sigtest_variable_header_1 =
-    "Var 1", sigtest_variable_header_2 = "Var 2", mesos_group_prefix = " Group: ",
-    mesos_group_suffix = "", mesos_label_all_others = "Others"),
+    "Var 1", sigtest_variable_header_2 = "Var 2", mesos_label_all_others = "Others"),
   plot_height = 15,
   label_font_size = 6,
   main_font_size = 6,
