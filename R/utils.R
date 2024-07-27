@@ -120,8 +120,8 @@ check_category_pairs <-
     TRUE
   }
 
-# Stolen from Julia Silge's tidytext-package.
 reorder_within <- function(x, by, within, fun = mean, sep = "___", ...) {
+  # Stolen from Julia Silge's tidytext-package.
   if (!is.list(within)) {
     within <- list(within)
   }
