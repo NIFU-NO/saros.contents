@@ -14,7 +14,6 @@ makeme(
     "cat_freq_table_docx", "int_table_docx", "sigtest_table_docx"),
   ...,
   require_common_categories = TRUE,
-  path = NULL,
   crowd = c("all"),
   mesos_var = NULL,
   mesos_group = NULL,
@@ -50,12 +49,11 @@ makeme(
   colour_na = "grey",
   table_wide = TRUE,
   table_main_question_as_header = FALSE,
-  translations = list(last_sep = " and ", by_breakdown = " by ", table_heading_N =
-    "Total (N)", add_n_to_label_prefix = " (N = ", add_n_to_label_suffix = ")",
+  translations = list(last_sep = " and ", table_heading_N = "Total (N)",
+    add_n_to_label_prefix = " (N = ", add_n_to_label_suffix = ")",
     add_n_to_category_prefix = " (N = [", add_n_to_category_infix = ",",
-    add_n_to_category_suffix = "])", by_total = "Everyone", sigtest_prefix =
-    "Significance testing of ", sigtest_suffix = "", sigtest_variable_header_1 = "Var 1",
-    sigtest_variable_header_2 = "Var 2", mesos_group_prefix = " Group: ",
+    add_n_to_category_suffix = "])", by_total = "Everyone", sigtest_variable_header_1 =
+    "Var 1", sigtest_variable_header_2 = "Var 2", mesos_group_prefix = " Group: ",
     mesos_group_suffix = "", mesos_label_all_others = "Others"),
   plot_height = 15,
   label_font_size = 6,
@@ -63,6 +61,7 @@ makeme(
   strip_font_size = 6,
   legend_font_size = 6,
   font_family = "sans",
+  path = NULL,
   docx_template = NULL
 )
 }
@@ -96,12 +95,6 @@ Arguments forwarded to the corresponding functions that create the elements.}
 \verb{scalar<logical>} // \emph{default:} \code{NULL} (\code{optional})
 
 Whether to check if all items share common categories.}
-
-\item{path}{\emph{Output path for DOCX}
-
-\verb{scalar<character>} // \emph{default:} \code{NULL} (\code{optional})
-
-Path to save docx-output.}
 
 \item{crowd}{\emph{Which group(s) to display results for}
 
@@ -360,6 +353,12 @@ Font sizes for general text (6), data label text (3), strip text (6) and legend 
 \verb{scalar<character>} // \emph{default:} \code{"sans"} (\code{optional})
 
 Word font family. See officer::fp_text.}
+
+\item{path}{\emph{Output path for DOCX}
+
+\verb{scalar<character>} // \emph{default:} \code{NULL} (\code{optional})
+
+Path to save docx-output.}
 
 \item{docx_template}{\emph{Filename or rdocx object}
 

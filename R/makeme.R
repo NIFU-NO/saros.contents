@@ -353,7 +353,6 @@ makeme <-
            ...,
 
            require_common_categories = TRUE,
-           path = NULL,
 
            # Multiple output, splits and selective hiding of variables
            crowd = c("all"), #"target", "others",
@@ -404,8 +403,7 @@ makeme <-
            table_main_question_as_header = FALSE,
 
            translations =
-             list(last_sep = " and ",
-                  by_breakdown = " by ",
+             list(last_sep = " and ", # Not in use
                   table_heading_N = "Total (N)",
                   add_n_to_label_prefix = " (N = ",
                   add_n_to_label_suffix = ")",
@@ -413,8 +411,6 @@ makeme <-
                   add_n_to_category_infix = ",",
                   add_n_to_category_suffix = "])",
                   by_total = "Everyone",
-                  sigtest_prefix = "Significance testing of ",
-                  sigtest_suffix = "",
                   sigtest_variable_header_1 = "Var 1",
                   sigtest_variable_header_2 = "Var 2",
                   mesos_group_prefix = " Group: ",
@@ -422,13 +418,14 @@ makeme <-
                   mesos_label_all_others = "Others"
              ),
 
-           # Only for docx, for ggplot2 it is set globally
+           # Only for docx, for ggplot2 it is set globally or wtih gplot2::theme()
            plot_height = 15,
            label_font_size = 6,
            main_font_size = 6,
            strip_font_size = 6,
            legend_font_size = 6,
            font_family = "sans",
+           path = NULL,
            docx_template = NULL
 
 
