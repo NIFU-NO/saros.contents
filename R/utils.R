@@ -9,6 +9,7 @@
 #' @param spread_n The number of values to extract when set is "spread".
 #' @param sort Whether to sort the output, defaults to FALSE.
 #' @return Selected set of vector.
+#' @keyword internal
 # subset_vector(vec=1:7, set=".mid_lower")
 subset_vector <-
   function(vec,
