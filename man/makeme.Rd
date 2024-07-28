@@ -44,9 +44,6 @@ makeme(
   descend = TRUE,
   variables_always_at_top = NULL,
   variables_always_at_bottom = NULL,
-  colour_palette = NULL,
-  colour_2nd_binary_cat = "#ffffff",
-  colour_na = "grey",
   table_wide = TRUE,
   table_main_question_as_header = FALSE,
   translations = list(last_sep = " and ", table_heading_N = "Total (N)",
@@ -55,6 +52,9 @@ makeme(
     add_n_to_category_suffix = "])", by_total = "Everyone", sigtest_variable_header_1 =
     "Var 1", sigtest_variable_header_2 = "Var 2", mesos_label_all_others = "Others"),
   plot_height = 15,
+  colour_palette = NULL,
+  colour_2nd_binary_cat = "#ffffff",
+  colour_na = "grey",
   label_font_size = 6,
   main_font_size = 6,
   strip_font_size = 6,
@@ -298,24 +298,6 @@ for sorting of report sections.}
 
 Column names in \code{data} that should always be placed at the top or bottom of figures/tables.}
 
-\item{colour_palette}{\emph{Colour palette}
-
-\verb{vector<character>} // \emph{default:} \code{NULL} (\code{optional})
-
-Must contain at least the number of unique values (including missing) in the data set.}
-
-\item{colour_2nd_binary_cat}{\emph{Colour for second binary category}
-
-\verb{scalar<character>} // \emph{default:} \code{"#ffffff"} (\code{optional})
-
-Colour for the second category in binary variables. Often useful to hide this.}
-
-\item{colour_na}{\emph{Colour for NA category}
-
-\verb{scalar<character>} // \emph{default:} \code{NULL} (\code{optional})
-
-Colour as a single string for NA values, if showNA is "ifany" or "always".}
-
 \item{table_wide}{\emph{Pivot table wider}
 
 \verb{scalar<logical>} // \emph{default:} \code{FALSE} (\code{optional})
@@ -339,6 +321,24 @@ A list of translations where the name is the code and the value is the translati
 \verb{scalar<numeric>} // \emph{default:} \code{12} (\code{optional})
 
 DOCX plots need a height, which currently cannot be set easily with a Quarto chunk option.}
+
+\item{colour_palette}{\emph{Colour palette}
+
+\verb{vector<character>} // \emph{default:} \code{NULL} (\code{optional})
+
+Must contain at least the number of unique values (including missing) in the data set.}
+
+\item{colour_2nd_binary_cat}{\emph{Colour for second binary category}
+
+\verb{scalar<character>} // \emph{default:} \code{"#ffffff"} (\code{optional})
+
+Colour for the second category in binary variables. Often useful to hide this.}
+
+\item{colour_na}{\emph{Colour for NA category}
+
+\verb{scalar<character>} // \emph{default:} \code{NULL} (\code{optional})
+
+Colour as a single string for NA values, if showNA is "ifany" or "always".}
 
 \item{main_font_size, label_font_size, strip_font_size, legend_font_size}{\emph{Font sizes}
 

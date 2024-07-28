@@ -6,8 +6,6 @@ make_content.cat_freq_plot_html <-
 
     data <- dots$data_summary
 
-    multi <- length(dots$colour_palette) > 2
-
     indep_vars <- colnames(data)[!colnames(data) %in%
                                    .saros.env$summary_data_sort2]
 
@@ -53,7 +51,7 @@ make_content.cat_freq_plot_html <-
       ggplot2::ggplot(
         mapping = ggplot2::aes(
           y = .data$.count,
-          x = x,
+          x = .data[[x]],
           fill = .data$.category,
           group = .data$.category,
           label = .data$.data_label,
@@ -79,7 +77,6 @@ make_content.cat_freq_plot_html <-
                                   expand = c(0,0.03)) +
       ggiraph::scale_fill_discrete_interactive(
         name="",
-        # values = dots$colour_palette,
         data_id = function(x) x,
         tooltip = function(x) x,
         drop = FALSE) +
@@ -89,9 +86,7 @@ make_content.cat_freq_plot_html <-
         drop = FALSE) +
       ggplot2::scale_x_discrete(limits = rev, labels = function(x) string_wrap(x, width = dots$x_axis_label_width)) +
       ggplot2::guides(fill = ggiraph::guide_legend_interactive(data_id="fill.guide",
-                                                               byrow = TRUE,
-                                                               nrow = max(c(ceiling(length(dots$colour_palette) / 5),
-                                                                            (max_nchar_cat > 10)+1), na.rm = TRUE)),
+                                                               byrow = TRUE),
                       colour = "none")
 
     if (length(indep_vars) > 1L ||

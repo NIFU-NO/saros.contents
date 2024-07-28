@@ -393,10 +393,6 @@ makeme <-
            variables_always_at_bottom = NULL,
 
 
-           # Colours
-           colour_palette = NULL,
-           colour_2nd_binary_cat = "#ffffff",
-           colour_na = "grey",
 
            # For tables
            table_wide = TRUE,
@@ -418,6 +414,9 @@ makeme <-
 
            # Only for docx, for ggplot2 it is set globally or wtih gplot2::theme()
            plot_height = 15,
+           colour_palette = NULL,
+           colour_2nd_binary_cat = "#ffffff",
+           colour_na = "grey",
            label_font_size = 6,
            main_font_size = 6,
            strip_font_size = 6,
@@ -540,7 +539,7 @@ makeme <-
           post_process_makeme_data(data = _,
                                     indep = args$indep,
                                     showNA = args$showNA,
-                                    colour_2nd_binary_cat = args$colour_2nd_binary_cat)
+                                    colour_2nd_binary_cat = if(grepl(x=args$type, pattern="docx")) args$colour_2nd_binary_cat)
       }
 
       out[[crwd]] <- rlang::exec(make_content, type=args$type, !!!args[!names(args) %in% c("type")])

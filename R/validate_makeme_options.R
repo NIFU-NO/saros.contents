@@ -72,8 +72,7 @@ validate_makeme_options <- function(params) {
       crowd = list(fun = function(x) is.character(x) && all(x %in% c("target", "others", "all"))),
       data_label = list(fun = function(x) is.character(x) && any(env$data_label == x[1])),
       showNA = list(fun = function(x) is.character(x) && any(env$showNA == x[1])),
-      colour_palette_nominal = list(fun = function(x) (is.character(x) && all(is_colour(x))) || is.null(x) || is.function(x)),
-      colour_palette_ordinal = list(fun = function(x) (is.character(x) && all(is_colour(x))) || is.null(x) || is.function(x)),
+      colour_palette = list(fun = function(x) (is.character(x) && all(is_colour(x))) || is.null(x) || is.function(x)),
       colour_na = list(fun = function(x) (is.character(x) && all(is_colour(x))) || is.null(x) || is.function(x)),
 
       # List
