@@ -145,7 +145,8 @@ crosstable.data.frame <-
             summary_prop$.proportion <- summary_prop$.count / summary_prop[[".count_total"]]
             summary_prop$.category <- factor(x = summary_prop$.category,
                                              levels = fct_lvls,
-                                             labels = fct_lvls)
+                                             labels = fct_lvls,
+                                             exclude = character())
             summary_prop$.variable_label <- unname(saros.base::get_raw_labels(data = data, col_pos = .x))
             # summary_prop$.mean_base <- as.integer(summary_prop$.category) * summary_prop$.count
             summary_prop$.count_se <- NA_real_
