@@ -53,7 +53,7 @@ make_content.cat_freq_plot_html <-
       ggplot2::ggplot(
         mapping = ggplot2::aes(
           y = .data$.count,
-          x = x,
+          x = .data[[x]],
           fill = .data$.category,
           group = .data$.category,
           label = .data$.data_label,
