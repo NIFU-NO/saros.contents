@@ -8,24 +8,7 @@ make_content.cat_prop_plot_html <-
 
     data <- dots$data_summary
 
-    multi <- length(dots$colour_palette) > 2
 
-    checkbox <-
-      length(unname(dots$colour_palette)[!is.na(unname(dots$colour_palette))]) == 1 && # Contains a single colour
-      length(unname(dots$colour_palette)[is.na(unname(dots$colour_palette))]) == 1 # Contains a NA
-
-    if(checkbox) {
-      na_category <- names(dots$colour_palette)[is.na(unname(dots$colour_palette))]
-      data$.category <- forcats::fct_relevel(data$.category,
-                                             na_category,
-                                             after = 1)
-      dots$colour_palette[is.na(unname(dots$colour_palette))] <- "#ffffff"
-      data$.data_label <- ifelse(data$.category == na_category,
-                                 NA_character_, data$.data_label)
-    }
-    if(length(dots$colour_palette) > 0 && length(names(dots$colour_palette))==0) {
-      dots$colour_palette <- stats::setNames(dots$colour_palette, levels(data$.category))
-    }
 
     indep_vars <- colnames(data)[!colnames(data) %in%
                                    .saros.env$summary_data_sort2]
@@ -34,9 +17,6 @@ make_content.cat_prop_plot_html <-
       isTRUE(dots$hide_axis_text_if_single_variable) &&
       length(indep_vars) == 0 &&
       dplyr::n_distinct(data$.variable_label) == 1
-
-    hide_legend <-
-      checkbox
 
     max_nchar_cat <- max(nchar(levels(data$.category)), na.rm = TRUE)
 
@@ -74,8 +54,7 @@ make_content.cat_prop_plot_html <-
                     .onclick = paste0('alert(\"', .data[['.onclick']], '\");'),
                     .onclick = stringi::stri_replace_all_regex(.data$.onclick,
                                                                pattern = "\n",
-                                                               replacement = "\\\\n"),
-                    .alpha = if(length(dots$colour_palette)>0) ifelse(.data$.category == names(dots$colour_palette)[2] & checkbox, 0, 1)
+                                                               replacement = "\\\\n")
       ) |>
       ggplot2::ggplot(
         mapping = ggplot2::aes(
@@ -110,7 +89,6 @@ make_content.cat_prop_plot_html <-
       ) +
       ggiraph::scale_fill_discrete_interactive(
         name = "",
-        # values = dots$colour_palette,
         data_id = function(x) x,
         tooltip = function(x) x,
         drop = FALSE
@@ -121,40 +99,9 @@ make_content.cat_prop_plot_html <-
       scale_x_reordered(limits = rev) +
       ggplot2::guides(
         alpha = "none",
-        fill = if (hide_legend) "none" else ggiraph::guide_legend_interactive(data_id = "fill.guide",
-                                                                              byrow = TRUE,
-                                                                              nrow = max(c(ceiling(length(dots$colour_palette) / 5),
-                                                                                           (max_nchar_cat > 10)+1), na.rm = TRUE)),
+        fill = ggiraph::guide_legend_interactive(data_id = "fill.guide", byrow = TRUE),
         colour = "none"
-      ) #+
-    # ggplot2::theme_classic() +
-    # ggplot2::theme(
-    #   text = ggplot2::element_text(family = dots$font_family, size = dots$main_font_size),
-    #   axis.text.x = ggiraph::element_text_interactive(size = dots$main_font_size),
-    #   axis.text.y = if (hide_axis_text) ggplot2::element_blank() else ggiraph::element_text_interactive(data_id = "axis.text.y", size = dots$main_font_size),
-    #   plot.caption = ggiraph::element_text_interactive(data_id = "plot.caption"),
-    #   legend.location = "plot",
-    #   legend.position = "bottom",
-    #   legend.justification = "left", #if(!rlang::is_string(indep_vars)) c(-.15, 0) else c(-.35, 0),
-    #   legend.direction = "horizontal",
-    #   legend.key.size = ggplot2::unit(4, "mm"),
-    #   legend.text = ggiraph::element_text_interactive(data_id = "legend.text", size = dots$legend_font_size),
-    #   strip.placement = "outside",
-    #   strip.text.x = ggplot2::element_text(margin = ggplot2::margin(l = 0, t = 0, r = 0, b = 2, "cm"), size = dots$strip_font_size),
-    #   strip.text.y.left = ggiraph::element_text_interactive(data_id = "strip.text",
-    #                                                          angle = dots$strip_angle,
-    #                                                          hjust = 0,
-    #                                                          colour = "grey20",
-    #                                                          size = dots$strip_font_size), # if(length(indep_vars)>0) ggplot2::element_blank() else
-    #   strip.text.y.right = ggiraph::element_text_interactive(data_id = "strip.text",
-    #                                                         angle = dots$strip_angle,
-    #                                                         hjust = 0,
-    #                                                         colour = "grey20",
-    #                                                         size = dots$strip_font_size), # if(length(indep_vars)>0) ggplot2::element_blank() else
-    #   strip.background = ggiraph::element_rect_interactive(colour = NA)
-    # ) +
-    # ggplot2::labs(x = NULL, y = NULL)
-
+      )
     if (length(indep_vars) > 1L ||
         (length(indep_vars) >= 1L &&
          (dplyr::n_distinct(data$.variable_label) > 1 ||

@@ -7,14 +7,6 @@
 #
 #
 #
-#     if(is.null(colour_palette)) {
-#       n <- length(levels(data[[".category"]]))
-#       hues <- seq(15, 375, length = n + 1)
-#       colour_palette <- grDevices::hcl(h = hues, l = 65, c = 100)[1:n]
-#     }
-#
-#
-#     multi <- length(colour_palette) > 2
 #
 #     indep_vars <- colnames(data)[!colnames(data) %in%
 #       .saros.env$summary_data_sort2]
@@ -23,10 +15,6 @@
 #       isTRUE(hide_axis_text_if_single_variable) &&
 #       length(indep_vars) == 0 &&
 #       dplyr::n_distinct(data[[".variable_label"]]) == 1
-#
-#     hide_legend <-
-#       dplyr::n_distinct(data[[".category"]], na.rm = TRUE) == 2 &&
-#         !is.null(colour_2nd_binary_cat)
 #
 #     percentage <- data_label %in% c("percentage", "percentage_bare")
 #     prop_family <- data_label %in% c("percentage", "percentage_bare", "proportion")

@@ -12,8 +12,6 @@ make_content.cat_prop_plot_docx <-
       dots$colour_palette <- grDevices::hcl(h = hues, l = 65, c = 100)[1:n]
     }
 
-    multi <- length(dots$colour_palette) > 2
-
     indep_vars <- colnames(data)[!colnames(data) %in%
                                    .saros.env$summary_data_sort2]
 
