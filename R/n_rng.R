@@ -96,9 +96,9 @@ n_range <- function(data, dep, indep=NULL,
   args$data <- data # reinsert after check_options
   args$dep <- names(dep_pos)
   args$indep <- names(indep_pos)
-  n_rng(data=args$data,
+  n_rng(data=data,
         dep=args$dep,
         indep=args$indep,
-        glue_template_1 = args$glue_template_1,
-        glue_template_2 = args$glue_template_2)
+        glue_template_1 = glue_template_1,
+        glue_template_2 = glue_template_2)
 }

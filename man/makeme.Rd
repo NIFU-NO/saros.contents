@@ -386,4 +386,9 @@ makeme(data = ex_survey,
 makeme(data = ex_survey,
        dep = p_1:p_4, indep = x2_human,
        type = "cat_table_html")
+makeme(data = ex_survey,
+       dep = b_1:b_3,
+       crowd = c("target", "others", "all"),
+       mesos_var = "f_uni",
+       mesos_group = "Uni of A")
 }
