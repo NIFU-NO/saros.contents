@@ -225,9 +225,9 @@ sort_data <- function(data_summary,
         uniques <- rev(as.character(unique(data_summary[[indep_name]])))
       }
       data_summary[[indep_name]] <- forcats::fct_relevel(data_summary[[indep_name]], uniques)
-      if(any(levels(data_summary[[indep_name]]) == translations$mesos_label_all_others)) {
+      if(any(levels(data_summary[[indep_name]]) %in% translations$crowd_others)) {
         data_summary[[indep_name]] <- forcats::fct_relevel(data_summary[[indep_name]],
-                                                           translations$mesos_label_all_others, after = length(uniques))
+                                                           translations$crowd_others, after = length(uniques))
       }
     }
   }
