@@ -414,7 +414,9 @@ makeme <-
                   by_total = "Everyone",
                   sigtest_variable_header_1 = "Var 1",
                   sigtest_variable_header_2 = "Var 2",
-                  mesos_label_all_others = "Others"
+                  crowd_all = "All",
+                  crowd_target = "Target",
+                  crowd_others = "Others"
              ),
 
            # Only for docx, for ggplot2 it is set globally or wtih gplot2::theme()
@@ -576,6 +578,11 @@ makeme <-
                                  !!!args_crwd[!names(args_crwd) %in% c("type")])
     }
 
+    for(crwd in names(out)) {
+      if(rlang::is_string(args$translations[[paste0("crowd_", crwd)]])) {
+        names(out)[names(out) == crwd] <- args$translations[[paste0("crowd_", crwd)]]
+      }
+    }
 
     if(isTRUE(args$simplify_output) && length(out)==1) out[[1]] else out
 
