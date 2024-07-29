@@ -12,24 +12,10 @@ keep_cols <- function(data,
                       hide_for_all_crowds_if_hidden_for_crowd_vars = NULL # 6
                       ) {
 
-  # ALL OF THESE CONDITIONALS INTO A NEW FUNCTION?
-  if(crowd == "target") {
-
-    out <-
-      data |>
-      dplyr::filter(as.character(.data[[mesos_var]]) == mesos_group)
-
-  } else if(crowd == "others") {
-
-    out <-
-      data |>
-      dplyr::filter(as.character(.data[[mesos_var]]) != mesos_group)
-
-  } else if(crowd == "all") {
-
-    out <-
-      data
-  }
+  out <- data[makeme_keep_rows(data = data,
+                               crwd = crowd,
+                               mesos_var = mesos_var,
+                               mesos_group = mesos_group), , drop = FALSE]
 
   kept_vars <- c()
 
