@@ -573,9 +573,12 @@ makeme <-
       args_crwd$dep <- dep_crwd
       args_crwd$indep <- indep_crwd
 
-      out[[crwd]] <- rlang::exec(make_content,
-                                 type = args_crwd$type,
-                                 !!!args_crwd[!names(args_crwd) %in% c("type")])
+      out[[crwd]] <-
+        suppressPackageStartupMessages(
+          rlang::exec(make_content,
+                      type = args_crwd$type,
+                      !!!args_crwd[!names(args_crwd) %in% c("type")])
+        )
     }
 
     for(crwd in names(out)) {
