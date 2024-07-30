@@ -11,33 +11,36 @@ if(!exists(".saros.env")) .saros.env <- NULL
       ".count", ".count_se",
       ".count_total",
       ".proportion", ".proportion_se",
-      ".mean", ".mean_se", #".mean_base",
+      ".mean", ".mean_se",
       ".variable_label", ".variable_label_prefix",
       ".data_label", ".comb_categories",
-      ".sum_value",
-      ".element_name")
+      ".sum_value")
   .saros.env$data_label_opts <<-
     c("proportion", "percentage", "percentage_bare",
       "count", "mean", "median")
 
-  .saros.env$ignore_args <<- c("data", "dep", "indep",
-                               #"type",
-                               "chapter_overview", "path", "...")
+  .saros.env$ignore_args <<- c("data",
+                               "dep",
+                               "indep",
+                               "chapter_overview",
+                               "chapter_structure",
+                               "call",
+                               "...")
 
   .saros.env$makeme_defaults <<-
-    lapply(formals(makeme)[!names(formals(makeme)) %in% c("data", "dep", "indep", "...")],
+    lapply(formals(makeme)[!names(formals(makeme)) %in% .saros.env$ignore_args],
            eval)
   .saros.env$makeme_defaults$type <<- .saros.env$makeme_defaults$type[1]
   .saros.env$makeme_defaults$showNA <<- .saros.env$makeme_defaults$showNA[1]
   .saros.env$makeme_defaults$data_label <<- .saros.env$makeme_defaults$data_label[1]
 
   .saros.env$make_link_defaults <<-
-    lapply(formals(make_link)[!names(formals(make_link)) %in% c("data", "...")],
+    lapply(formals(make_link)[!names(formals(make_link)) %in% .saros.env$ignore_args],
            eval)
 
 
   .saros.env$n_rng_defaults <<-
-    lapply(formals(n_rng)[!names(formals(n_rng)) %in% c("data", "dep", "indep", "...")],
+    lapply(formals(n_rng)[!names(formals(n_rng)) %in% .saros.env$ignore_args],
            eval)
 
   # Initialize global options with the factory defaults if not already set
