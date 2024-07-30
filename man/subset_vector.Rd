@@ -27,3 +27,4 @@ Selected set of vector.
 \description{
 Useful for identifying which categories are to be collected.
 }
+\keyword{internal}
