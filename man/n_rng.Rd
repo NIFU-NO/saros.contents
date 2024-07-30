@@ -27,5 +27,6 @@ Always a string.
 Obtain range of N for a given data set and other settings.
 }
 \examples{
-n_rng(saros.base::ex_survey, dep="b_1", indep = "x1_sex")
+saros.contents:::n_rng(saros.base::ex_survey, dep="b_1", indep = "x1_sex")
 }
+\keyword{internal}
