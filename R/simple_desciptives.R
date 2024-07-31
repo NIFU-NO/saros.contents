@@ -19,10 +19,11 @@ simple_descriptives <- function(data, y_var, x_var = NULL, na.rm=FALSE, max_k = 
                                      .names = "{.fn}"),
                        .by = tidyselect::all_of(x_var))
     if(rlang::is_string(x_var) && isTRUE(table_wide)) {
-      out |>
-      tidyr::pivot_wider(names_from = tidyselect::all_of(x_var),
+      return(
+      tidyr::pivot_wider(out, names_from = tidyselect::all_of(x_var),
                          values_from = -tidyselect::all_of(x_var))
-    } else out
+      )
+    } else return(out)
 
   } else {
 
@@ -37,9 +38,11 @@ simple_descriptives <- function(data, y_var, x_var = NULL, na.rm=FALSE, max_k = 
                                      .names = "{.fn}"),
                        .by = tidyselect::all_of(x_var))
     if(rlang::is_string(x_var) && isTRUE(table_wide)) {
-      out |>
-        tidyr::pivot_wider(names_from = tidyselect::all_of(x_var),
+
+        return(tidyr::pivot_wider(out,
+                           names_from = tidyselect::all_of(x_var),
                            values_from = -tidyselect::all_of(x_var))
-    } else out
+        )
+    } else return(out)
   }
 }
