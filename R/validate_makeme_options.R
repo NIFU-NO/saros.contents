@@ -35,8 +35,8 @@ validate_makeme_options <- function(params) {
 
       path = list(fun = function(x) is.null(x) || rlang::is_string(x)),
       label_separator = list(fun = function(x) is.null(x) || is.character(x)),
-      variables_always_at_top = list(fun = function(x) is.null(x) || (is.character(x) && all(x %in% colnames(params$data)))),
-      variables_always_at_bottom = list(fun = function(x) is.null(x) || (is.character(x) && all(x %in% colnames(params$data)))),
+      variables_always_at_top = list(fun = function(x) is.null(x) || is.character(x)),
+      variables_always_at_bottom = list(fun = function(x) is.null(x) || is.character(x)),
       font_family = list(fun = function(x) rlang::is_string(x)),
       data_label_decimal_symbol = list(fun = function(x) rlang::is_string(x)),
 
@@ -113,6 +113,12 @@ validate_makeme_options <- function(params) {
     }
   }
 
+  variables_always_at_top_invalid <- params$variables_always_at_top[!params$variables_always_at_top %in% colnames(params$data)]
+  if(length(variables_always_at_top_invalid)>0) cli::cli_warn(c("{.arg variables_always_at_top} contains variables not found in {.arg data}:",
+                                                                    i="{.val {variables_always_at_top_invalid}}."))
+  variables_always_at_bottom_invalid <- params$variables_always_at_bottom[!params$variables_always_at_bottom %in% colnames(params$data)]
+  if(length(variables_always_at_bottom_invalid)>0) cli::cli_warn(c("{.arg variables_always_at_bottom} contains variables not found in {.arg data}:",
+                                                                    i="{.val {variables_always_at_bottom_invalid}}."))
 
 
   params
