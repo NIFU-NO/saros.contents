@@ -471,10 +471,10 @@ makeme <-
     if(grepl(x=args$type, pattern = "freq")) args$data_label <- "count"
 
     # Set hide_for_all_crowds_if_hidden_for_crowd first to get its excluded variables early
-    if(rlang::is_string(args$hide_for_all_crowds_if_hidden_for_crowd)) {
-      args$crowd <- c(args$hide_for_all_crowds_if_hidden_for_crowd,
-                      args$crowd[args$crowd != args$hide_for_all_crowds_if_hidden_for_crowd])
-    }
+    # This only happens if hide_for_all_crowds_if_hidden_for_crowd are in the set of crowd.
+    args$crowd <- c(args$hide_for_all_crowds_if_hidden_for_crowd[args$hide_for_all_crowds_if_hidden_for_crowd %in% args$crowd],
+                    args$crowd[!args$crowd %in% args$hide_for_all_crowds_if_hidden_for_crowd[args$hide_for_all_crowds_if_hidden_for_crowd %in% args$crowd]
+                   ])
 
 
     omitted_vars <- c()
