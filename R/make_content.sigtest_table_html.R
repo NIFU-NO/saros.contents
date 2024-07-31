@@ -14,7 +14,8 @@ make_content.sigtest_table_html <-
       dplyr::group_map(
         .keep = TRUE,
         .f = ~{
-          if(rlang::is_string(.x$y)) {
+          if(rlang::is_string(.x$y) &&
+             (!rlang::is_string(.x$x) || .x$y != .x$x)) {
 
             if(rlang::is_string(.x$x)) {
 
