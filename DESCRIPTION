@@ -31,6 +31,7 @@ Depends:
     R (>= 4.2.0)
 Imports: 
     cli,
+    saros.base,
     utils,
     vctrs,
     glue,
@@ -47,7 +48,6 @@ Imports:
      fs
 Suggests:
     covr,
-    saros.base,
     srvyr,
     writexl,
     haven,
