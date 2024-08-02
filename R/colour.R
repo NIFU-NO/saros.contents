@@ -6,6 +6,7 @@
 #' @param x Character vector of colours in hex-format.
 #'
 #' @return Logical, or error.
+#' @keywords internal
 #'
 # is_colour(c("#ff00ff", "#010101"))
 is_colour <- function(x) {
@@ -23,6 +24,7 @@ is_colour <- function(x) {
 #' @param hex_code Colour in hex-format.
 #'
 #' @return Colours in hex-format, either black or white.
+#' @keywords internal
 #'
 # hex_bw("#0dadfd")
 hex_bw <- function(hex_code) {
@@ -116,7 +118,7 @@ get_remaining_colours <- function(user_colour_set,
 #'  Is palette ordinal?
 #'
 #' @return A colour set as character vector, where `NA` has the `colour_na`, and the rest are taken from colour_palette_nominal if available.
-# get_colour_set(x=1:4)
+#' @keywords internal
 get_colour_set <-
   function(x,
            common_data_type = "factor",
@@ -187,6 +189,8 @@ get_colour_set <-
 #'   User-supplied default palette, excluding `colour_na`.
 #'
 #' @return A colour set as character vector, where `NA` has the `colour_na`, and the rest are taken from colour_palette_nominal if available.
+#' @keywords internal
+#'
 # get_colour_palette(saros.base::ex_survey, col_pos=c("b_1", "b_2"))
 # get_colour_palette(saros.base::ex_survey, col_pos=c("b_1", "b_2"),
 #                   colour_palette_nominal = c("red", "blue", "orange"))

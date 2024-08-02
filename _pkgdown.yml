@@ -1,6 +1,7 @@
 url: https://nifu-no.github.io/saros.contents/
 template:
   bootstrap: 5
+  light-switch: true
 
 
 reference:
@@ -14,7 +15,23 @@ reference:
   - makeme_global_settings_get
   - makeme_global_settings_set
   - makeme_global_settings_reset
-- title: "Gets the possible data_label argument options"
-  desc: "Retrieves all the options you can set for data_label in makeme()"
+  - make_link_global_settings_get
+  - make_link_global_settings_set
+  - make_link_global_settings_reset
+- title: "Gets the possible data_label and type options for the makeme()-arguments"
   contents:
   - get_data_label_opts
+  - get_makeme_types
+- title: "Save output and create a link to it on rendering"
+  contents:
+  - make_link
+  - ggsaver
+- title: "Compute optimal figure heights for the built-in cat_plot"
+  contents:
+  - fig_height_h_barchart
+- title: "Obtain sample size range for a makeme-object (experimental)"
+  contents:
+  - n_range
+- title: "Only relevant when expanding the S3 system with your own functions"
+  contents:
+  - make_content

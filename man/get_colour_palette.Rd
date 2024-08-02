@@ -54,3 +54,4 @@ A colour set as character vector, where \code{NA} has the \code{colour_na}, and 
 Possibly using colour_palette_nominal if available. If not sufficient, uses a set
 palette from RColorBrewer.
 }
+\keyword{internal}

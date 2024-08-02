@@ -15,3 +15,4 @@ Logical, or error.
 \description{
 As title says. From: (https://stackoverflow.com/a/13290832/3315962)
 }
+\keyword{internal}
