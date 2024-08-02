@@ -15,22 +15,20 @@ knitr::opts_chunk$set(
 )
 ```
 
-# saros: Semi-Automatic Reporting of Ordinary Surveys
+# saros.contents: Semi-Automatic Reporting of Ordinary Surveys - contents package
 
 <!-- badges: start -->
 
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-[![Codecov test coverage](https://codecov.io/gh/NIFU-NO/saros/branch/main/graph/badge.svg)](https://app.codecov.io/gh/NIFU-NO/saros?branch=main)
-[![CRAN status](https://www.r-pkg.org/badges/version/saros)](https://CRAN.R-project.org/package=saros)
-[![CRAN release](https://www.r-pkg.org/badges/version-ago/saros)](https://CRAN.R-project.org/package=saros)
-[![CRAN total downloads](https://cranlogs.r-pkg.org/badges/grand-total/saros)](https://CRAN.R-project.org/package=saros)
-[![R-CMD-check](https://github.com/NIFU-NO/saros/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/NIFU-NO/saros/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/NIFU-NO/saros.contents/branch/main/graph/badge.svg)](https://app.codecov.io/gh/NIFU-NO/saros.contents?branch=main)
+[![CRAN status](https://www.r-pkg.org/badges/version/saros.contents)](https://CRAN.R-project.org/package=saros.contents)
+[![CRAN release](https://www.r-pkg.org/badges/version-ago/saros.contents)](https://CRAN.R-project.org/package=saros.contents)
+[![CRAN total downloads](https://cranlogs.r-pkg.org/badges/grand-total/saros.contents)](https://CRAN.R-project.org/package=saros.contents)
+[![R-CMD-check](https://github.com/NIFU-NO/saros.contents/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/NIFU-NO/saros.contents/actions/workflows/R-CMD-check.yaml)
 [![R-CMD-check](https://github.com/NIFU-NO/saros.contents/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/NIFU-NO/saros.contents/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 ## Introduction
 
-
-## Acknowledgements
-The code for reordering unordered factors in cat_prop_plots has been copied (without permission) from Julia Silge's and David Robinson's excellent [{tidytext}](https://juliasilge.github.io/tidytext/)-package.
+See [the main saros-package](https://github.com/saros/).
 
