@@ -1,14 +1,11 @@
 #' @export
-make_content.cat_prop_plot_html <-
+make_content.cat_plot_html <-
   function(type,
            ...) {
-
 
     dots <- rlang::list2(...)
 
     data <- dots$data_summary
-
-
 
     indep_vars <- colnames(data)[!colnames(data) %in%
                                    .saros.env$summary_data_sort2]
@@ -23,6 +20,7 @@ make_content.cat_prop_plot_html <-
     percentage <- dots$data_label %in% c("percentage", "percentage_bare")
     prop_family <- dots$data_label %in% c("percentage", "percentage_bare", "proportion")
     x <- if(length(indep_vars) == 1 && isFALSE(dots$inverse)) indep_vars else ".variable_label"
+
     if(!is.ordered(data[[x]])) {
       data[[x]] <- reorder_within(x = data[[x]],
                                   by = ifelse(is.na(data[[".sum_value"]]), 0, data[[".sum_value"]]),
@@ -61,24 +59,23 @@ make_content.cat_prop_plot_html <-
           y = .data[[if (prop_family) ".proportion" else stringi::stri_c(".", dots$data_label, ignore_null=TRUE)]],
           x = .data[[x]],
           fill = .data$.category,
-          # alpha = .data$.alpha,
           group = .data$.category,
           label = .data$.data_label,
           data_id = .data$.id,
           onclick = .data$.onclick
-        ),
+          ),
         cumulative = TRUE
-      ) +
+        ) +
       ggiraph::geom_col_interactive(
         mapping = ggplot2::aes(tooltip = .data$.tooltip), # BUG: Messes up order of categories if enabled.
-        position = ggplot2::position_stack(reverse = TRUE),
+        position = if (prop_family) ggplot2::position_stack(reverse = TRUE) else ggplot2::position_dodge(width = .9),
         na.rm = TRUE,
         show.legend = TRUE
       ) +
       ggiraph::geom_text_interactive(
-        mapping = ggplot2::aes(
-          colour = ggplot2::after_scale(x = hex_bw(.data$fill))),
-        position = ggplot2::position_stack(vjust = .5, reverse = TRUE),
+        mapping = ggplot2::aes(y = .data[[if(prop_family) ".proportion" else ".count"]] * .5,
+                               colour = ggplot2::after_scale(x = hex_bw(.data$fill))),
+        position = if (prop_family) ggplot2::position_stack(reverse = TRUE) else ggplot2::position_dodge(width = .9),
         na.rm = TRUE,
         show.legend = FALSE
       ) +
@@ -94,20 +91,22 @@ make_content.cat_prop_plot_html <-
         drop = FALSE
       ) +
       ggiraph::scale_colour_discrete_interactive(
-        guide = FALSE, #values = c("black", "white"),
+        guide = FALSE,
         drop = FALSE) +
-      scale_x_reordered(limits = rev) +
+      scale_x_reordered(limits = rev, x_axis_label_width = dots$x_axis_label_width) +
       ggplot2::guides(
-        alpha = "none",
-        fill = ggiraph::guide_legend_interactive(data_id = "fill.guide", byrow = TRUE),
+        fill = ggiraph::guide_legend_interactive(data_id = "fill.guide",
+                                                 byrow = TRUE),
         colour = "none"
-      )
+        )
+
     if (length(indep_vars) > 1L ||
         (length(indep_vars) >= 1L &&
          (dplyr::n_distinct(data$.variable_label) > 1 ||
           (dplyr::n_distinct(data$.variable_label) == 1 &&
            isFALSE(dots$hide_axis_text_if_single_variable))))) {
       if(!dots$inverse) {
+
         p <- p +
           ggiraph::facet_grid_interactive(
             rows = ggplot2::vars(.data$.variable_label),
@@ -115,11 +114,11 @@ make_content.cat_prop_plot_html <-
               .mapping = ggplot2::aes(
                 data_id = .data$.variable_label,
                 tooltip = .data$.variable_label,
-                label = string_wrap(.data$.variable_label,
+                label = string_wrap(.data[[if(prop_family) indep_vars else ".label"]], # ????????????????????
                                     width = dots$x_axis_label_width
+                                    )
                 )
-              )
-            ),
+              ),
             interactive_on = "text",
             switch = "y", scales = "free", space = "free_y"
           )
@@ -131,21 +130,19 @@ make_content.cat_prop_plot_html <-
               .mapping = ggplot2::aes(
                 data_id = .data[[indep_vars]],
                 tooltip = .data[[indep_vars]],
-                label = string_wrap(.data[[indep_vars]],
+                label = string_wrap(.data[[if(prop_family) indep_vars else ".label"]], # ????????????????????
                                     width = dots$x_axis_label_width
+                                    )
                 )
-              )
-            ),
+              ),
             interactive_on = "text",
             switch = "y", scales = "free_y", space = "free_y"
           )
       }
     }
 
-    if (!dots$vertical) {
+    if(!dots$vertical) {
       p + ggplot2::coord_flip()
-    } else {
-      p
-    }
+    } else p
   }
 
