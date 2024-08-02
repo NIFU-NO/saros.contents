@@ -25,8 +25,8 @@ Description: Produces highly customized reports, primarily intended for survey
     on a 'Quarto' Website.
 Note: Free to use for non-Norwegian institutions, otherwise see LICENSE.
 License: MIT + file LICENSE
-URL: https://nifu-no.github.io/saros/, https://github.com/NIFU-NO/saros 
-BugReports: https://github.com/NIFU-NO/saros/issues
+URL: https://nifu-no.github.io/saros.contents/, https://github.com/NIFU-NO/saros.contents
+BugReports: https://github.com/NIFU-NO/saros.contents/issues
 Depends:
     R (>= 4.2.0)
 Imports: 
