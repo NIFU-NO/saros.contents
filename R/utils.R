@@ -132,9 +132,10 @@ reorder_within <- function(x, by, within, fun = mean, sep = "___", ...) {
 }
 
 
-scale_x_reordered <- function(..., labels = reorder_func) {
+scale_x_reordered <- function(..., x_axis_label_width = 20) {
 
-  ggplot2::scale_x_discrete(labels = labels, ...)
+  ggplot2::scale_x_discrete(labels = function(x) reorder_func(x, x_axis_label_width = x_axis_label_width),
+                            ...)
 }
 
 
