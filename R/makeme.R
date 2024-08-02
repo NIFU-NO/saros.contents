@@ -317,7 +317,6 @@
 #' @export
 #'
 #' @examples
-#' library(saros.base)
 #' makeme(data = ex_survey,
 #'        dep = b_1:b_3)
 #' makeme(data = ex_survey,

@@ -1,6 +1,6 @@
 testthat::test_that("make_content.cat_table_html works", {
   result <-
-    saros.contents::makeme(data = saros.base::ex_survey,
+    saros.contents::makeme(data = ex_survey,
          dep = p_1:p_4, #indep = x2_human,
          type = "cat_table_html",
          showNA = "never",

@@ -371,7 +371,6 @@ ggplot
 This function allows embedding of interactive or static plots based on various types of data using tidyselect syntax for variable selection.
 }
 \examples{
-library(saros.base)
 makeme(data = ex_survey,
        dep = b_1:b_3)
 makeme(data = ex_survey,

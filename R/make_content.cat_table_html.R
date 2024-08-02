@@ -17,7 +17,7 @@ make_content.cat_table_html <-
     ######### MUST TIDY UP FROM HERE ############
 
     if(length(dots$indep)>0) {
-      indep_label <- saros.base::get_raw_labels(data = dots$data, col_pos = dots$indep)
+      indep_label <- get_raw_labels(data = dots$data, col_pos = dots$indep)
       indep_label <- get_main_question(indep_label,
                                         label_separator = dots$label_separator,
                                         warn_multiple = TRUE)
@@ -26,7 +26,7 @@ make_content.cat_table_html <-
 
     } else indep_label <- character(0)
 
-    # indep_label <- unname(saros.base::get_raw_labels(data = dots$data, col_pos = dots$indep))
+    # indep_label <- unname(get_raw_labels(data = dots$data, col_pos = dots$indep))
 
 
     cat_lvls <- levels(data_summary[[".category"]])

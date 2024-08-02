@@ -35,7 +35,7 @@ get_block_caption <-
 
 
       main_question <-
-        saros.base::get_raw_labels(data = data, col_pos = cols_pos) |>
+        get_raw_labels(data = data, col_pos = cols_pos) |>
         get_main_question(label_separator = label_separator)
 
       caption_style <-
