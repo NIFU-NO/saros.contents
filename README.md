@@ -19,6 +19,10 @@ downloads](https://cranlogs.r-pkg.org/badges/grand-total/saros.contents)](https:
 [![R-CMD-check](https://github.com/NIFU-NO/saros.contents/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/NIFU-NO/saros.contents/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-## Introduction
+## Sub-package
 
-See [the main saros-package](https://github.com/saros/).
+saros.contents is merely an upstream sub-package used in
+the[{saros}-package](https://github.com/NIFU-NO/saros/). Go there for
+common presentation of the packages, or see [here for documentation of
+the
+saros.contents-functions](https://nifu-no.github.io/saros.contents/).
