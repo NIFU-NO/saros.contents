@@ -340,21 +340,15 @@ makeme <-
   function(data,
            dep = tidyselect::everything(),
            indep = NULL,
-           type = c("cat_prop_plot_html",
-                    "cat_freq_plot_html",
+           type = c("cat_plot_html",
                     "int_plot_html",
-                    "cat_prop_table_html",
-                    "cat_freq_table_html",
+                    "cat_table_html",
                     "int_table_html",
                     "sigtest_table_html",
 
                     "cat_prop_plot_docx",
                     "cat_freq_plot_docx",
-                    "int_plot_docx",
-                    "cat_prop_table_docx",
-                    "cat_freq_table_docx",
-                    "int_table_docx",
-                    "sigtest_table_docx"),
+                    "int_plot_docx"),
            ...,
 
            require_common_categories = TRUE,
@@ -468,7 +462,7 @@ makeme <-
 
 
 
-    if(grepl(x=args$type, pattern = "freq")) args$data_label <- "count"
+    # if(grepl(x=args$type, pattern = "freq")) args$data_label <- "count"
 
     # Set hide_for_all_crowds_if_hidden_for_crowd first to get its excluded variables early
     # This only happens if hide_for_all_crowds_if_hidden_for_crowd are in the set of crowd.
