@@ -32,4 +32,5 @@ reference:
   contents: n_range
 - title: Only relevant when expanding the S3 system with your own functions
   contents: make_content
-
+- title: Example dataset
+  contents: ex_survey
