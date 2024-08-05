@@ -28,7 +28,7 @@ crosstable.data.frame <-
     }
 
     # indep_names <- colnames(data[, indep, drop = FALSE])
-    indep_labels <- saros.base::get_raw_labels(data = data, col_pos = indep)
+    indep_labels <- get_raw_labels(data = data, col_pos = indep)
     col_names <- colnames(data[ , dep, drop=FALSE])[!(colnames(data[ , dep, drop=FALSE]) %in% indep)]
 
 
@@ -147,7 +147,7 @@ crosstable.data.frame <-
                                              levels = fct_lvls,
                                              labels = fct_lvls,
                                              exclude = character())
-            summary_prop$.variable_label <- unname(saros.base::get_raw_labels(data = data, col_pos = .x))
+            summary_prop$.variable_label <- unname(get_raw_labels(data = data, col_pos = .x))
             # summary_prop$.mean_base <- as.integer(summary_prop$.category) * summary_prop$.count
             summary_prop$.count_se <- NA_real_
             summary_prop$.proportion_se <- NA_real_
@@ -168,7 +168,7 @@ crosstable.data.frame <-
             out$.variable_name <- .x
           } else {
             out <- data.frame(.variable_name = .x,
-                              .variable_label = unname(saros.base::get_raw_labels(data = data, col_pos = .x)),
+                              .variable_label = unname(get_raw_labels(data = data, col_pos = .x)),
                               .category = factor(NA),
                               .count = NA_integer_,
                               .count_se = NA_real_,
@@ -230,7 +230,7 @@ crosstable.tbl_svy <-
     showNA <- rlang::arg_match(showNA, values = eval(formals(makeme)$showNA), error_call = call)
 
     # indep_names <- colnames(data[, indep, drop = FALSE])
-    indep_labels <- saros.base::get_raw_labels(data = data$variables, col_pos = indep)
+    indep_labels <- get_raw_labels(data = data$variables, col_pos = indep)
     col_names <- colnames(data[, dep, drop = FALSE])[!(colnames(data[, dep, drop = FALSE]) %in% indep)]
 
     # indep_names <- colnames(srvyr::select(data, indep))
@@ -286,10 +286,10 @@ crosstable.tbl_svy <-
                                          .proportion = srvyr::survey_prop(proportion = TRUE))
         summary_prop <- srvyr::ungroup(summary_prop)
         summary_prop <- srvyr::as_tibble(summary_prop)
-        # print(saros.base::get_raw_labels(data = srvyr::as_tibble(data), col_pos = .x))
+        # print(get_raw_labels(data = srvyr::as_tibble(data), col_pos = .x))
         summary_prop <- dplyr::mutate(summary_prop,
                                       .category = factor(x = .data$.category, levels = fct_lvls, labels = fct_lvls),
-                                      .variable_label = saros.base::get_raw_labels(data = srvyr::as_tibble(data), col_pos = .x)
+                                      .variable_label = get_raw_labels(data = srvyr::as_tibble(data), col_pos = .x)
                                       # .mean_base = as.integer(.category) * .count
         )
 
@@ -302,7 +302,7 @@ crosstable.tbl_svy <-
 
       } else {
         out <- data.frame(.variable_name = .x,
-                          .variable_label = unname(saros.base::get_raw_labels(data = data, col_pos = .x)),
+                          .variable_label = unname(get_raw_labels(data = data, col_pos = .x)),
                           .category = factor(NA),
                           .count = NA_integer_,
                           .count_total = NA_integer_,

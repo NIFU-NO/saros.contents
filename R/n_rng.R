@@ -9,7 +9,7 @@
 #' @return Always a string.
 #' @keywords internal
 #'
-#' @examples saros.contents:::n_rng(saros.base::ex_survey, dep="b_1", indep = "x1_sex")
+#' @examples saros.contents:::n_rng(ex_survey, dep="b_1", indep = "x1_sex")
 n_rng <- function(data, dep, indep = NULL,
                   glue_template_1 = "{n}", glue_template_2 = "[{n[1]}-{n[2]}]") {
   # Should always return a string, no matter the inputs
@@ -79,7 +79,7 @@ n_rng <- function(data, dep, indep = NULL,
 #' @return String.
 #' @export
 #'
-#' @examples n_range(data=saros.base::ex_survey, dep=b_1:b_3, indep=x1_sex)
+#' @examples n_range(data=ex_survey, dep=b_1:b_3, indep=x1_sex)
 n_range <- function(data, dep, indep=NULL,
                     glue_template_1 = "{n}", glue_template_2 = "[{n[1]}-{n[2]}]") {
   current_call <- match.call()

@@ -1,16 +1,16 @@
 url: https://nifu-no.github.io/saros.contents/
 template:
   bootstrap: 5
-  light-switch: true
-
-
+  light-switch: yes
 reference:
-- title: "The main function you will use"
-  desc: "You use this function with the `type`-argument to create most things you'll need."
-  contents:
-  - makeme
-- title: "Get, set and reset global options"
-  desc: "Global options allow you to easily set defaults for all your makeme function calls, so you basically do not need to specify the same arguments throughout. data, dep and indep will still need to be specified."
+- title: The main function you will use
+  desc: You use this function with the `type`-argument to create most things you'll
+    need.
+  contents: makeme
+- title: Get, set and reset global options
+  desc: Global options allow you to easily set defaults for all your makeme function
+    calls, so you basically do not need to specify the same arguments throughout.
+    data, dep and indep will still need to be specified.
   contents:
   - makeme_global_settings_get
   - makeme_global_settings_set
@@ -18,20 +18,19 @@ reference:
   - make_link_global_settings_get
   - make_link_global_settings_set
   - make_link_global_settings_reset
-- title: "Gets the possible data_label and type options for the makeme()-arguments"
+- title: Gets the possible data_label and type options for the makeme()-arguments
   contents:
   - get_data_label_opts
   - get_makeme_types
-- title: "Save output and create a link to it on rendering"
+- title: Save output and create a link to it on rendering
   contents:
   - make_link
   - ggsaver
-- title: "Compute optimal figure heights for the built-in cat_plot"
-  contents:
-  - fig_height_h_barchart
-- title: "Obtain sample size range for a makeme-object (experimental)"
-  contents:
-  - n_range
-- title: "Only relevant when expanding the S3 system with your own functions"
-  contents:
-  - make_content
+- title: Compute optimal figure heights for the built-in cat_plot
+  contents: fig_height_h_barchart
+- title: Obtain sample size range for a makeme-object (experimental)
+  contents: n_range
+- title: Only relevant when expanding the S3 system with your own functions
+  contents: make_content
+- title: Example dataset
+  contents: ex_survey

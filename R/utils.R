@@ -121,25 +121,3 @@ check_category_pairs <-
     TRUE
   }
 
-reorder_within <- function(x, by, within, fun = mean, sep = "___", ...) {
-  # Stolen from Julia Silge's tidytext-package.
-  if (!is.list(within)) {
-    within <- list(within)
-  }
-
-  new_x <- do.call(paste, c(list(x, sep = sep), within))
-  stats::reorder(new_x, by, FUN = fun)
-}
-
-
-scale_x_reordered <- function(..., x_axis_label_width = 20) {
-
-  ggplot2::scale_x_discrete(labels = function(x) reorder_func(x, x_axis_label_width = x_axis_label_width),
-                            ...)
-}
-
-
-reorder_func <- function(x, sep = "___", x_axis_label_width = 20) {
-  reg <- paste0(sep, ".+$")
-  string_wrap(gsub(reg, "", x), width = x_axis_label_width)
-}

@@ -27,5 +27,5 @@ String.
 Tidyselect-version of \code{\link[=n_rng]{n_rng()}}
 }
 \examples{
-n_range(data=saros.base::ex_survey, dep=b_1:b_3, indep=x1_sex)
+n_range(data=ex_survey, dep=b_1:b_3, indep=x1_sex)
 }

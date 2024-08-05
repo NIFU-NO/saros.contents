@@ -93,7 +93,7 @@ make_content.cat_plot_html <-
       ggiraph::scale_colour_discrete_interactive(
         guide = FALSE,
         drop = FALSE) +
-      scale_x_reordered(limits = rev, x_axis_label_width = dots$x_axis_label_width) +
+      scale_x_reorder(limits = rev, x_axis_label_width = dots$x_axis_label_width) +
       ggplot2::guides(
         fill = ggiraph::guide_legend_interactive(data_id = "fill.guide",
                                                  byrow = TRUE),

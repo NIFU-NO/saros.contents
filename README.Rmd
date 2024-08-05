@@ -30,3 +30,7 @@ knitr::opts_chunk$set(
 
 ## Sub-package
 saros.contents is merely an upstream sub-package used in the[{saros}-package](https://github.com/NIFU-NO/saros/). Go there for common presentation of the packages, or see [here for documentation of the saros.contents-functions](https://nifu-no.github.io/saros.contents/).
+
+## Acknowledgements and license
+
+A small part of the code is taken from tidytext to avoid dependency.
