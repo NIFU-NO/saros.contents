@@ -1,4 +1,4 @@
-#' Code-snippets copied and modified from <tidytext>-package
+#' Code-snippets copied and modified from tidytext-package
 #' <https://github.com/juliasilge/tidytext/blob/main/R/reorder_within.R>
 #'
 #'
