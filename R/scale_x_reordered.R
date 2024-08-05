@@ -32,7 +32,7 @@
 #' @param fun Function, defaults to the mean
 #' @param sep String, separator
 #' @param ... Dots
-#'
+#' @keywords internal
 
 reorder_within <- function(x, by, within, fun = mean, sep = "___", ...) {
   if (!is.list(within)) {

@@ -5,7 +5,7 @@
 #' @param x Object
 #'
 #' @return Logical value.
-#'
+#' @keywords internal
 is_string <- function(x) {
   is.character(x) && length(x) == 1
 }
@@ -17,7 +17,7 @@ is_string <- function(x) {
 #' @param return_as_list Flag, whether to return as list or character vector
 #'
 #' @return List or character vector
-#'
+#' @keywords internal
 get_raw_labels <-
   function(data, col_pos = NULL, return_as_list = FALSE) {
     if(is.null(col_pos)) col_pos <- colnames(data)

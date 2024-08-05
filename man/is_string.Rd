@@ -15,3 +15,4 @@ Logical value.
 \description{
 Returns TRUE if object is a character of length 1.
 }
+\keyword{internal}
