@@ -1,8 +1,9 @@
 ## R CMD check results
 
-0 errors | 0 warnings | 2 notes
+0 errors | 0 warnings | 3 notes
 
 ## Note
 
-- Set one long-running test only locally, saving many minutes.
-- Early update due to changes in ggplot2.
+- New submission. This is part of the 'saros'-packages (saros.base, saros.utils, saros).
+- There are no references to the package (yet).
+- Success on rhub versions 1,2,3,4,5,20,21,22,23.
