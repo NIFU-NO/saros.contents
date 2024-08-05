@@ -1,10 +1,6 @@
-#' Code-snippets copied and modified from tidytext-package
-#' https://github.com/juliasilge/tidytext/blob/main/R/reorder_within.R
+#' Code-snippets copied and modified from <tidytext>-package
+#' <https://github.com/juliasilge/tidytext/blob/main/R/reorder_within.R>
 #'
-#' @source "Original: Ordering categories within ggplot2 Facets" by Tyler Rinker:
-#' <https://trinkerrstuff.wordpress.com/2016/12/23/ordering-categories-within-ggplot2-facets/>
-#' Based on http://opensource.org/licenses/MIT
-#' Copyright (c) 2017, Julia Silge and David Robinson
 #'
 #' Permission is hereby granted, free of charge, to any person obtaining
 #' a copy of this software and associated documentation files (the
@@ -24,6 +20,18 @@
 #' LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 #' OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 #' WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+#'
+#'
+#' @source "Original: Ordering categories within ggplot2 Facets" by Tyler Rinker:
+#' <https://trinkerrstuff.wordpress.com/2016/12/23/ordering-categories-within-ggplot2-facets/>
+#' Based on <https://opensource.org/licenses/MIT>
+#' Copyright (c) 2017, Julia Silge and David Robinson
+#' @param x Vector
+#' @param by Vector
+#' @param within Vector (factor)
+#' @param fun Function, defaults to the mean
+#' @param sep String, separator
+#' @param ... Dots
 #'
 
 reorder_within <- function(x, by, within, fun = mean, sep = "___", ...) {

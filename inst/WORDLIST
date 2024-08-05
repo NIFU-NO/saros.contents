@@ -1,3 +1,4 @@
+Acknowledgements
 CMD
 Codecov
 Colour
@@ -5,9 +6,12 @@ Colours
 DOCX
 Lifecycle
 Likert
+MERCHANTABILITY
 Mockup
+NONINFRINGEMENT
 Pandoc's
 RColorBrewer
+Rinker
 Saros
 SurveyXact
 Tidyselect
@@ -31,5 +35,7 @@ showNA
 sigtest
 srvyr
 stackoverflow
+sublicense
 tibble
 tidyselect
+tidytext
