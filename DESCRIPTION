@@ -18,14 +18,14 @@ Authors@R: c(
 Maintainer: Stephan Daus <stephus.daus@gmail.com>
 Description: Offers a systematic way for conditional reporting of figures and tables for many
     (and bivariate combinations of) variables, typically from survey data.
-    Contains interactive ggiraph-based 
+    Contains interactive 'ggiraph'-based 
     (<https://CRAN.R-project.org/package=ggiraph>) plotting functions and
     data frame-based summary tables (bivariate significance tests, 
     frequencies/proportions, unique open ended responses, etc) with
     many arguments for customization, and extensions possible. Uses a global 
-    `options()` system for neatly reducing redundant code.
+    'options()' system for neatly reducing redundant code.
     Also contains tools for immediate saving of objects and returning a hashed link to the object,
-    useful for creating download links to high resolution images upon rendering in Quarto.
+    useful for creating download links to high resolution images upon rendering in 'Quarto'.
     See 'saros' (<https://CRAN.R-project.org/package=saros>) for the main umbrella package.
 Note: Free to use for non-Norwegian institutions, otherwise see LICENSE.
 License: MIT + file LICENSE
