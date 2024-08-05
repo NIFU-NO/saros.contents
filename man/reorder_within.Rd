@@ -2,7 +2,7 @@
 % Please edit documentation in R/scale_x_reordered.R
 \name{reorder_within}
 \alias{reorder_within}
-\title{Code-snippets copied and modified from \if{html}{\out{<tidytext>}}-package
+\title{Code-snippets copied and modified from tidytext-package
 \url{https://github.com/juliasilge/tidytext/blob/main/R/reorder_within.R}}
 \source{
 "Original: Ordering categories within ggplot2 Facets" by Tyler Rinker:
