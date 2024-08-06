@@ -8,17 +8,13 @@
 #'
 #' @return Always a string.
 #' @keywords internal
-#'
-#' @examples saros.contents:::n_rng(ex_survey, dep="b_1", indep = "x1_sex")
 n_rng <- function(data, dep, indep = NULL,
                   glue_template_1 = "{n}", glue_template_2 = "[{n[1]}-{n[2]}]") {
   # Should always return a string, no matter the inputs
-
-  current_call <- match.call()
-  current_call <- current_call[!names(current_call) %in% .saros.env$ignore_args]
-  args <- check_options(call = current_call,
-                        ignore_args = .saros.env$ignore_args,
-                        defaults_env = makeme_global_settings_get())
+  # args <- check_options(call = match.call(),
+  #                       ignore_args = .saros.env$ignore_args,
+  #                       defaults_env = global_settings_get(fn_name = "n_rng"),
+  #                       default_values = formals(n_rng))
 
   deps <- as.character(unique(dep))
   deps <- deps[!is.na(deps)]
@@ -73,7 +69,7 @@ n_rng <- function(data, dep, indep = NULL,
   n
 }
 
-#' Tidyselect-version of [n_rng()]
+#' Provides a range (or single value) for N in data, given dep and indep
 #'
 #' @inheritParams n_rng
 #' @return String.
@@ -82,23 +78,23 @@ n_rng <- function(data, dep, indep = NULL,
 #' @examples n_range(data=ex_survey, dep=b_1:b_3, indep=x1_sex)
 n_range <- function(data, dep, indep=NULL,
                     glue_template_1 = "{n}", glue_template_2 = "[{n[1]}-{n[2]}]") {
-  current_call <- match.call()
-  current_call <- current_call[!names(current_call) %in% .saros.env$ignore_args]
+
   dep_enq <- rlang::enquo(arg = dep)
   dep_pos <- tidyselect::eval_select(dep_enq, data = data)
   indep_enq <- rlang::enquo(arg = indep)
   indep_pos <- tidyselect::eval_select(indep_enq, data = data)
 
-  args <- check_options(call = current_call,
+  args <- check_options(call = match.call(),
                         ignore_args = .saros.env$ignore_args,
-                        defaults_env = makeme_global_settings_get()
-  )
+                        defaults_env = global_settings_get(fn_name ="n_rng"),
+                        default_values = formals(n_rng))
+# browser()
   args$data <- data # reinsert after check_options
   args$dep <- names(dep_pos)
   args$indep <- names(indep_pos)
   n_rng(data=data,
         dep=args$dep,
         indep=args$indep,
-        glue_template_1 = glue_template_1,
-        glue_template_2 = glue_template_2)
+        glue_template_1 = args$glue_template_1,
+        glue_template_2 = args$glue_template_2)
 }

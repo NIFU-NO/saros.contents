@@ -26,7 +26,4 @@ Always a string.
 \description{
 Obtain range of N for a given data set and other settings.
 }
-\examples{
-saros.contents:::n_rng(ex_survey, dep="b_1", indep = "x1_sex")
-}
 \keyword{internal}

@@ -1,6 +1,6 @@
 
 check_options <- function(call,
-                          defaults_env = makeme_global_settings_get(),
+                          defaults_env = global_settings_get(),
                           default_values = formals(makeme),
                           ignore_args = .saros.env$ignore_args) {
 

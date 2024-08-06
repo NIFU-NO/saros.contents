@@ -2,7 +2,7 @@
 % Please edit documentation in R/n_rng.R
 \name{n_range}
 \alias{n_range}
-\title{Tidyselect-version of \code{\link[=n_rng]{n_rng()}}}
+\title{Provides a range (or single value) for N in data, given dep and indep}
 \usage{
 n_range(
   data,
@@ -24,7 +24,7 @@ value (1) or a range with minimum-maximum of values (2).}
 String.
 }
 \description{
-Tidyselect-version of \code{\link[=n_rng]{n_rng()}}
+Provides a range (or single value) for N in data, given dep and indep
 }
 \examples{
 n_range(data=ex_survey, dep=b_1:b_3, indep=x1_sex)
