@@ -25,6 +25,9 @@ if(!exists(".saros.env")) .saros.env <- NULL
                                "chapter_overview",
                                "chapter_structure",
                                "call",
+                               "n_y",
+                               "n_cats_y",
+                               "max_chars_y",
                                "...")
 
 

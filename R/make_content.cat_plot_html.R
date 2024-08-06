@@ -73,7 +73,7 @@ make_content.cat_plot_html <-
         show.legend = TRUE
       ) +
       ggiraph::geom_text_interactive(
-        mapping = ggplot2::aes(y = .data[[if(prop_family) ".proportion" else ".count"]] * .5,
+        mapping = ggplot2::aes(y = if(prop_family) .data[[".proportion"]] else .data[[".count"]] * .5,
                                colour = ggplot2::after_scale(x = hex_bw(.data$fill))),
         position = if (prop_family) ggplot2::position_stack(reverse = TRUE) else ggplot2::position_dodge(width = .9),
         na.rm = TRUE,

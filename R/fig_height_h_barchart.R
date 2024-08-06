@@ -56,7 +56,7 @@
 fig_height_h_barchart <- # Returns a numeric value
   function(n_y,
            n_cats_y,
-           max_chars_y = NULL,
+           max_chars_y,
            n_x = NULL,
            n_cats_x = NULL,
            max_chars_x = NULL,
@@ -77,6 +77,32 @@ fig_height_h_barchart <- # Returns a numeric value
            margin_in_cm = 0,
            max = 8,
            min = 1) {
+
+    args <- check_options(call = match.call(),
+                          ignore_args = .saros.env$ignore_args,
+                          defaults_env = global_settings_get(fn_name="fig_height_h_barchart"),
+                          default_values = formals(fig_height_h_barchart))
+
+    n_x <- args$n_x
+    n_cats_x <- args$n_cats_x
+    max_chars_x <- args$max_chars_x
+    freq <- args$freq
+    x_axis_label_width <- args$x_axis_label_width
+    strip_angle <- args$strip_angle
+    main_font_size <- args$main_font_size
+    legend_location <- args$legend_location
+    n_legend_lines <- args$n_legend_lines
+    legend_key_chars_equivalence <- args$legend_key_chars_equivalence
+    max_chars_per_figure_width <- args$max_chars_per_figure_width
+    multiplier_per_horizontal_line <- args$multiplier_per_horizontal_line
+    multiplier_per_vertical_letter <- args$multiplier_per_vertical_letter
+    multiplier_per_facet <- args$multiplier_per_facet
+    multiplier_per_legend_line <- args$multiplier_per_legend_line
+    fixed_constant <- args$fixed_constant
+    figure_width_in_cm <- args$figure_width_in_cm
+    margin_in_cm <- args$margin_in_cm
+    max <- args$max
+    min <- args$min
 
     check_integerish(n_y)
     check_integerish(n_cats_y)
@@ -100,7 +126,9 @@ fig_height_h_barchart <- # Returns a numeric value
     check_integerish(strip_angle)
     check_integerish(max)
     check_integerish(min)
-    legend_location <- rlang::arg_match(legend_location, multiple = FALSE)
+    legend_location <- legend_location[1]
+
+
 
     if(is.null(multiplier_per_horizontal_line)) {
       multiplier_per_horizontal_line <- main_font_size/72.27

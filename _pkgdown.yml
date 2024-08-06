@@ -12,12 +12,9 @@ reference:
     calls, so you basically do not need to specify the same arguments throughout.
     data, dep and indep will still need to be specified.
   contents:
-  - makeme_global_settings_get
-  - makeme_global_settings_set
-  - makeme_global_settings_reset
-  - make_link_global_settings_get
-  - make_link_global_settings_set
-  - make_link_global_settings_reset
+  - global_settings_get
+  - global_settings_set
+  - global_settings_reset
 - title: Gets the possible data_label and type options for the makeme()-arguments
   contents:
   - get_data_label_opts

@@ -7,7 +7,7 @@
 fig_height_h_barchart(
   n_y,
   n_cats_y,
-  max_chars_y = NULL,
+  max_chars_y,
   n_x = NULL,
   n_cats_x = NULL,
   max_chars_x = NULL,

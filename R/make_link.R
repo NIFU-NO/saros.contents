@@ -67,6 +67,13 @@ make_link <- function(data,
   path <- fs::path(args$folder,
                    paste0(args$file_prefix, rlang::hash(data), args$file_suffix))
 
-  save_fn(data, path, ...)
+  # save_fn <- args$save_fn
+
+  tryCatch({args$save_fn(data, path, ...)
            I(paste0(args$link_prefix, path, args$link_suffix))
+           },
+           error = function(cnd) {
+             cli::cli_warn(c(x="Function {rlang::call_name(quote(safe_fn()))} failed with arguments {.arg path}={path}, {.arg data}={data}."),
+                            parent = cnd)
+           })
 }
