@@ -8,6 +8,8 @@ n_range(
   data,
   dep,
   indep = NULL,
+  mesos_var = NULL,
+  mesos_group = NULL,
   glue_template_1 = "{n}",
   glue_template_2 = "[{n[1]}-{n[2]}]"
 )
@@ -15,7 +17,13 @@ n_range(
 \arguments{
 \item{data}{Dataset}
 
-\item{dep, indep}{Character vector, names of (in)dependent variables}
+\item{dep, indep}{Tidyselect syntax}
+
+\item{mesos_var}{Optional, NULL or string specifying name of variable used to
+split dataset.}
+
+\item{mesos_group}{Optional, NULL or string specifying value in \code{mesos_var}
+indicating the target group.}
 
 \item{glue_template_1, glue_template_2}{String, for the case of a single
 value (1) or a range with minimum-maximum of values (2).}

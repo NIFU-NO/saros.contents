@@ -28,6 +28,7 @@ if(!exists(".saros.env")) .saros.env <- NULL
                                "n_y",
                                "n_cats_y",
                                "max_chars_y",
+                               "ggobj",
                                "...")
 
 
