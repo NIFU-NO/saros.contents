@@ -1,3 +1,47 @@
+
+# Function to estimate the number of categories that can fit on one line of a legend
+estimate_categories_per_line <- function(figure_width_cm = 12,
+                                         max_chars_cats = 20, # Maximum characters across the categories
+                                         legend_key_chars = 5,
+                                         font_size = 8,
+                                         margin_cm = 0) {
+  # Calculate the width of one character in cm, assuming a monospace font approximation
+  char_width_cm <- font_size * 0.035
+
+  # Estimate the width per category in cm
+  width_per_category_cm <- (legend_key_chars + max_chars_cats) * char_width_cm
+
+  # Calculate the total available width for the legend in cm
+  available_width_cm <- figure_width_cm - margin_cm * 2
+
+  # Calculate the number of categories that can fit in one line
+  categories_per_line <- available_width_cm / width_per_category_cm
+
+  # Return the estimated number of categories per line
+  floor(categories_per_line)
+}
+
+
+get_max_lines <- function(max_cat_char, width) {
+  ceiling(max_cat_char / width)
+}
+
+
+
+calculate_height <- function(strip_height,
+                             x_axis_height,
+                             n_facets = 1,
+                             n_legend_lines,
+                             multiplier_per_facet,
+                             multiplier_per_legend_line,
+                             fixed_constant) {
+
+  max(c(strip_height, x_axis_height), na.rm=TRUE) * n_facets * multiplier_per_facet +
+    n_legend_lines * multiplier_per_legend_line +
+    fixed_constant
+}
+
+
 #' Estimate figure height for a horizontal bar chart
 #'
 #' This function estimates the height of a figure for a horizontal bar chart based on several parameters including the number of dependent and independent variables, number of categories, maximum characters in the labels, and legend properties.
@@ -134,44 +178,7 @@ fig_height_h_barchart <- # Returns a numeric value
       multiplier_per_horizontal_line <- main_font_size/72.27
     }
 
-    get_max_lines <- function(max_cat_char, width) {
-      ceiling(max_cat_char / width)
-    }
 
-    # Function to estimate the number of categories that can fit on one line of a legend
-    estimate_categories_per_line <- function(figure_width_cm = 12,
-                                             max_chars_cats = 20, # Maximum characters across the categories
-                                             font_size = 8,
-                                             legend_key_chars = 5,
-                                             margin_cm = 0) {
-      # Calculate the width of one character in cm, assuming a monospace font approximation
-      char_width_cm <- font_size * 0.035
-
-      # Estimate the width per category in cm
-      width_per_category_cm <- (legend_key_chars + max_chars_cats) * char_width_cm
-
-      # Calculate the total available width for the legend in cm
-      available_width_cm <- figure_width_cm - margin_cm * 2
-
-      # Calculate the number of categories that can fit in one line
-      categories_per_line <- available_width_cm / width_per_category_cm
-
-      # Return the estimated number of categories per line
-      floor(categories_per_line)
-    }
-
-    calculate_height <- function(strip_height,
-                                 x_axis_height,
-                                 n_facets = 1,
-                                 n_legend_lines,
-                                 multiplier_per_facet,
-                                 multiplier_per_legend_line,
-                                 fixed_constant) {
-
-      max(c(strip_height, x_axis_height), na.rm=TRUE) * n_facets * multiplier_per_facet +
-        n_legend_lines * multiplier_per_legend_line +
-        fixed_constant
-    }
 
     if(is.null(n_legend_lines)) {
       categories_per_line <-
