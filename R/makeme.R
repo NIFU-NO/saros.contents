@@ -504,7 +504,7 @@ makeme <-
       dep_crwd <- args$dep[!args$dep %in% omitted_vars_crwd]
       if(length(dep_crwd)==0) next
 
-      indep_crwd <- args$indep[!args$indep %in% omitted_vars_crwd]
+      indep_crwd <- args$indep#[!args$indep %in% omitted_vars_crwd]
       if(length(indep_crwd)==0) indep_crwd <- NULL
 
 
