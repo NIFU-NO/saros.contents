@@ -12,12 +12,9 @@ reference:
     calls, so you basically do not need to specify the same arguments throughout.
     data, dep and indep will still need to be specified.
   contents:
-  - makeme_global_settings_get
-  - makeme_global_settings_set
-  - makeme_global_settings_reset
-  - make_link_global_settings_get
-  - make_link_global_settings_set
-  - make_link_global_settings_reset
+  - global_settings_get
+  - global_settings_set
+  - global_settings_reset
 - title: Gets the possible data_label and type options for the makeme()-arguments
   contents:
   - get_data_label_opts
@@ -29,7 +26,9 @@ reference:
 - title: Compute optimal figure heights for the built-in cat_plot
   contents: fig_height_h_barchart
 - title: Obtain sample size range for a makeme-object (experimental)
-  contents: n_range
+  contents:
+  - n_range
+  - n_range2
 - title: Only relevant when expanding the S3 system with your own functions
   contents: make_content
 - title: Example dataset

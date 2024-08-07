@@ -25,36 +25,34 @@ if(!exists(".saros.env")) .saros.env <- NULL
                                "chapter_overview",
                                "chapter_structure",
                                "call",
+                               "n_y",
+                               "n_cats_y",
+                               "max_chars_y",
+                               "ggobj",
                                "...")
 
-  .saros.env$makeme_defaults <<-
-    lapply(formals(makeme)[!names(formals(makeme)) %in% .saros.env$ignore_args],
-           eval)
+
+  fn_opt_list <- list(makeme = makeme,
+                      make_link = make_link, n_rng = n_rng, n_range = n_range,
+                      fig_height_h_barchart = fig_height_h_barchart)
+
+  for(fn_name in names(fn_opt_list)) {
+    .saros.env[[paste0(fn_name, "_defaults")]] <<-
+      lapply(formals(fn_opt_list[[fn_name]])[!names(formals(fn_opt_list[[fn_name]])) %in% .saros.env$ignore_args],
+             eval)
+  }
   .saros.env$makeme_defaults$type <<- .saros.env$makeme_defaults$type[1]
   .saros.env$makeme_defaults$showNA <<- .saros.env$makeme_defaults$showNA[1]
   .saros.env$makeme_defaults$data_label <<- .saros.env$makeme_defaults$data_label[1]
-
-  .saros.env$make_link_defaults <<-
-    lapply(formals(make_link)[!names(formals(make_link)) %in% .saros.env$ignore_args],
-           eval)
-
-
-  .saros.env$n_rng_defaults <<-
-    lapply(formals(n_rng)[!names(formals(n_rng)) %in% .saros.env$ignore_args],
-           eval)
+  .saros.env$fig_height_h_barchart_defaults$legend_location <<- .saros.env$fig_height_h_barchart_defaults$legend_location[1]
 
   # Initialize global options with the factory defaults if not already set
   .saros_options <- getOption("saros", list())
-  if (is.null(.saros_options$makeme_defaults)) {
-    .saros_options$makeme_defaults <- .saros.env$makeme_defaults
-    options(saros = .saros_options)
+  for(fn in names(fn_opt_list)) {
+    if (is.null(.saros_options[[paste0(fn, "_defaults")]])) {
+      .saros_options[[paste0(fn, "_defaults")]] <- .saros.env[[paste0(fn, "_defaults")]]
+      options(saros = .saros_options)
+    }
   }
-  if (is.null(.saros_options$make_link_defaults)) {
-    .saros_options$make_link_defaults <- .saros.env$make_link_defaults
-    options(saros = .saros_options)
-  }
-  if (is.null(.saros_options$n_rng_defaults)) {
-    .saros_options$n_rng_defaults <- .saros.env$n_rng_defaults
-    options(saros = .saros_options)
-  }
+
 }

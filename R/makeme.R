@@ -431,17 +431,17 @@ makeme <-
 
     ##
 
-    current_call <- match.call()
-    current_call <- current_call[!names(current_call) %in% .saros.env$ignore_args]
+
     dep_enq <- rlang::enquo(arg = dep)
     dep_pos <- tidyselect::eval_select(dep_enq, data = data)
     indep_enq <- rlang::enquo(arg = indep)
     indep_pos <- tidyselect::eval_select(indep_enq, data = data)
 
-    args <- check_options(call = current_call,
+    args <- check_options(call = match.call(),
                           ignore_args = .saros.env$ignore_args,
-                          defaults_env = makeme_global_settings_get()
-                          )
+                          defaults_env = global_settings_get(fn_name="makeme"),
+                          default_values = formals(makeme))
+
     args$data <- data # reinsert after check_options
     args$dep <- names(dep_pos)
     args$indep <- names(indep_pos)
@@ -504,7 +504,7 @@ makeme <-
       dep_crwd <- args$dep[!args$dep %in% omitted_vars_crwd]
       if(length(dep_crwd)==0) next
 
-      indep_crwd <- args$indep[!args$indep %in% omitted_vars_crwd]
+      indep_crwd <- args$indep#[!args$indep %in% omitted_vars_crwd]
       if(length(indep_crwd)==0) indep_crwd <- NULL
 
 

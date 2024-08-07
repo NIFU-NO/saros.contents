@@ -56,23 +56,24 @@ make_link <- function(data,
                       link_suffix = ")",
                       ...) {
 
-  # dots <- rlang::list2(...)
-
-  current_call <- match.call()
-  current_call <- current_call[!names(current_call) %in% c(.saros.env$ignore_args)]
-
   args <-
-    check_options(call = current_call,
+    check_options(call = match.call(),
                         ignore_args = .saros.env$ignore_args,
-                        defaults_env = make_link_global_settings_get(),
-                        default_values = formals(make_link)
-  )
+                        defaults_env = global_settings_get(fn_name = "make_link"),
+                        default_values = formals(make_link))
 
   if(!rlang::is_string(args$folder)) args$folder <- "."
 
   path <- fs::path(args$folder,
                    paste0(args$file_prefix, rlang::hash(data), args$file_suffix))
 
-  save_fn(data, path, ...)
-  I(paste0(args$link_prefix, path, args$link_suffix))
+  # save_fn <- args$save_fn
+
+  tryCatch({args$save_fn(data, path, ...)
+           I(paste0(args$link_prefix, path, args$link_suffix))
+           },
+           error = function(cnd) {
+             cli::cli_warn(c(x="Function {rlang::call_name(quote(safe_fn()))} failed with arguments {.arg path}={path}, {.arg data}={data}."),
+                            parent = cnd)
+           })
 }
