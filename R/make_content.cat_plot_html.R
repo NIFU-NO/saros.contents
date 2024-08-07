@@ -105,6 +105,8 @@ make_content.cat_plot_html <-
          (dplyr::n_distinct(data$.variable_label) > 1 ||
           (dplyr::n_distinct(data$.variable_label) == 1 &&
            isFALSE(dots$hide_axis_text_if_single_variable))))) {
+      lab <- ".label"
+      p$data[[lab]] <- string_wrap(p$data[[lab]], width = dots$x_axis_label_width)
       if(!dots$inverse) {
 
         p <- p +
@@ -113,10 +115,8 @@ make_content.cat_plot_html <-
             labeller = ggiraph::labeller_interactive(
               .mapping = ggplot2::aes(
                 data_id = .data$.variable_label,
-                tooltip = .data$.variable_label,
-                label = string_wrap(.data[[if(prop_family) indep_vars else ".label"]], # ????????????????????
-                                    width = dots$x_axis_label_width
-                                    )
+                tooltip = .data$.variable_label#,
+                # label = .data[[lab]]
                 )
               ),
             interactive_on = "text",
@@ -129,10 +129,10 @@ make_content.cat_plot_html <-
             labeller = ggiraph::labeller_interactive(
               .mapping = ggplot2::aes(
                 data_id = .data[[indep_vars]],
-                tooltip = .data[[indep_vars]],
-                label = string_wrap(.data[[if(prop_family) indep_vars else ".label"]], # ????????????????????
-                                    width = dots$x_axis_label_width
-                                    )
+                tooltip = .data[[indep_vars]]#,
+                # label = string_wrap(.data[[if(prop_family) indep_vars else ".label"]], # ????????????????????
+                                    # width = dots$x_axis_label_width
+                                    # )
                 )
               ),
             interactive_on = "text",
