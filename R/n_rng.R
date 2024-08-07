@@ -132,7 +132,7 @@ n_rng2 <- function(ggobj,
   if(!ggplot2::is.ggplot(ggobj)) cli::cli_abort("{.arg ggobj} must be a ggplot2-object.")
   data <- ggobj$data
 
-  n <- range(data$.count_total, na.rm=TRUE)
+  n <- unique(range(data$.count_total, na.rm=TRUE))
 
   if(!is.null(n)) {
     template <-
