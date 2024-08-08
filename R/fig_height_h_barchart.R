@@ -239,3 +239,79 @@ fig_height_h_barchart <- # Returns a numeric value
     round(plot_height, digits=2)
   }
 
+
+#' Estimate figure height for a horizontal bar chart
+#'
+#' Taking an object from `makeme()`, this function estimates the height of a
+#' figure for a horizontal bar chart.
+#'
+#' @param ggobj `ggplot2`-object
+#' @inheritParams fig_height_h_barchart
+#'
+#' @inheritSection fig_height_h_barchart return
+#' @export
+#'
+#' @examples
+#'
+fig_height_h_barchart2 <- # Returns a numeric value
+  function(ggobj,
+           freq = FALSE,
+           x_axis_label_width = 20,
+           strip_angle = 0,
+           main_font_size = 8,
+           legend_location = c("panel", "plot"),
+           n_legend_lines = 2,
+           legend_key_chars_equivalence = 5,
+           max_chars_per_figure_width = 100,
+           multiplier_per_horizontal_line = NULL,
+           multiplier_per_vertical_letter = .01,
+           multiplier_per_facet = .95,
+           multiplier_per_legend_line = 1.5,
+           fixed_constant = 0,
+           figure_width_in_cm = 16,
+           margin_in_cm = 0,
+           max = 8,
+           min = 1) {
+
+    data <- ggobj$data
+    indep_vars <- colnames(data)[!colnames(data) %in% .saros.env$summary_data_sort2]
+    if(length(indep_vars)>1) {
+      cli::cli_abort("{.arg fig_height_h_barchart2} only supports a single indep variable.")
+    }
+    if(length(indep_vars)==1) {
+      data[[indep_vars]] <-
+        stringi::stri_replace_all_regex(
+          string = data[[indep_vars]],
+          pattern = "(.+)___.+",
+          replacement = "\\1")
+    }
+
+
+    fig_height_h_barchart(
+      n_y = dplyr::n_distinct(data$.variable_name),
+      n_cats_y = dplyr::n_distinct(data$.category),
+      max_chars_y = max(nchar(data$.variable_label), na.rm=TRUE),
+      n_x = if(length(indep_vars)==1) 1,
+      n_cats_x = if(length(indep_vars)==1) dplyr::n_distinct(data[[indep_vars]]),
+      max_chars_x = if(length(indep_vars)==1) max(nchar(data[[indep_vars]]), na.rm=TRUE),
+      freq = freq,
+      x_axis_label_width = x_axis_label_width,
+      strip_angle = strip_angle,
+      main_font_size = main_font_size,
+      legend_location = legend_location,
+      n_legend_lines = n_legend_lines,
+      legend_key_chars_equivalence = legend_key_chars_equivalence,
+      max_chars_per_figure_width = max_chars_per_figure_width,
+      multiplier_per_horizontal_line = multiplier_per_horizontal_line,
+      multiplier_per_vertical_letter = multiplier_per_vertical_letter,
+      multiplier_per_facet = multiplier_per_facet,
+      multiplier_per_legend_line = multiplier_per_legend_line,
+      fixed_constant = fixed_constant,
+      figure_width_in_cm = figure_width_in_cm,
+      margin_in_cm = margin_in_cm,
+      max = max,
+      min = min
+    )
+
+  }
+
