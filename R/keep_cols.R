@@ -53,7 +53,6 @@ keep_cols <- function(data,
     }
   }
 
-  list(data = out[, c(kept_vars, indep, mesos_var), drop=FALSE],
-       omitted_vars = dep[!dep %in% kept_vars])
+  dep[!dep %in% kept_vars]
 
 }

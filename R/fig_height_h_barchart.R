@@ -44,7 +44,10 @@ calculate_height <- function(strip_height,
 
 #' Estimate figure height for a horizontal bar chart
 #'
-#' This function estimates the height of a figure for a horizontal bar chart based on several parameters including the number of dependent and independent variables, number of categories, maximum characters in the labels, and legend properties.
+#' This function estimates the height of a figure for a horizontal bar chart
+#' based on several parameters including the number of dependent and independent
+#' variables, number of categories, maximum characters in the labels, and
+#' legend properties.
 #'
 #' @param n_y Integer. Number of dependent variables.
 #' @param n_cats_y Integer. Number of categories across the dependent variables.
@@ -107,17 +110,17 @@ fig_height_h_barchart <- # Returns a numeric value
            freq = FALSE,
            x_axis_label_width = 20,
            strip_angle = 0,
-           main_font_size = 8,
-           legend_location = c("panel", "plot"),
+           main_font_size = 7,
+           legend_location = c("plot", "panel"),
            n_legend_lines = 2,
            legend_key_chars_equivalence = 5,
            max_chars_per_figure_width = 100,
            multiplier_per_horizontal_line = NULL,
-           multiplier_per_vertical_letter = .15,
-           multiplier_per_facet = .95,
-           multiplier_per_legend_line = 1.5,
+           multiplier_per_vertical_letter = 1,
+           multiplier_per_facet = 1,
+           multiplier_per_legend_line = 1,
            fixed_constant = 0,
-           figure_width_in_cm = 16,
+           figure_width_in_cm = 14,
            margin_in_cm = 0,
            max = 8,
            min = 1) {
@@ -237,5 +240,180 @@ fig_height_h_barchart <- # Returns a numeric value
                                  fixed_constant = fixed_constant)
     plot_height <- max(c(min(c(estimate, max)), min))
     round(plot_height, digits=2)
+  }
+
+
+#' Estimate figure height for a horizontal bar chart
+#'
+#' Taking an object from `makeme()`, this function estimates the height of a
+#' figure for a horizontal bar chart.
+#'
+#' @param ggobj `ggplot2`-object
+#' @inheritParams fig_height_h_barchart
+#'
+#' @inherit fig_height_h_barchart return
+#' @export
+#'
+#' @examples
+#' fig_height_h_barchart2(makeme(data=ex_survey, dep=b_1:b_3, indep=x1_sex))
+fig_height_h_barchart2 <- # Returns a numeric value
+  function(ggobj,
+           freq = FALSE,
+           x_axis_label_width = 20,
+           strip_angle = 0,
+           main_font_size = 8,
+           legend_location = c("panel", "plot"),
+           n_legend_lines = 2,
+           legend_key_chars_equivalence = 5,
+           max_chars_per_figure_width = 100,
+           multiplier_per_horizontal_line = NULL,
+           multiplier_per_vertical_letter = .01,
+           multiplier_per_facet = .95,
+           multiplier_per_legend_line = 1.5,
+           fixed_constant = 0,
+           figure_width_in_cm = 16,
+           margin_in_cm = 0,
+           max = 8,
+           min = 1) {
+
+    data <- ggobj$data
+    indep_vars <- colnames(data)[!colnames(data) %in% .saros.env$summary_data_sort2]
+
+    if(length(indep_vars)>1) {
+      cli::cli_abort("{.arg fig_height_h_barchart2} only supports a single indep variable.")
+    }
+    if(length(indep_vars)==1) {
+      # browser()
+      data[[indep_vars]] <-
+        stringi::stri_replace_all_regex(
+          str = as.character(data[[indep_vars]]),
+          pattern = "(.+)___.+",
+          replacement = "$1")
+    }
+
+
+
+    args <- check_options(call = match.call(),
+                          ignore_args = .saros.env$ignore_args,
+                          defaults_env = global_settings_get(fn_name="fig_height_h_barchart"),
+                          default_values = formals(fig_height_h_barchart2))
+
+
+    n_y = dplyr::n_distinct(data$.variable_name)
+    n_cats_y = dplyr::n_distinct(data$.category)
+    max_chars_y = max(nchar(as.character(data$.variable_label)), na.rm=TRUE)
+    n_x = if(length(indep_vars)==1) 1
+    n_cats_x = if(length(indep_vars)==1) dplyr::n_distinct(data[[indep_vars]])
+    max_chars_x = if(length(indep_vars)==1) max(nchar(as.character(data[[indep_vars]])), na.rm=TRUE)
+
+    freq <- args$freq
+    x_axis_label_width <- args$x_axis_label_width
+    strip_angle <- args$strip_angle
+    main_font_size <- args$main_font_size
+    legend_location <- args$legend_location
+    n_legend_lines <- args$n_legend_lines
+    legend_key_chars_equivalence <- args$legend_key_chars_equivalence
+    max_chars_per_figure_width <- args$max_chars_per_figure_width
+    multiplier_per_horizontal_line <- args$multiplier_per_horizontal_line
+    multiplier_per_vertical_letter <- args$multiplier_per_vertical_letter
+    multiplier_per_facet <- args$multiplier_per_facet
+    multiplier_per_legend_line <- args$multiplier_per_legend_line
+    fixed_constant <- args$fixed_constant
+    figure_width_in_cm <- args$figure_width_in_cm
+    margin_in_cm <- args$margin_in_cm
+    max <- args$max
+    min <- args$min
+
+    check_integerish(n_y)
+    check_integerish(n_cats_y)
+    check_integerish(max_chars_y)
+    check_integerish(n_x, null_allowed=TRUE)
+    check_integerish(n_cats_x, null_allowed=TRUE)
+    check_integerish(max_chars_x, null_allowed=TRUE)
+    check_bool(freq)
+    check_double(strip_angle)
+    check_double(main_font_size)
+    check_double(multiplier_per_horizontal_line, null_allowed=TRUE)
+    check_double(multiplier_per_vertical_letter)
+    check_double(multiplier_per_legend_line)
+    check_integerish(legend_key_chars_equivalence)
+    check_integerish(max_chars_per_figure_width)
+
+    check_integerish(n_legend_lines, null_allowed= TRUE)
+    check_integerish(fixed_constant)
+    check_integerish(margin_in_cm)
+    check_integerish(figure_width_in_cm)
+    check_integerish(strip_angle)
+    check_integerish(max)
+    check_integerish(min)
+    legend_location <- legend_location[1]
+
+
+
+    if(is.null(multiplier_per_horizontal_line)) {
+      multiplier_per_horizontal_line <- main_font_size/72.27
+    }
+
+
+
+    if(is.null(n_legend_lines)) {
+      categories_per_line <-
+        estimate_categories_per_line(figure_width_cm = figure_width_in_cm,
+                                     max_chars_cats = max_chars_y, # Maximum characters across the categories
+                                     font_size = main_font_size,
+                                     legend_key_chars = legend_key_chars_equivalence,
+                                     margin_cm = margin_in_cm)
+      n_legend_lines <- ceiling(n_y / categories_per_line)
+    }
+
+
+
+    max_lines_y <- get_max_lines(max_cat_char = max_chars_y,
+                                 width = x_axis_label_width)
+    if(n_cats_y==0) unique_y_cats <- 1
+
+    if(isFALSE(freq)) {
+      n_cats_y <- 1
+    }
+
+
+
+    if(!is.null(n_x) && n_x > 0) {
+
+      max_lines_x <- get_max_lines(max_cat_char = max_chars_x,
+                                   width = x_axis_label_width)
+
+      x_axis_height <-
+        max(c(max_lines_x, n_cats_y), na.rm=TRUE) * multiplier_per_horizontal_line * n_cats_x
+      n_facets <- n_y
+
+      if (strip_angle >= 45 && strip_angle <= 135) { # vertical strip
+        strip_height <-
+          max_chars_y * multiplier_per_vertical_letter
+
+      } else { # horizontal strip
+        strip_height <-
+          max_lines_y * multiplier_per_horizontal_line
+      }
+
+    } else { # Univariates
+      x_axis_height <-
+        max(c(max_lines_y, n_cats_y), na.rm=TRUE) *
+        multiplier_per_horizontal_line * n_y
+      strip_height <- NA_real_
+      n_facets <- 1
+
+    }
+    estimate <- calculate_height(strip_height = strip_height,
+                                 x_axis_height = x_axis_height,
+                                 n_facets = n_facets,
+                                 n_legend_lines = n_legend_lines,
+                                 multiplier_per_facet = multiplier_per_facet,
+                                 multiplier_per_legend_line = multiplier_per_legend_line,
+                                 fixed_constant = fixed_constant)
+    plot_height <- max(c(min(c(estimate, max)), min))
+    round(plot_height, digits=2)
+
+
   }
 

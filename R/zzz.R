@@ -14,7 +14,8 @@ if(!exists(".saros.env")) .saros.env <- NULL
       ".mean", ".mean_se",
       ".variable_label", ".variable_label_prefix",
       ".data_label", ".comb_categories",
-      ".sum_value")
+      ".sum_value",
+      ".id", ".tooltip", ".onclick")
   .saros.env$data_label_opts <<-
     c("proportion", "percentage", "percentage_bare",
       "count", "mean", "median")

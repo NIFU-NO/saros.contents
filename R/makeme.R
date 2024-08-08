@@ -488,7 +488,7 @@ makeme <-
                   hide_for_crowd_if_category_n_below = args$hide_for_crowd_if_category_n_below, # 4
                   hide_for_crowd_if_cell_n_below = args$hide_for_crowd_if_cell_n_below#, # 5
                   # hide_for_all_crowds_if_hidden_for_crowd_vars = omitted_vars
-                  )[["omitted_vars"]]
+                  )
     }
 
     out <- rlang::set_names(vector(mode = "list", length = length(args$crowd)), args$crowd)
