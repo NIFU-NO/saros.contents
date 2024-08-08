@@ -44,7 +44,10 @@ calculate_height <- function(strip_height,
 
 #' Estimate figure height for a horizontal bar chart
 #'
-#' This function estimates the height of a figure for a horizontal bar chart based on several parameters including the number of dependent and independent variables, number of categories, maximum characters in the labels, and legend properties.
+#' This function estimates the height of a figure for a horizontal bar chart
+#' based on several parameters including the number of dependent and independent
+#' variables, number of categories, maximum characters in the labels, and
+#' legend properties.
 #'
 #' @param n_y Integer. Number of dependent variables.
 #' @param n_cats_y Integer. Number of categories across the dependent variables.

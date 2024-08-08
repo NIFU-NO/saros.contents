@@ -81,7 +81,10 @@ fig_height_h_barchart(
 Numeric value representing the estimated height of the figure.
 }
 \description{
-This function estimates the height of a figure for a horizontal bar chart based on several parameters including the number of dependent and independent variables, number of categories, maximum characters in the labels, and legend properties.
+This function estimates the height of a figure for a horizontal bar chart
+based on several parameters including the number of dependent and independent
+variables, number of categories, maximum characters in the labels, and
+legend properties.
 }
 \examples{
 fig_height_h_barchart(n_y = 5,
