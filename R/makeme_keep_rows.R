@@ -1,4 +1,4 @@
-makeme_keep_rows <- function(data, crwd, mesos_var, mesos_group) {
+makeme_keep_rows <- function(data, crwd, mesos_var=NULL, mesos_group=NULL) {
 
   if(crwd == "all") return(TRUE)
   if(crwd == "target" &&
