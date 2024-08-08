@@ -24,7 +24,9 @@ reference:
   - make_link
   - ggsaver
 - title: Compute optimal figure heights for the built-in cat_plot
-  contents: fig_height_h_barchart
+  contents:
+  - fig_height_h_barchart
+  - fig_height_h_barchart2
 - title: Obtain sample size range for a makeme-object (experimental)
   contents:
   - n_range
