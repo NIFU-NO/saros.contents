@@ -251,11 +251,11 @@ fig_height_h_barchart <- # Returns a numeric value
 #' @param ggobj `ggplot2`-object
 #' @inheritParams fig_height_h_barchart
 #'
-#' @inheritSection fig_height_h_barchart return
+#' @inherit fig_height_h_barchart return
 #' @export
 #'
 #' @examples
-#'
+#' fig_height_h_barchart2(makeme(data=ex_survey, dep=b_1:b_3, indep=x1_sex))
 fig_height_h_barchart2 <- # Returns a numeric value
   function(ggobj,
            freq = FALSE,
@@ -278,15 +278,17 @@ fig_height_h_barchart2 <- # Returns a numeric value
 
     data <- ggobj$data
     indep_vars <- colnames(data)[!colnames(data) %in% .saros.env$summary_data_sort2]
+
     if(length(indep_vars)>1) {
       cli::cli_abort("{.arg fig_height_h_barchart2} only supports a single indep variable.")
     }
     if(length(indep_vars)==1) {
+      # browser()
       data[[indep_vars]] <-
         stringi::stri_replace_all_regex(
-          string = data[[indep_vars]],
+          str = as.character(data[[indep_vars]]),
           pattern = "(.+)___.+",
-          replacement = "\\1")
+          replacement = "$1")
     }
 
 

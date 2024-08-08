@@ -62,7 +62,13 @@ fig_height_h_barchart2(
 
 \item{min}{Numeric. Minimum height.}
 }
+\value{
+Numeric value representing the estimated height of the figure.
+}
 \description{
 Taking an object from \code{makeme()}, this function estimates the height of a
 figure for a horizontal bar chart.
+}
+\examples{
+fig_height_h_barchart2(makeme(data=ex_survey, dep=b_1:b_3, indep=x1_sex))
 }
