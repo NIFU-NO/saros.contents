@@ -12,8 +12,9 @@ is_arg_explicit <- function(arg_name, call) {
 
 # Helper function to get argument value considering priorities
 get_argument_value <- function(arg_name, call, defaults_env, formals_list) {
+
   if (is_arg_explicit(arg_name, call)) {
-    return(eval(call[[arg_name]]))
+    return(call[[arg_name]])
   } else if (!is.null(defaults_env[[arg_name]])) {
     return(defaults_env[[arg_name]])
   } else {

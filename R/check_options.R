@@ -5,6 +5,7 @@ check_options <- function(call,
                           ignore_args = .saros.env$ignore_args) {
 
   call <- call[!names(call) %in% ignore_args]
+  call <- lapply(call, eval, envir = rlang::caller_env(n = 1))
   default_values <- default_values[!names(default_values) %in% ignore_args]
   default_values <- lapply(default_values, eval)
 
