@@ -129,7 +129,10 @@ n_range <- function(data, dep, indep=NULL, mesos_var = NULL, mesos_group = NULL,
 n_rng2 <- function(ggobj,
                   glue_template_1 = "{n}", glue_template_2 = "[{n[1]}-{n[2]}]") {
 
-  if(!ggplot2::is.ggplot(ggobj)) cli::cli_abort("{.arg ggobj} must be a ggplot2-object.")
+  if(!ggplot2::is.ggplot(ggobj)) {
+    cli::cli_warn("{.arg ggobj} must be a ggplot2-object, returning NULL.")
+    return(NULL)
+  }
   data <- ggobj$data
 
   n <- unique(range(data$.count_total, na.rm=TRUE))
