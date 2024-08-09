@@ -124,6 +124,16 @@
 #'   Whether to hide a variable for a crowd if the combination of dep-indep results in a cell with less than n observations (ignoring NA).
 #'   Cells with a 0 count is not considered as these are usually not a problem for anonymity.
 #'
+#' @param hide_indep_cat_for_all_crowds_if_hidden_for_crowd *Conditionally hide independent categories*
+#'
+#'   `scalar<logical>` // *default:* `FALSE`
+#'
+#'   If `hide_for_all_crowds_if_hidden_for_crowd` is specified, should categories of the
+#'   `indep` variable(s) be hidden for a crowd if it does not exist for the
+#'   crowds specified in `hide_for_all_crowds_if_hidden_for_crowd`? This is useful when e.g.
+#'   `indep` is academic disciplines, `mesos_var` is institutions, and a specific
+#'   institution is not interested in seeing academic disciplines they do not offer themselves.
+#'
 #' @param label_separator *How to separate main question from sub-question*
 #'
 #'   `scalar<character>` // *default:* `NULL` (`optional`)
@@ -365,6 +375,7 @@ makeme <-
            hide_for_crowd_if_category_n_below = 0,
            hide_for_crowd_if_cell_n_below = 0,
            hide_for_all_crowds_if_hidden_for_crowd = NULL,
+           hide_indep_cat_for_all_crowds_if_hidden_for_crowd = FALSE,
 
 
            add_n_to_label = FALSE,
@@ -470,12 +481,13 @@ makeme <-
                    ])
 
 
-    omitted_vars <- c()
     kept_cols_list <- rlang::set_names(vector(mode = "list", length = length(args$crowd)), args$crowd)
+    omitted_cols_list <- rlang::set_names(vector(mode = "list", length = length(args$crowd)), args$crowd)
+    kept_indep_cats_list <- rlang::set_names(vector(mode = "list", length = length(args$crowd)), args$crowd)
 
     for(crwd in names(kept_cols_list)) {
 
-      kept_cols_list[[crwd]] <-
+      kept_cols_tmp <-
         keep_cols(data = args$data,
                   dep = args$dep,
                   indep = args$indep,
@@ -489,22 +501,57 @@ makeme <-
                   hide_for_crowd_if_cell_n_below = args$hide_for_crowd_if_cell_n_below#, # 5
                   # hide_for_all_crowds_if_hidden_for_crowd_vars = omitted_vars
                   )
+      omitted_cols_list[[crwd]] <- kept_cols_tmp[["omitted_vars"]]
+
+      kept_indep_cats_list[[crwd]] <-
+        keep_indep_cats(data = kept_cols_tmp[["data"]],
+                        indep = args$indep)
     }
+
+
+
+    kept_indep_cats_list <-
+      lapply(rlang::set_names(names(kept_indep_cats_list)), function(crwd) {
+        lapply(rlang::set_names(names(kept_indep_cats_list[[crwd]])), function(x) {
+          if(is.character(args$hide_for_all_crowds_if_hidden_for_crowd) &&
+             !crwd %in% args$hide_for_all_crowds_if_hidden_for_crowd) {
+
+            kept_globally <-
+              kept_indep_cats_list[args$hide_for_all_crowds_if_hidden_for_crowd] |>
+              unlist() |>
+              unique()
+
+            kept_indep_cats_list[[crwd]][[x]][
+              kept_indep_cats_list[[crwd]][[x]] %in%
+                kept_globally
+            ]
+          } else {
+            kept_indep_cats_list[[crwd]][[x]]
+          }
+        })
+      })
 
     out <- rlang::set_names(vector(mode = "list", length = length(args$crowd)), args$crowd)
 
-    for(crwd in names(out)) {
 
+
+
+    for(crwd in names(out)) {
+#
       omitted_vars_crwd <-
-        unique(unlist(kept_cols_list[
+        omitted_cols_list[
           c(crwd,
             args$hide_for_all_crowds_if_hidden_for_crowd
-          )]))
+          )] |>
+        lapply(FUN = function(x) if("omitted_vars" %in% names(x)) x["omitted_vars"]) |>
+        unlist() |>
+        unique()
+
 
       dep_crwd <- args$dep[!args$dep %in% omitted_vars_crwd]
       if(length(dep_crwd)==0) next
 
-      indep_crwd <- args$indep#[!args$indep %in% omitted_vars_crwd]
+      indep_crwd <- args$indep
       if(length(indep_crwd)==0) indep_crwd <- NULL
 
 
@@ -513,6 +560,13 @@ makeme <-
                                                 mesos_var = mesos_var,
                                                 mesos_group = mesos_group),
                                !colnames(args$data) %in% omitted_vars_crwd, drop=FALSE]
+      # browser()
+      if(isTRUE(args$hide_indep_cat_for_all_crowds_if_hidden_for_crowd)) {
+        for(x in indep_crwd) {
+          subset_data <- subset_data[as.character(subset_data[[x]]) %in%
+                                       kept_indep_cats_list[[crwd]][[x]], , drop = FALSE]
+        }
+      }
 
 
       variable_type_dep <-
