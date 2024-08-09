@@ -124,6 +124,16 @@
 #'   Whether to hide a variable for a crowd if the combination of dep-indep results in a cell with less than n observations (ignoring NA).
 #'   Cells with a 0 count is not considered as these are usually not a problem for anonymity.
 #'
+#' @param hide_indep_cat_for_all_crowds_if_hidden_for_crowd *Conditionally hide independent categories*
+#'
+#'   `scalar<logical>` // *default:* `FALSE`
+#'
+#'   If `hide_for_all_crowds_if_hidden_for_crowd` is specified, should categories of the
+#'   `indep` variable(s) be hidden for a crowd if it does not exist for the
+#'   crowds specified in `hide_for_all_crowds_if_hidden_for_crowd`? This is useful when e.g.
+#'   `indep` is academic disciplines, `mesos_var` is institutions, and a specific
+#'   institution is not interested in seeing academic disciplines they do not offer themselves.
+#'
 #' @param label_separator *How to separate main question from sub-question*
 #'
 #'   `scalar<character>` // *default:* `NULL` (`optional`)
@@ -365,6 +375,7 @@ makeme <-
            hide_for_crowd_if_category_n_below = 0,
            hide_for_crowd_if_cell_n_below = 0,
            hide_for_all_crowds_if_hidden_for_crowd = NULL,
+           hide_indep_cat_for_all_crowds_if_hidden_for_crowd = FALSE,
 
 
            add_n_to_label = FALSE,
@@ -426,7 +437,7 @@ makeme <-
            docx_template = NULL
 
 
-           ) {
+  ) {
 
 
     ##
@@ -467,15 +478,16 @@ makeme <-
     # This only happens if hide_for_all_crowds_if_hidden_for_crowd are in the set of crowd.
     args$crowd <- c(args$hide_for_all_crowds_if_hidden_for_crowd[args$hide_for_all_crowds_if_hidden_for_crowd %in% args$crowd],
                     args$crowd[!args$crowd %in% args$hide_for_all_crowds_if_hidden_for_crowd[args$hide_for_all_crowds_if_hidden_for_crowd %in% args$crowd]
-                   ])
+                    ])
 
 
-    omitted_vars <- c()
     kept_cols_list <- rlang::set_names(vector(mode = "list", length = length(args$crowd)), args$crowd)
+    omitted_cols_list <- rlang::set_names(vector(mode = "list", length = length(args$crowd)), args$crowd)
+    kept_indep_cats_list <- rlang::set_names(vector(mode = "list", length = length(args$crowd)), args$crowd)
 
     for(crwd in names(kept_cols_list)) {
 
-      kept_cols_list[[crwd]] <-
+      kept_cols_tmp <-
         keep_cols(data = args$data,
                   dep = args$dep,
                   indep = args$indep,
@@ -488,23 +500,58 @@ makeme <-
                   hide_for_crowd_if_category_n_below = args$hide_for_crowd_if_category_n_below, # 4
                   hide_for_crowd_if_cell_n_below = args$hide_for_crowd_if_cell_n_below#, # 5
                   # hide_for_all_crowds_if_hidden_for_crowd_vars = omitted_vars
-                  )
+        )
+      omitted_cols_list[[crwd]] <- kept_cols_tmp[["omitted_vars"]]
+
+      kept_indep_cats_list[[crwd]] <-
+        keep_indep_cats(data = kept_cols_tmp[["data"]],
+                        indep = args$indep)
     }
+
+
+
+    kept_indep_cats_list <-
+      lapply(rlang::set_names(names(kept_indep_cats_list)), function(crwd) {
+        lapply(rlang::set_names(names(kept_indep_cats_list[[crwd]])), function(x) {
+          if(is.character(args$hide_for_all_crowds_if_hidden_for_crowd) &&
+             !crwd %in% args$hide_for_all_crowds_if_hidden_for_crowd) {
+
+            kept_globally <-
+              kept_indep_cats_list[args$hide_for_all_crowds_if_hidden_for_crowd] |>
+              unlist() |>
+              unique()
+
+            kept_indep_cats_list[[crwd]][[x]][
+              kept_indep_cats_list[[crwd]][[x]] %in%
+                kept_globally
+            ]
+          } else {
+            kept_indep_cats_list[[crwd]][[x]]
+          }
+        })
+      })
 
     out <- rlang::set_names(vector(mode = "list", length = length(args$crowd)), args$crowd)
 
-    for(crwd in names(out)) {
 
+
+
+    for(crwd in names(out)) {
+      #
       omitted_vars_crwd <-
-        unique(unlist(kept_cols_list[
+        omitted_cols_list[
           c(crwd,
             args$hide_for_all_crowds_if_hidden_for_crowd
-          )]))
+          )] |>
+        lapply(FUN = function(x) if("omitted_vars" %in% names(x)) x["omitted_vars"]) |>
+        unlist() |>
+        unique()
+
 
       dep_crwd <- args$dep[!args$dep %in% omitted_vars_crwd]
       if(length(dep_crwd)==0) next
 
-      indep_crwd <- args$indep#[!args$indep %in% omitted_vars_crwd]
+      indep_crwd <- args$indep
       if(length(indep_crwd)==0) indep_crwd <- NULL
 
 
@@ -513,7 +560,20 @@ makeme <-
                                                 mesos_var = mesos_var,
                                                 mesos_group = mesos_group),
                                !colnames(args$data) %in% omitted_vars_crwd, drop=FALSE]
+      # browser()
+      if(isTRUE(args$hide_indep_cat_for_all_crowds_if_hidden_for_crowd)) {
+        for(x in indep_crwd) {
+          subset_data <- subset_data[as.character(subset_data[[x]]) %in%
+                                       kept_indep_cats_list[[crwd]][[x]], , drop = FALSE]
+        }
+      }
 
+      if(nrow(subset_data) == 0) {
+        indep_msg <- if(is.character(args$indep)) paste0('indep=', cli::ansi_collapse(args$indep))
+        cli::cli_warn(c("No data left to make you {.arg {args$type}} with dep={.arg {args$dep}}, {.arg {indep_msg}}, crowd={.arg {crwd}}.",
+                        i="Skipping."))
+        next
+      }
 
       variable_type_dep <-
         lapply(args$dep, function(v) class(subset_data[[v]])) |>
@@ -531,24 +591,24 @@ makeme <-
 
         args$data_summary <-
           summarize_cat_cat_data(data = subset_data,
-                         dep = dep_crwd,
-                         indep = indep_crwd,
-                         ...,
-                         label_separator = args$label_separator,
-                         showNA = args$showNA,
-                         totals = args$totals,
-                         sort_by = args$sort_by,
-                         descend = args$descend,
-                         data_label = args$data_label,
-                         digits = args$digits,
-                         add_n_to_label = args$add_n_to_label,
-                         add_n_to_category = args$add_n_to_category,
-                         hide_label_if_prop_below = args$hide_label_if_prop_below,
-                         data_label_decimal_symbol = args$data_label_decimal_symbol,
-                         categories_treated_as_na = args$categories_treated_as_na,
-                         variables_always_at_bottom = args$variables_always_at_bottom,
-                         variables_always_at_top = args$variables_always_at_top,
-                         translations = args$translations)
+                                 dep = dep_crwd,
+                                 indep = indep_crwd,
+                                 ...,
+                                 label_separator = args$label_separator,
+                                 showNA = args$showNA,
+                                 totals = args$totals,
+                                 sort_by = args$sort_by,
+                                 descend = args$descend,
+                                 data_label = args$data_label,
+                                 digits = args$digits,
+                                 add_n_to_label = args$add_n_to_label,
+                                 add_n_to_category = args$add_n_to_category,
+                                 hide_label_if_prop_below = args$hide_label_if_prop_below,
+                                 data_label_decimal_symbol = args$data_label_decimal_symbol,
+                                 categories_treated_as_na = args$categories_treated_as_na,
+                                 variables_always_at_bottom = args$variables_always_at_bottom,
+                                 variables_always_at_top = args$variables_always_at_top,
+                                 translations = args$translations)
       }
 
       args$main_question <-
@@ -557,9 +617,9 @@ makeme <-
       if(!args$type %in% c("sigtest_table_html")) {
         args$data_summary <-
           post_process_makeme_data(data = args$data_summary,
-                                    indep = indep_crwd,
-                                    showNA = args$showNA,
-                                    colour_2nd_binary_cat = if(grepl(x=args$type, pattern="docx")) args$colour_2nd_binary_cat)
+                                   indep = indep_crwd,
+                                   showNA = args$showNA,
+                                   colour_2nd_binary_cat = if(grepl(x=args$type, pattern="docx")) args$colour_2nd_binary_cat)
       }
 
       args_crwd <- args
@@ -579,6 +639,7 @@ makeme <-
         names(out)[names(out) == crwd] <- args$translations[[paste0("crowd_", crwd)]]
       }
     }
+    out <- out[lapply(out, function(x) !is.null(x)) |> unlist()]
 
     if(isTRUE(args$simplify_output) && length(out)==1) out[[1]] else out
 

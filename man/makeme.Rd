@@ -22,6 +22,7 @@ makeme(
   hide_for_crowd_if_category_n_below = 0,
   hide_for_crowd_if_cell_n_below = 0,
   hide_for_all_crowds_if_hidden_for_crowd = NULL,
+  hide_indep_cat_for_all_crowds_if_hidden_for_crowd = FALSE,
   add_n_to_label = FALSE,
   add_n_to_category = FALSE,
   totals = FALSE,
@@ -162,6 +163,16 @@ all \code{crowd}-outputs if it for some reason is not displayed for
 
 will hide variables from both target and others-outputs if all are NA in
 the target-group.}
+
+\item{hide_indep_cat_for_all_crowds_if_hidden_for_crowd}{\emph{Conditionally hide independent categories}
+
+\verb{scalar<logical>} // \emph{default:} \code{FALSE}
+
+If \code{hide_for_all_crowds_if_hidden_for_crowd} is specified, should categories of the
+\code{indep} variable(s) be hidden for a crowd if it does not exist for the
+crowds specified in \code{hide_for_all_crowds_if_hidden_for_crowd}? This is useful when e.g.
+\code{indep} is academic disciplines, \code{mesos_var} is institutions, and a specific
+institution is not interested in seeing academic disciplines they do not offer themselves.}
 
 \item{add_n_to_label}{\emph{Add N= to the variable label}
 

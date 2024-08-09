@@ -56,6 +56,11 @@ make_link <- function(data,
                       link_suffix = ")",
                       ...) {
 
+  if(is.null(data)) {
+    cli::cli_warn("{.arg data} should not be NULL. Returning NULL.")
+    return(NULL)
+  }
+
   args <-
     check_options(call = match.call(),
                         ignore_args = .saros.env$ignore_args,
