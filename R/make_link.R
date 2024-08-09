@@ -77,8 +77,8 @@ make_link <- function(data,
   tryCatch({args$save_fn(data, path, ...)
            I(paste0(args$link_prefix, path, args$link_suffix))
            },
-           error = function(cnd) {
-             cli::cli_warn(c(x="Function {rlang::call_name(quote(safe_fn()))} failed with arguments {.arg path}={path}, {.arg data}={data}."),
+           error = function(cnd) { #={data}
+             cli::cli_warn(c(x="Function {rlang::call_name(quote(safe_fn()))} failed with arguments {.arg path}={path}, {.arg data} is {.obj_type_friendly {data}}."),
                             parent = cnd)
            })
 }
