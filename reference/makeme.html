@@ -63,6 +63,7 @@
 <span>  hide_for_crowd_if_category_n_below <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  hide_for_crowd_if_cell_n_below <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  hide_for_all_crowds_if_hidden_for_crowd <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  hide_indep_cat_for_all_crowds_if_hidden_for_crowd <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  add_n_to_label <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  add_n_to_category <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  totals <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -206,6 +207,16 @@ all <code>crowd</code>-outputs if it for some reason is not displayed for
 <code>hide_for_all_if_hidden_for_crowd = "target"</code></p>
 <p>will hide variables from both target and others-outputs if all are NA in
 the target-group.</p></dd>
+
+
+<dt id="arg-hide-indep-cat-for-all-crowds-if-hidden-for-crowd">hide_indep_cat_for_all_crowds_if_hidden_for_crowd<a class="anchor" aria-label="anchor" href="#arg-hide-indep-cat-for-all-crowds-if-hidden-for-crowd"></a></dt>
+<dd><p><em>Conditionally hide independent categories</em></p>
+<p><code>scalar&lt;logical&gt;</code> // <em>default:</em> <code>FALSE</code></p>
+<p>If <code>hide_for_all_crowds_if_hidden_for_crowd</code> is specified, should categories of the
+<code>indep</code> variable(s) be hidden for a crowd if it does not exist for the
+crowds specified in <code>hide_for_all_crowds_if_hidden_for_crowd</code>? This is useful when e.g.
+<code>indep</code> is academic disciplines, <code>mesos_var</code> is institutions, and a specific
+institution is not interested in seeing academic disciplines they do not offer themselves.</p></dd>
 
 
 <dt id="arg-add-n-to-label">add_n_to_label<a class="anchor" aria-label="anchor" href="#arg-add-n-to-label"></a></dt>
