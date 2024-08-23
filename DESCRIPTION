@@ -1,7 +1,7 @@
 Type: Package
 Package: saros.contents
 Title: Contents for the Semi-Automatic Reporting of Ordinary Surveys (Saros)
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: c(
     person(given = "Stephan", 
            family = "Daus", 

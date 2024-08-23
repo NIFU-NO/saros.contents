@@ -4,12 +4,14 @@
 \alias{global_settings_set}
 \title{Get Global Options for saros-functions}
 \usage{
-global_settings_set(new, fn_name = "makeme")
+global_settings_set(new, fn_name = "makeme", quiet = FALSE)
 }
 \arguments{
 \item{new}{List of arguments (see \code{?make_link()}, \code{?makeme()}, \code{fig_height_h_barchart()})}
 
 \item{fn_name}{String, one of \code{"make_link"}, \code{"fig_height_h_barchart"} and \code{"makeme"}.}
+
+\item{quiet}{Flag. If \code{FALSE} (default), informs about what has been set.}
 }
 \value{
 Invisibly returned list of old and new values.
