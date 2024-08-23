@@ -322,7 +322,7 @@
 #'
 #'
 #'
-#' @return ggplot
+#' @returns ggplot-object, optionally an extended ggplot object with ggiraph features.
 #' @importFrom rlang !!!
 #' @export
 #'

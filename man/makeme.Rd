@@ -376,7 +376,7 @@ Path to save docx-output.}
 Can be either a valid character path to a reference Word file, or an existing rdocx-object in memory.}
 }
 \value{
-ggplot
+ggplot-object, optionally an extended ggplot object with ggiraph features.
 }
 \description{
 This function allows embedding of interactive or static plots based on various types of data using tidyselect syntax for variable selection.

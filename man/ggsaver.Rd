@@ -13,6 +13,9 @@ ggsaver(plot, filename, ...)
 
 \item{...}{Arguments forwarded to \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}}}
 }
+\value{
+No return value, called for side effects
+}
 \description{
 This only exists to make it easy to use it in \code{\link[=make_link]{make_link()}}
 }
