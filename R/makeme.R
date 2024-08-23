@@ -555,16 +555,20 @@ makeme <-
       if(length(indep_crwd)==0) indep_crwd <- NULL
 
 
-      subset_data <- args$data[makeme_keep_rows(data = data,
-                                                crwd = crwd,
-                                                mesos_var = mesos_var,
-                                                mesos_group = mesos_group),
-                               !colnames(args$data) %in% omitted_vars_crwd, drop=FALSE]
-      # browser()
+
+      subset_data <-
+        dplyr::filter(args$data[, # subetting would remove variable labels, filter keeps them
+                               !colnames(args$data) %in% omitted_vars_crwd, drop=FALSE],
+                      makeme_keep_rows(data = data,
+                                       crwd = crwd,
+                                       mesos_var = mesos_var,
+                                       mesos_group = mesos_group))
+
       if(isTRUE(args$hide_indep_cat_for_all_crowds_if_hidden_for_crowd)) {
         for(x in indep_crwd) {
-          subset_data <- subset_data[as.character(subset_data[[x]]) %in%
-                                       kept_indep_cats_list[[crwd]][[x]], , drop = FALSE]
+          subset_data <-
+            dplyr::filter(subset_data, as.character(subset_data[[x]]) %in%
+                                       kept_indep_cats_list[[crwd]][[x]])
         }
       }
 
