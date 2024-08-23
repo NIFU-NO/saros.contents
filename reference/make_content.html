@@ -11,7 +11,7 @@ for ease of user-customized function programming."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">saros.contents</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,6 +70,14 @@ useful for error messages, etc.</p></dd>
 <p>Arguments provided by <code>makeme</code></p></dd>
 
 </dl></div>
+    <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    <p>The returned object class depends on the type.
+<code>type="*_table_html"</code> always returns a <code>tibble</code>.
+<code>type="*_plot_html"</code> always returns a <code>ggplot</code>.
+<code>type="*_docx"</code> always returns a <code>rdocx</code> object if <code>path=NULL</code>,
+or has side-effect of writing docx file to disk if <code>path</code> is set.</p>
+    </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
