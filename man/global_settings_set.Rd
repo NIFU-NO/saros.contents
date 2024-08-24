@@ -4,7 +4,12 @@
 \alias{global_settings_set}
 \title{Get Global Options for saros-functions}
 \usage{
-global_settings_set(new, fn_name = "makeme", quiet = FALSE)
+global_settings_set(
+  new,
+  fn_name = "makeme",
+  quiet = FALSE,
+  null_deletes = FALSE
+)
 }
 \arguments{
 \item{new}{List of arguments (see \code{?make_link()}, \code{?makeme()}, \code{fig_height_h_barchart()})}
@@ -12,6 +17,10 @@ global_settings_set(new, fn_name = "makeme", quiet = FALSE)
 \item{fn_name}{String, one of \code{"make_link"}, \code{"fig_height_h_barchart"} and \code{"makeme"}.}
 
 \item{quiet}{Flag. If \code{FALSE} (default), informs about what has been set.}
+
+\item{null_deletes}{Flag. If \code{FALSE} (default), \code{NULL} elements in \code{new}
+become \code{NULL} elements in the option. Otherwise, the corresponding element,
+if present, is deleted from the option.}
 }
 \value{
 Invisibly returned list of old and new values.
