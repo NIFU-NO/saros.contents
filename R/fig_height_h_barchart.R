@@ -277,6 +277,10 @@ fig_height_h_barchart2 <- # Returns a numeric value
            min = 1) {
 
     data <- ggobj$data
+    if(!(inherits(data, "data.frame") && nrow(data)>0)) {
+      cli::cli_warn("{.arg ggobj} must be a ggplot2-object with a nrow>0 data in it. Returning {.arg min}: {.val {min}}.")
+      return(min)
+    }
     indep_vars <- colnames(data)[!colnames(data) %in% .saros.env$summary_data_sort2]
 
     if(length(indep_vars)>1) {
