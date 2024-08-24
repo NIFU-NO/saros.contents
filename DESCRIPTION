@@ -60,7 +60,8 @@ Suggests:
 	  tibble,
     withr,
     quarto,
-    spelling
+    spelling,
+    vdiffr
 Config/testthat/edition: 3
 Encoding: UTF-8
 RoxygenNote: 7.3.2
