@@ -7,6 +7,7 @@
 #' @param ... Arguments forwarded to [ggplot2::ggsave()]
 #'
 #' @export
+#' @returns No return value, called for side effects
 #'
 #' @examples
 #' library(ggplot2)

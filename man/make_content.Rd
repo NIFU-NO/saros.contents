@@ -18,6 +18,13 @@ useful for error messages, etc.}
 
 Arguments provided by \code{makeme}}
 }
+\value{
+The returned object class depends on the type.
+\code{type="*_table_html"} always returns a \code{tibble}.
+\code{type="*_plot_html"} always returns a \code{ggplot}.
+\code{type="*_docx"} always returns a \code{rdocx} object if \code{path=NULL},
+or has side-effect of writing docx file to disk if \code{path} is set.
+}
 \description{
 Takes the same arguments as \code{makeme}, except
 that dep and indep in make_content are character vectors,

@@ -15,6 +15,10 @@ make_content.cat_plot_html <-
       length(indep_vars) == 0 &&
       dplyr::n_distinct(data$.variable_label) == 1
 
+    if(isTRUE(hide_axis_text)) {
+      data$.variable_label <- ""
+    }
+
     max_nchar_cat <- max(nchar(levels(data$.category)), na.rm = TRUE)
 
     percentage <- dots$data_label %in% c("percentage", "percentage_bare")
@@ -27,6 +31,7 @@ make_content.cat_plot_html <-
                                   within = data[, c(".variable_label")],
                                   fun = mean, na.rm=TRUE)
     }
+
     p <-
       dplyr::mutate(data,
                     .id = seq_len(nrow(data)),
@@ -95,8 +100,7 @@ make_content.cat_plot_html <-
         drop = FALSE) +
       scale_x_reorder(limits = rev, x_axis_label_width = dots$x_axis_label_width) +
       ggplot2::guides(
-        fill = ggiraph::guide_legend_interactive(data_id = "fill.guide",
-                                                 byrow = TRUE),
+        fill = ggiraph::guide_legend_interactive(data_id = "fill.guide"),
         colour = "none"
         )
 
@@ -105,34 +109,46 @@ make_content.cat_plot_html <-
          (dplyr::n_distinct(data$.variable_label) > 1 ||
           (dplyr::n_distinct(data$.variable_label) == 1 &&
            isFALSE(dots$hide_axis_text_if_single_variable))))) {
-      lab <- ".label"
-      p$data[[lab]] <- string_wrap(p$data[[lab]], width = dots$x_axis_label_width)
-      if(!dots$inverse) {
+
+      if(isFALSE(dots$inverse)) {
+        lab <- ".variable_label"
+        if(is.factor(p$data[[lab]])) {
+          levels(p$data[[lab]]) <- string_wrap(levels(p$data[[lab]]), width = dots$strip_width)
+        } else {
+          p$data[[lab]] <- string_wrap(p$data[[lab]], width = dots$strip_width)
+        }
 
         p <- p +
           ggiraph::facet_grid_interactive(
             rows = ggplot2::vars(.data$.variable_label),
             labeller = ggiraph::labeller_interactive(
               .mapping = ggplot2::aes(
-                data_id = .data$.variable_label,
-                tooltip = .data$.variable_label#,
-                # label = .data[[lab]]
+                data_id = .data[[lab]],
+                tooltip = .data[[lab]]
                 )
               ),
             interactive_on = "text",
             switch = "y", scales = "free", space = "free_y"
           )
-      } else {
+
+      } else if(isTRUE(dots$inverse)) {
+
+        for(lab in indep_vars) {
+          if(is.factor(p$data[[lab]])) {
+            levels(p$data[[lab]]) <- string_wrap(levels(p$data[[lab]]), width = dots$strip_width)
+          } else {
+            p$data[[lab]] <- string_wrap(p$data[[lab]], width = dots$strip_width)
+          }
+
+        }
+
         p <- p +
           ggiraph::facet_grid_interactive(
             rows = ggplot2::vars(.data[[indep_vars]]),
             labeller = ggiraph::labeller_interactive(
               .mapping = ggplot2::aes(
                 data_id = .data[[indep_vars]],
-                tooltip = .data[[indep_vars]]#,
-                # label = string_wrap(.data[[if(prop_family) indep_vars else ".label"]], # ????????????????????
-                                    # width = dots$x_axis_label_width
-                                    # )
+                tooltip = .data[[indep_vars]]
                 )
               ),
             interactive_on = "text",

@@ -15,6 +15,11 @@
 #'
 #'   Arguments provided by `makeme`
 #'
+#' @returns The returned object class depends on the type.
+#'   `type="*_table_html"` always returns a `tibble`.
+#'   `type="*_plot_html"` always returns a `ggplot`.
+#'   `type="*_docx"` always returns a `rdocx` object if `path=NULL`,
+#'    or has side-effect of writing docx file to disk if `path` is set.
 #'
 #' @export
 make_content <- function(type, ...) {

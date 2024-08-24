@@ -15,19 +15,21 @@ global_settings_get <- function(fn_name = "makeme") {
 #'
 #' @param fn_name String, one of `"make_link"`, `"fig_height_h_barchart"` and `"makeme"`.
 #' @param new List of arguments (see `?make_link()`, `?makeme()`, `fig_height_h_barchart()`)
-#'
+#' @param quiet Flag. If `FALSE` (default), informs about what has been set.
 #' @return Invisibly returned list of old and new values.
 #' @export
 #'
 #' @examples global_settings_set(new=list(digits=2))
-global_settings_set <- function(new, fn_name = "makeme") {
+global_settings_set <- function(new, fn_name = "makeme", quiet=FALSE) {
   saros_options <- getOption("saros", list())
   current_options <- saros_options[[paste0(fn_name, "_defaults")]]
   updated_options <- utils::modifyList(current_options, new)
   saros_options[[paste0(fn_name, "_defaults")]] <- updated_options
   options(saros = saros_options)
-  msg_part <- paste0("options('saros')$", fn_name, "_defaults")
-  cli::cli_inform("{.val {msg_part}} has now been set.")
+  if(isFALSE(quiet)) {
+    msg_part <- paste0("options('saros')$", fn_name, "_defaults")
+    cli::cli_inform("{.arg {msg_part}} has now been set.")
+  }
   invisible(list(old = current_options,
                  new = updated_options))
 }
