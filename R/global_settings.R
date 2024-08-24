@@ -16,14 +16,18 @@ global_settings_get <- function(fn_name = "makeme") {
 #' @param fn_name String, one of `"make_link"`, `"fig_height_h_barchart"` and `"makeme"`.
 #' @param new List of arguments (see `?make_link()`, `?makeme()`, `fig_height_h_barchart()`)
 #' @param quiet Flag. If `FALSE` (default), informs about what has been set.
+#' @param null_deletes Flag. If `FALSE` (default), `NULL` elements in `new`
+#'    become `NULL` elements in the option. Otherwise, the corresponding element,
+#'    if present, is deleted from the option.
+#'
 #' @return Invisibly returned list of old and new values.
 #' @export
 #'
 #' @examples global_settings_set(new=list(digits=2))
-global_settings_set <- function(new, fn_name = "makeme", quiet=FALSE) {
+global_settings_set <- function(new, fn_name = "makeme", quiet = FALSE, null_deletes = FALSE) {
   saros_options <- getOption("saros", list())
   current_options <- saros_options[[paste0(fn_name, "_defaults")]]
-  updated_options <- utils::modifyList(current_options, new)
+  updated_options <- utils::modifyList(current_options, new, keep.null = !null_deletes)
   saros_options[[paste0(fn_name, "_defaults")]] <- updated_options
   options(saros = saros_options)
   if(isFALSE(quiet)) {

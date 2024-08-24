@@ -22,14 +22,15 @@ make_content.cat_table_html <-
                                         label_separator = dots$label_separator,
                                         warn_multiple = TRUE)
       indep_label <- unique(indep_label)
-      if(nchar(indep_label)==0) browser() #cli::cli_warn("Indep {.var {indep_pos}} lacks a label.")
+      if(nchar(indep_label)==0) indep_label <- dots$indep[1] #browser() #cli::cli_warn("Indep {.var {indep_pos}} lacks a label.")
 
     } else indep_label <- character(0)
 
     # indep_label <- unname(get_raw_labels(data = dots$data, col_pos = dots$indep))
 
-
     cat_lvls <- levels(data_summary[[".category"]])
+    cat_lvls[is.na(cat_lvls)] <- "NA"
+
     if(length(indep_label)==1 && length(dots$indep)==0) {
       cli::cli_abort("Something wrong in function.")
     }
@@ -39,8 +40,13 @@ make_content.cat_table_html <-
       dplyr::arrange(as.integer(.data[[".variable_label"]]),
                      if(length(dots$indep)>0) as.integer(.data[[dots$indep]])) |>
       tidyr::pivot_wider(id_cols = tidyselect::all_of(c(".variable_label", dots$indep, ".count_total")),
-                         names_from = ".category", values_from = ".data_label") |>
-      dplyr::relocate(tidyselect::all_of(c(".variable_label", dots$indep, cat_lvls, ".count_total")), .after = 1) |>
+                         names_from = ".category", values_from = ".data_label")
+    names(data_out)[names(data_out) == "NA"] <- "NA"
+    new_col_order <-
+      c(".variable_label", dots$indep, cat_lvls, ".count_total")
+    data_out <-
+      data_out |>
+      dplyr::relocate(tidyselect::all_of(new_col_order), .after = 1) |>
       dplyr::rename_with(.cols = tidyselect::all_of(cat_lvls),
                          .fn = ~stringi::stri_c(ignore_null=TRUE, .x, if(dots$data_label %in% c("percentage", "percentage_bare")) " (%)")) |>
       dplyr::rename_with(.cols = ".count_total",
