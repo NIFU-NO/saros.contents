@@ -3,9 +3,11 @@
 # Helper function to create overarching factor variable for the response categories column
 category_var_as_fct <-
   function(data_summary, fct_unions) {
+
     data_summary$.category <- factor(x = data_summary$.category,
                                      levels = fct_unions,
-                                     labels = fct_unions)
+                                     labels = fct_unions,
+                                     exclude = NULL)
     data_summary
   }
 
